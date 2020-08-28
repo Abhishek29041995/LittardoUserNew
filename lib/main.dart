@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fluttercommerce/screens/home.dart';
-import 'package:fluttercommerce/screens/product.dart';
+import 'package:littardo/screens/home.dart';
+import 'package:littardo/screens/product.dart';
 
 import 'screens/login.dart';
 

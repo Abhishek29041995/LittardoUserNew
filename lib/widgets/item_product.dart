@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_icons/ionicons.dart';
-import 'package:fluttercommerce/models/product.dart';
-import 'package:fluttercommerce/screens/product.dart';
-import 'package:fluttercommerce/widgets/star_rating.dart';
+import 'package:littardo/models/product.dart';
+import 'package:littardo/screens/product.dart';
+import 'package:littardo/widgets/star_rating.dart';
 
 class TrendingItem extends StatelessWidget {
   final Product product;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/ionicons.dart';
-import 'package:fluttercommerce/utils/navigator.dart';
+import 'package:littardo/utils/navigator.dart';
 
 import 'home.dart';
 

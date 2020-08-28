@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fluttercommerce/utils/codeinput.dart';
+import 'package:littardo/utils/codeinput.dart';
 import 'home.dart';
-import 'package:fluttercommerce/utils/progressdialog.dart';
+import 'package:littardo/utils/progressdialog.dart';
 
 class VerificationScreen extends StatefulWidget {
   @override

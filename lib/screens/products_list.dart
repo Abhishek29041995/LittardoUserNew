@@ -1,8 +1,8 @@
 import 'package:flutter_icons/ionicons.dart';
 import 'package:flutter_icons/material_community_icons.dart';
-import 'package:fluttercommerce/models/product.dart';
-import 'package:fluttercommerce/widgets/filter.dart';
-import 'package:fluttercommerce/widgets/item_product.dart';
+import 'package:littardo/models/product.dart';
+import 'package:littardo/widgets/filter.dart';
+import 'package:littardo/widgets/item_product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:page_transition/page_transition.dart';

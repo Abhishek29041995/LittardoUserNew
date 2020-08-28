@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:fluttercommerce/utils/navigator.dart';
+import 'package:littardo/utils/navigator.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 import '../widgets/board_view.dart';

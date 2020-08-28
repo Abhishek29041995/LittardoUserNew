@@ -2,9 +2,9 @@ import 'package:country_pickers/country.dart';
 import 'package:country_pickers/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fluttercommerce/screens/verificationcode.dart';
-import 'package:fluttercommerce/utils/countrydropdown.dart';
-import 'package:fluttercommerce/widgets/socialbottomsheet.dart';
+import 'package:littardo/screens/verificationcode.dart';
+import 'package:littardo/utils/countrydropdown.dart';
+import 'package:littardo/widgets/socialbottomsheet.dart';
 
 class VerifyScreeen extends StatefulWidget {
   @override

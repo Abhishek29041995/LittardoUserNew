@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fluttercommerce/screens/login.dart';
-import 'package:fluttercommerce/screens/verifynumber.dart';
-import 'package:fluttercommerce/widgets/edittext.dart';
-import 'package:fluttercommerce/widgets/submitbutton.dart';
+import 'package:littardo/screens/login.dart';
+import 'package:littardo/screens/verifynumber.dart';
+import 'package:littardo/widgets/edittext.dart';
+import 'package:littardo/widgets/submitbutton.dart';
 
 class RegisterScreen extends StatelessWidget {
   @override

@@ -1,8 +1,8 @@
 import 'package:division/division.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:fluttercommerce/screens/accountsettings.dart';
-import 'package:fluttercommerce/screens/checkout.dart';
+import 'package:littardo/screens/accountsettings.dart';
+import 'package:littardo/screens/checkout.dart';
 import 'package:page_transition/page_transition.dart';
 
 class UserSettings extends StatelessWidget {

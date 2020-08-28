@@ -1,7 +1,7 @@
-import 'package:fluttercommerce/screens/products_list.dart';
-import 'package:fluttercommerce/widgets/clip_shadow_path.dart';
-import 'package:fluttercommerce/models/product.dart';
-import 'package:fluttercommerce/widgets/star_rating.dart';
+import 'package:littardo/screens/products_list.dart';
+import 'package:littardo/widgets/clip_shadow_path.dart';
+import 'package:littardo/models/product.dart';
+import 'package:littardo/widgets/star_rating.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 

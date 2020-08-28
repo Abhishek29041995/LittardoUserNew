@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fluttercommerce/screens/register.dart';
-import 'package:fluttercommerce/screens/verifynumber.dart';
-import 'package:fluttercommerce/utils/progressdialog.dart';
-import 'package:fluttercommerce/widgets/edittext.dart';
-import 'package:fluttercommerce/widgets/submitbutton.dart';
+import 'package:littardo/screens/register.dart';
+import 'package:littardo/screens/verifynumber.dart';
+import 'package:littardo/utils/progressdialog.dart';
+import 'package:littardo/widgets/edittext.dart';
+import 'package:littardo/widgets/submitbutton.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
