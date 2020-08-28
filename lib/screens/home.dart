@@ -55,9 +55,7 @@ class _HomeState extends State<Home> {
               icon: new Icon(Icons.account_circle),
             )
           ],
-          labelColor: Theme
-              .of(context)
-              .primaryColor,
+          labelColor: Theme.of(context).primaryColor,
           unselectedLabelColor: Colors.blueGrey,
           indicatorSize: TabBarIndicatorSize.label,
           indicatorPadding: EdgeInsets.all(8.0),
@@ -282,7 +280,7 @@ class _HomeState extends State<Home> {
       autoPlay: true,
       enlargeCenterPage: true,
       items: imgList.map(
-            (url) {
+        (url) {
           return Stack(
             children: <Widget>[
               Container(
@@ -312,7 +310,7 @@ class _HomeState extends State<Home> {
                         child: Text(
                             "Lorem Ipsım Dolar Lorem Ipsım Dolar Lorem Ipsım Dolar",
                             style:
-                            TextStyle(color: Colors.white, fontSize: 14)),
+                                TextStyle(color: Colors.white, fontSize: 14)),
                       ),
                     ],
                   ),
@@ -329,36 +327,27 @@ class _HomeState extends State<Home> {
     return BottomNavyBar(
       selectedIndex: currentIndex,
       showElevation: true,
-      onItemSelected: (index) =>
-          setState(() {
-            currentIndex = index;
-          }),
+      onItemSelected: (index) => setState(() {
+        currentIndex = index;
+      }),
       items: [
         BottomNavyBarItem(
           icon: Icon(Icons.home),
           title: Text('Home'),
-          activeColor: Theme
-              .of(context)
-              .primaryColor,
+          activeColor: Theme.of(context).primaryColor,
         ),
         BottomNavyBarItem(
             icon: Icon(Icons.apps),
             title: Text('Categories'),
-            activeColor: Theme
-                .of(context)
-                .primaryColor),
+            activeColor: Theme.of(context).primaryColor),
         BottomNavyBarItem(
             icon: Icon(Icons.shopping_cart),
             title: Text('Shopping Cart'),
-            activeColor: Theme
-                .of(context)
-                .primaryColor),
+            activeColor: Theme.of(context).primaryColor),
         BottomNavyBarItem(
             icon: Icon(Icons.shopping_basket),
             title: Text('Orders'),
-            activeColor: Theme
-                .of(context)
-                .primaryColor),
+            activeColor: Theme.of(context).primaryColor),
       ],
     );
   }
@@ -531,7 +520,7 @@ class _HomeState extends State<Home> {
                     fontWeight: FontWeight.w600,
                     color: blackColor)),
             onTap: () {
-              Nav.route(context,Checkout());
+              Nav.route(context, Checkout());
             },
           ),
           ListTile(
@@ -541,7 +530,7 @@ class _HomeState extends State<Home> {
               size: 18,
             ),
             leading:
-            Icon(Feather.getIconData('shopping-cart'), color: blackColor),
+                Icon(Feather.getIconData('shopping-cart'), color: blackColor),
             title: Text('Shopping Cart',
                 style: TextStyle(
                     fontSize: 16,
@@ -581,7 +570,7 @@ class _HomeState extends State<Home> {
           ),
           ListTile(
             leading:
-            Icon(Feather.getIconData('message-circle'), color: blackColor),
+                Icon(Feather.getIconData('message-circle'), color: blackColor),
             title: Text('Support',
                 style: TextStyle(
                     fontSize: 16,
@@ -593,7 +582,7 @@ class _HomeState extends State<Home> {
           ),
           ListTile(
             leading:
-            Icon(Feather.getIconData('help-circle'), color: blackColor),
+                Icon(Feather.getIconData('help-circle'), color: blackColor),
             title: Text('Help',
                 style: TextStyle(
                     fontSize: 16,
@@ -642,10 +631,11 @@ class CategoriesListView extends StatelessWidget {
   final List<String> categories;
   final List<String> categoryTitle;
 
-  const CategoriesListView({Key key,
-    @required this.title,
-    @required this.categories,
-    @required this.categoryTitle})
+  const CategoriesListView(
+      {Key key,
+      @required this.title,
+      @required this.categories,
+      @required this.categoryTitle})
       : super(key: key);
 
   @override

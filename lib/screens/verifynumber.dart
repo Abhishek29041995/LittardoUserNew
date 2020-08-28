@@ -1,19 +1,26 @@
+import 'dart:convert';
+
 import 'package:country_pickers/country.dart';
 import 'package:country_pickers/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart';
 import 'package:littardo/screens/verificationcode.dart';
+import 'package:littardo/services/api_services.dart';
 import 'package:littardo/utils/countrydropdown.dart';
+import 'package:littardo/utils/progressdialog.dart';
 import 'package:littardo/widgets/socialbottomsheet.dart';
 
 class VerifyScreeen extends StatefulWidget {
+  final Map user;
+  VerifyScreeen({this.user});
   @override
   _VerifyScreeenState createState() => _VerifyScreeenState();
 }
 
 class _VerifyScreeenState extends State<VerifyScreeen> {
   var _txtNumber = TextEditingController();
-  String _txtNumberHint = "05078596252";
+  String _txtNumberHint = "";
 
   @override
   void initState() {
@@ -45,7 +52,9 @@ class _VerifyScreeenState extends State<VerifyScreeen> {
                   padding: const EdgeInsets.only(
                       left: 24.0, right: 24.0, bottom: 36.0),
                   child: Text(
-                      "We have sent you an SMS with a code to number +90$_txtNumberHint",
+                      _txtNumberHint.isEmpty
+                          ? "Please enter mobile number to get OTP."
+                          : "We will send you an SMS with a code to number +91 $_txtNumberHint",
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.subtitle),
                 ),
@@ -55,6 +64,7 @@ class _VerifyScreeenState extends State<VerifyScreeen> {
                       padding: const EdgeInsets.only(
                           top: 24.0, bottom: 8.0, left: 24.0, right: 24.0),
                       child: TextField(
+                        enabled: false,
                         textAlign: TextAlign.left,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
@@ -75,12 +85,15 @@ class _VerifyScreeenState extends State<VerifyScreeen> {
                     Padding(
                       padding: const EdgeInsets.only(
                           top: 36.0, bottom: 8.0, left: 36.0, right: 24.0),
-                      child: CountryPickerDropdown(
-                        initialValue: 'tr',
-                        itemBuilder: _buildDropdownItem,
-                        onValuePicked: (Country country) {
-                          print("${country.name}");
-                        },
+                      child: IgnorePointer(
+                        ignoring: true,
+                        child: CountryPickerDropdown(
+                          initialValue: 'in',
+                          itemBuilder: _buildDropdownItem,
+                          onValuePicked: (Country country) {
+                            print("${country.name}");
+                          },
+                        ),
                       ),
                     ),
                     Padding(
@@ -88,6 +101,7 @@ class _VerifyScreeenState extends State<VerifyScreeen> {
                           top: 24.0, bottom: 8.0, left: 184.0, right: 24.0),
                       child: TextField(
                         controller: _txtNumber,
+                        maxLength: 10,
                         textAlign: TextAlign.left,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
@@ -157,12 +171,50 @@ class _VerifyScreeenState extends State<VerifyScreeen> {
                               borderRadius: new BorderRadius.circular(4.0),
                             ),
                             color: Color(0xFFF93963),
-                            onPressed: () => {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => VerificationScreen()),
-                              ),
+                            onPressed: () async {
+                              if (_txtNumber.text.length == 10) {
+                                getProgressDialog(context, "Verifying").show();
+                                var request = MultipartRequest("POST",
+                                    Uri.parse(api_url + "verify_mobile"));
+                                request.fields['user_id'] =
+                                    widget.user["id"].toString();
+                                request.fields['phone'] =
+                                    "+91" + _txtNumber.text;
+                                commonMethod(request).then((onResponse) {
+                                  onResponse.stream
+                                      .transform(utf8.decoder)
+                                      .listen((value) {
+                                    Map data = json.decode(value);
+                                    print(data);
+                                    if (data["code"] == 200) {
+                                      getProgressDialog(context, "Verifying")
+                                          .hide(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              VerificationScreen(
+                                            phoneNumber: _txtNumber.text,
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      Scaffold.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text("${data["message"]}"),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                    }
+                                  });
+                                });
+                              }
+
+                              // Navigator.pushReplacement(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => VerificationScreen()),
+                              // ),
                             },
                             child: new Container(
                               padding: const EdgeInsets.symmetric(

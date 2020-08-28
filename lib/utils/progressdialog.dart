@@ -41,10 +41,10 @@ class ProgressDialog {
     return _isShowing;
   }
 
-  void hide() {
+  void hide(BuildContext context) {
     if (_isShowing) {
       _isShowing = false;
-      Navigator.of(_context).pop();
+      Navigator.of(context).pop();
       debugPrint('ProgressDialog dismissed');
     }
   }
