@@ -24,9 +24,6 @@ dependencies:
   intro_views_flutter: ^2.6.0
   rflutter_alert: ^1.0.3
   hidden_drawer_menu: ^1.1.2
-
-  
-  flutter_svg: ^0.18.1
   cached_network_image: ^2.0.0
   shared_preferences: ^0.5.4+6
   http: ^0.12.0+2

@@ -178,8 +178,7 @@ class _VerifyScreeenState extends State<VerifyScreeen> {
                                     Uri.parse(api_url + "verify_mobile"));
                                 request.fields['user_id'] =
                                     widget.user["id"].toString();
-                                request.fields['phone'] =
-                                    "+91" + _txtNumber.text;
+                                request.fields['phone'] =_txtNumber.text;
                                 commonMethod(request).then((onResponse) {
                                   onResponse.stream
                                       .transform(utf8.decoder)
@@ -195,26 +194,18 @@ class _VerifyScreeenState extends State<VerifyScreeen> {
                                           builder: (context) =>
                                               VerificationScreen(
                                             phoneNumber: _txtNumber.text,
+                                                user_id:widget.user["id"].toString(),
                                           ),
                                         ),
                                       );
                                     } else {
-                                      Scaffold.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text("${data["message"]}"),
-                                          backgroundColor: Colors.red,
-                                        ),
-                                      );
+                                      presentToast(data["message"], context, 2);
+                                      getProgressDialog(context, "Verifying")
+                                          .hide(context);
                                     }
                                   });
                                 });
                               }
-
-                              // Navigator.pushReplacement(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //       builder: (context) => VerificationScreen()),
-                              // ),
                             },
                             child: new Container(
                               padding: const EdgeInsets.symmetric(

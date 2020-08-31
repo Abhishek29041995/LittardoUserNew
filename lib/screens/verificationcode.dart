@@ -9,13 +9,17 @@ import 'package:littardo/utils/progressdialog.dart';
 
 class VerificationScreen extends StatefulWidget {
   final String phoneNumber;
-  VerificationScreen({this.phoneNumber});
+  final String user_id;
+
+  VerificationScreen({this.phoneNumber, this.user_id});
+
   @override
   _VerificationScreenState createState() => _VerificationScreenState();
 }
 
 class _VerificationScreenState extends State<VerificationScreen> {
   ProgressDialog pr;
+
   @override
   Widget build(BuildContext context) {
     pr = new ProgressDialog(context, ProgressDialogType.Normal);
@@ -55,22 +59,25 @@ class _VerificationScreenState extends State<VerificationScreen> {
                             "POST", Uri.parse(api_url + "verify_otp"));
                         request.fields['phone'] = widget.phoneNumber;
                         request.fields['otp'] = value;
+                        print(request.fields);
                         commonMethod(request).then((onResponse) {
                           onResponse.stream
                               .transform(utf8.decoder)
                               .listen((value) {
                             print(value);
+                            Map data = json.decode(value);
+                            print(data);
+                            if (data["code"] == 200) {
+                              getProgressDialog(context, "Verifying")
+                                  .hide(context);
+
+                            } else {
+                              presentToast(data['message'], context, 2);
+                              getProgressDialog(context, "Verifying")
+                                  .hide(context);
+                            }
                           });
                         });
-                        // Future.delayed(const Duration(milliseconds: 1500), () {
-                        //   setState(() {
-                        //     pr.hide(context);
-                        //     Navigator.pushReplacement(
-                        //       context,
-                        //       MaterialPageRoute(builder: (context) => Home()),
-                        //     );
-                        //   });
-                        // });
                       },
                     ),
                   ),
@@ -83,11 +90,23 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => Home()),
-                    ),
+                  onTap: () {
+                    getProgressDialog(context, "Please wait...").show();
+                    var request = MultipartRequest(
+                        "POST", Uri.parse(api_url + "verify_mobile"));
+                    request.fields['user_id'] = widget.user_id.toString();
+                    request.fields['phone'] = widget.phoneNumber;
+                    commonMethod(request).then((onResponse) {
+                      onResponse.stream.transform(utf8.decoder).listen((value) {
+                        Map data = json.decode(value);
+                        print(data);
+                        if (data["code"] == 200) {
+                          getProgressDialog(context, "Verifying").hide(context);
+                        } else {
+                          getProgressDialog(context, "Verifying").hide(context);
+                        }
+                      });
+                    });
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4.0),
