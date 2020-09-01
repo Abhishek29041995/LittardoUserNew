@@ -1,14 +1,29 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:littardo/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserData extends ChangeNotifier {
   Map _userData;
   String token = "";
   String cartCount = "";
-
+  List featured = new List();
+  List bannerOffers = new List();
+  List bestselling = new List();
+  List hot_deals = new List();
+  List brands = new List();
+  List categories = new List();
+  List banners = new List();
   get userData => _userData;
+
+  get getfeatured => featured;
+  get getbannerOffers => bannerOffers;
+  get getbestselling => bestselling;
+  get gethot_deals => hot_deals;
+  get getbrands => brands;
+  get getcategories => categories;
+  get getbanners => banners;
 
   get getToken => token;
 
@@ -36,6 +51,7 @@ class UserData extends ChangeNotifier {
     } else {
       cartCount = prefs.getString("cartCount");
     }
+    getDashBoardData();
     notifyListeners();
   }
 
@@ -44,5 +60,21 @@ class UserData extends ChangeNotifier {
     prefs.setString("cartCount", length.toString());
     cartCount = length.toString();
     notifyListeners();
+  }
+
+  void getDashBoardData() {
+    commeonMethod2(api_url + "home", userData['api_token']).then((onResponse) {
+      Map data = json.decode(onResponse.body);
+      if (data['code'] == 200) {
+        bannerOffers = data['data']['offer_banner'];
+        featured = data['data']['featured'];
+        categories = data['data']['categories'];
+        banners = data['data']['banners'];
+        bestselling = data['data']['best_selling'];
+        hot_deals = data['data']['hot_deals'];
+        brands = data['data']['brands'];
+        notifyListeners();
+      }
+    }).catchError((onerr) {});
   }
 }
