@@ -1,4 +1,5 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -73,29 +74,7 @@ class _HomeState extends State<Home> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
-                      CategoriesListView(
-                        title: "YOUR TITLES",
-                        categories: [
-                          'menu.png',
-                          'tshirt.png',
-                          'telephone.png',
-                          'armchair.png',
-                          'baby.png',
-                          'lipstick.png',
-                          'diamond.png',
-                          'book.png'
-                        ],
-                        categoryTitle: [
-                          'All',
-                          'Dress',
-                          'Electronic',
-                          'Home',
-                          'Baby',
-                          'Fashion',
-                          'Jewel',
-                          'Book'
-                        ],
-                      ),
+                      CategoriesListView(),
                       buildCarouselSlider(),
                       SizedBox(
                         height: 5.0,
@@ -640,17 +619,6 @@ class _HomeState extends State<Home> {
 }
 
 class CategoriesListView extends StatelessWidget {
-  final String title;
-  final List<String> categories;
-  final List<String> categoryTitle;
-
-  const CategoriesListView(
-      {Key key,
-      @required this.title,
-      @required this.categories,
-      @required this.categoryTitle})
-      : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
@@ -662,7 +630,9 @@ class CategoriesListView extends StatelessWidget {
             height: 90,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: categories.length,
+              itemCount: Provider.of<UserData>(context, listen: false)
+                  .getcategories
+                  .length,
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
@@ -680,35 +650,31 @@ class CategoriesListView extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Container(
-                          width: 55,
-                          height: 55,
-                          padding: EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Colors.blueGrey,
-                              width: 1,
-                            ),
-                          ),
-                          child: Container(
-                            width: 50,
-                            height: 50,
+                            width: 55,
+                            height: 55,
+                            padding: EdgeInsets.all(12),
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: AssetImage(
-                                  "assets/images/" + categories[index],
-                                ),
-                                fit: BoxFit.fill,
+                              color: Colors.white,
+                              border: Border.all(
+                                color: Colors.blueGrey,
+                                width: 1,
                               ),
                             ),
-                          ),
-                        ),
+                            child: Container(
+                              width: 50,
+                              height: 50,
+                              child: CachedNetworkImage(
+                                imageUrl: Provider.of<UserData>(context,
+                                        listen: false)
+                                    .getcategories[index]['icon'],
+                              ),
+                            )),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            categoryTitle[index],
+                            Provider.of<UserData>(context, listen: false)
+                                .getcategories[index]['name'],
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: 'Regular',
