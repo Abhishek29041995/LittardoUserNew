@@ -34,10 +34,18 @@ dependencies:
   url_launcher: 4.0.0
   flutter_share_me: ^0.9.1
   flutter_launcher_icons: "^0.7.3"
+  animated_splash: ^1.0.0
+  flutter_rating_bar: ^3.0.1+1
+  lottie: ^0.2.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/littardo_logo.png"
 
 flutter:
 

@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:littardo/models/product.dart';
 import 'package:littardo/painters/circlepainters.dart';
+import 'package:littardo/provider/UserData.dart';
+import 'package:littardo/screens/myOrders.dart';
 import 'package:littardo/screens/products_list.dart';
 import 'package:littardo/screens/search.dart';
 import 'package:littardo/screens/shoppingcart.dart';
@@ -16,6 +18,7 @@ import 'package:littardo/widgets/item_product.dart';
 import 'package:littardo/widgets/occasions.dart';
 import 'package:littardo/utils/navigator.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 import 'checkout.dart';
 import 'products_list.dart';
@@ -30,146 +33,152 @@ class _HomeState extends State<Home> {
   int currentIndex = 0;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  UserData userDataProvider;
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 4,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        key: _scaffoldKey,
-        drawer: Drawer(child: leftDrawerMenu()),
-        appBar: buildAppBar(context),
-        bottomNavigationBar: new TabBar(
-          tabs: [
-            Tab(
-              icon: new Icon(Icons.home),
-            ),
-            Tab(
-              icon: new Icon(Icons.attach_money),
-            ),
-            Tab(
-              icon: new Icon(Icons.shopping_cart),
-            ),
-            Tab(
-              icon: new Icon(Icons.account_circle),
-            )
-          ],
-          labelColor: Theme.of(context).primaryColor,
-          unselectedLabelColor: Colors.blueGrey,
-          indicatorSize: TabBarIndicatorSize.label,
-          indicatorPadding: EdgeInsets.all(8.0),
-          indicatorColor: Colors.red,
-        ),
-        body: TabBarView(
-          children: [
-            Container(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    CategoriesListView(
-                      title: "YOUR TITLES",
-                      categories: [
-                        'menu.png',
-                        'tshirt.png',
-                        'telephone.png',
-                        'armchair.png',
-                        'baby.png',
-                        'lipstick.png',
-                        'diamond.png',
-                        'book.png'
-                      ],
-                      categoryTitle: [
-                        'All',
-                        'Dress',
-                        'Electronic',
-                        'Home',
-                        'Baby',
-                        'Fashion',
-                        'Jewel',
-                        'Book'
-                      ],
-                    ),
-                    buildCarouselSlider(),
-                    SizedBox(
-                      height: 5.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: Text(
-                              "Popular Trendings",
-                              style: TextStyle(
-                                  fontSize: 20.0, fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.start,
-                            ),
-                          ),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  PageTransition(
-                                    type: PageTransitionType.fade,
-                                    child: ProductList(),
-                                  ),
-                                );
-                              },
-                              child: Text(
-                                "View All",
-                                style: TextStyle(
-                                    fontSize: 18.0, color: Colors.blue),
-                                textAlign: TextAlign.end,
-                              ),
-                            ),
-                          ),
+      child: Consumer<UserData>(builder: (context, userData, child) {
+        userDataProvider = userData;
+        return Scaffold(
+          backgroundColor: Colors.white,
+          key: _scaffoldKey,
+          drawer: Drawer(child: leftDrawerMenu()),
+          appBar: buildAppBar(context),
+          bottomNavigationBar: new TabBar(
+            tabs: [
+              Tab(
+                icon: new Icon(Icons.home),
+              ),
+              Tab(
+                icon: new Icon(Icons.attach_money),
+              ),
+              Tab(
+                icon: new Icon(Icons.shopping_cart),
+              ),
+              Tab(
+                icon: new Icon(Icons.account_circle),
+              )
+            ],
+            labelColor: Theme.of(context).primaryColor,
+            unselectedLabelColor: Colors.blueGrey,
+            indicatorSize: TabBarIndicatorSize.label,
+            indicatorPadding: EdgeInsets.all(8.0),
+            indicatorColor: Colors.red,
+          ),
+          body: TabBarView(
+            children: [
+              Container(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      CategoriesListView(
+                        title: "YOUR TITLES",
+                        categories: [
+                          'menu.png',
+                          'tshirt.png',
+                          'telephone.png',
+                          'armchair.png',
+                          'baby.png',
+                          'lipstick.png',
+                          'diamond.png',
+                          'book.png'
+                        ],
+                        categoryTitle: [
+                          'All',
+                          'Dress',
+                          'Electronic',
+                          'Home',
+                          'Baby',
+                          'Fashion',
+                          'Jewel',
+                          'Book'
                         ],
                       ),
-                    ),
-                    buildTrending(),
-                    Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: Text(
-                              "Best Selling",
-                              style: TextStyle(
-                                  fontSize: 20.0, fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.start,
-                            ),
-                          ),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                print("Clicked");
-                              },
+                      buildCarouselSlider(),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
                               child: Text(
-                                "View All",
+                                "Popular Trendings",
                                 style: TextStyle(
-                                    fontSize: 18.0, color: Colors.blue),
-                                textAlign: TextAlign.end,
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.start,
                               ),
                             ),
-                          ),
-                        ],
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    PageTransition(
+                                      type: PageTransitionType.fade,
+                                      child: ProductList(),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  "View All",
+                                  style: TextStyle(
+                                      fontSize: 18.0, color: Colors.blue),
+                                  textAlign: TextAlign.end,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    buildTrending(),
-                    Occasions(),
-                    Occasions(),
-                  ],
+                      buildTrending(),
+                      Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Text(
+                                "Best Selling",
+                                style: TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  print("Clicked");
+                                },
+                                child: Text(
+                                  "View All",
+                                  style: TextStyle(
+                                      fontSize: 18.0, color: Colors.blue),
+                                  textAlign: TextAlign.end,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      buildTrending(),
+                      Occasions(),
+                      Occasions(),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            WhellFortune(),
-            ShoppingCart(false),
-            UserSettings(),
-          ],
-        ),
-      ),
+              WhellFortune(),
+              ShoppingCart(false),
+              UserSettings(),
+            ],
+          ),
+        );
+      }),
     );
   }
 
@@ -432,7 +441,9 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 title: Text(
-                  "Ali Anıl Koçak",
+                  userDataProvider.userData != null
+                      ? userDataProvider.userData['name']
+                      : "",
                   style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -468,45 +479,45 @@ class _HomeState extends State<Home> {
               );
             },
           ),
-          ListTile(
-            trailing: Icon(
-              Ionicons.getIconData('ios-radio-button-on'),
-              color: Color(0xFFFB7C7A),
-              size: 18,
-            ),
-            leading: Icon(Feather.getIconData('gift'), color: blackColor),
-            title: Text('Wheel Spin(Free)',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: blackColor)),
-            onTap: () {
-              Navigator.push(
-                context,
-                PageTransition(
-                  type: PageTransitionType.fade,
-                  child: WhellFortune(),
-                ),
-              );
-            },
-          ),
-          ListTile(
-            leading: Icon(Feather.getIconData('search'), color: blackColor),
-            title: Text('Search',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: blackColor)),
-            onTap: () {
-              Navigator.push(
-                context,
-                PageTransition(
-                  type: PageTransitionType.fade,
-                  child: Search(),
-                ),
-              );
-            },
-          ),
+//          ListTile(
+//            trailing: Icon(
+//              Ionicons.getIconData('ios-radio-button-on'),
+//              color: Color(0xFFFB7C7A),
+//              size: 18,
+//            ),
+//            leading: Icon(Feather.getIconData('gift'), color: blackColor),
+//            title: Text('Wheel Spin(Free)',
+//                style: TextStyle(
+//                    fontSize: 16,
+//                    fontWeight: FontWeight.w600,
+//                    color: blackColor)),
+//            onTap: () {
+//              Navigator.push(
+//                context,
+//                PageTransition(
+//                  type: PageTransitionType.fade,
+//                  child: WhellFortune(),
+//                ),
+//              );
+//            },
+//          ),
+//          ListTile(
+//            leading: Icon(Feather.getIconData('search'), color: blackColor),
+//            title: Text('Search',
+//                style: TextStyle(
+//                    fontSize: 16,
+//                    fontWeight: FontWeight.w600,
+//                    color: blackColor)),
+//            onTap: () {
+//              Navigator.push(
+//                context,
+//                PageTransition(
+//                  type: PageTransitionType.fade,
+//                  child: Search(),
+//                ),
+//              );
+//            },
+//          ),
           ListTile(
             trailing: Icon(
               Ionicons.getIconData('ios-radio-button-on'),
@@ -523,29 +534,29 @@ class _HomeState extends State<Home> {
               Nav.route(context, Checkout());
             },
           ),
-          ListTile(
-            trailing: Icon(
-              Icons.looks_two,
-              color: Color(0xFFFB7C7A),
-              size: 18,
-            ),
-            leading:
-                Icon(Feather.getIconData('shopping-cart'), color: blackColor),
-            title: Text('Shopping Cart',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: blackColor)),
-            onTap: () {
-              Navigator.push(
-                context,
-                PageTransition(
-                  type: PageTransitionType.fade,
-                  child: ShoppingCart(true),
-                ),
-              );
-            },
-          ),
+//          ListTile(
+//            trailing: Icon(
+//              Icons.looks_two,
+//              color: Color(0xFFFB7C7A),
+//              size: 18,
+//            ),
+//            leading:
+//                Icon(Feather.getIconData('shopping-cart'), color: blackColor),
+//            title: Text('Shopping Cart',
+//                style: TextStyle(
+//                    fontSize: 16,
+//                    fontWeight: FontWeight.w600,
+//                    color: blackColor)),
+//            onTap: () {
+//              Navigator.push(
+//                context,
+//                PageTransition(
+//                  type: PageTransitionType.fade,
+//                  child: ShoppingCart(true),
+//                ),
+//              );
+//            },
+//          ),
           ListTile(
             leading: Icon(Feather.getIconData('list'), color: blackColor),
             title: Text('My Orders',
@@ -554,7 +565,9 @@ class _HomeState extends State<Home> {
                     fontWeight: FontWeight.w600,
                     color: blackColor)),
             onTap: () {
-              Nav.route(context, ProductList());
+              Navigator.pop(context);
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => MyOrders()));
             },
           ),
           ListTile(

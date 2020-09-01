@@ -1,14 +1,25 @@
+import 'package:animated_splash/animated_splash.dart';
 import 'package:flutter/material.dart';
+import 'package:littardo/provider/UserData.dart';
 import 'package:littardo/screens/home.dart';
 import 'package:littardo/screens/product.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'screens/login.dart';
 
-void main() => runApp(EcommerceApp());
+void main() => runApp(MultiProvider(
+    providers: [ChangeNotifierProvider(create: (context) => UserData())],
+    child: EcommerceApp()));
 
 class EcommerceApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Future<String> isLoggedIn() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      return prefs.getString("token");
+    }
+
     return MaterialApp(
       theme: ThemeData(
         dividerColor: Color(0xFFECEDF1),
@@ -29,8 +40,20 @@ class EcommerceApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      title: 'Ecommerce UI Kit',
-      home: LoginScreen(),
+      title: 'Littardo Emporium',
+      home: AnimatedSplash(
+        imagePath: 'assets/littardo_logo.png',
+        home: FutureBuilder(
+          future: isLoggedIn(),
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            if (snapshot.hasData) {
+              return snapshot.data == "loggedIn" ? Home() : LoginScreen();
+            }
+            return LoginScreen(); // noop, this builder is called again when the future completes
+          },
+        ),
+        duration: 4000,
+      ),
       routes: {
         '/product': (context) => ProductPage(),
       },

@@ -1,10 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:littardo/product_details.dart';
-import 'package:littardo/widgets/custom_textstyle.dart';
 
 class OrderDetais extends StatefulWidget {
   Map product;
@@ -73,9 +70,7 @@ class _OrderDetais extends State<OrderDetais> {
                                         child: new RichText(
                                             text: TextSpan(
                                                 text: "Order ID - ",
-                                                style: CustomTextStyle
-                                                    .mediumTextStyle
-                                                    .copyWith(
+                                                style: TextStyle(
                                                     color: Colors.grey
                                                         .withOpacity(0.9),
                                                     fontSize: 12),
@@ -108,12 +103,12 @@ class _OrderDetais extends State<OrderDetais> {
                                         padding: EdgeInsets.all(10.0),
                                         child: InkWell(
                                           onTap: () {
-                                            Navigator.of(context).push(
-                                                new MaterialPageRoute(
-                                                    builder: (context) =>
-                                                    new ProductDetails(
-                                                        product['order_details'][0]
-                                                        ['product'])));
+//                                            Navigator.of(context).push(
+//                                                new MaterialPageRoute(
+//                                                    builder: (context) =>
+//                                                    new ProductDetails(
+//                                                        product['order_details'][0]
+//                                                        ['product'])));
                                           },
                                           child: Column(
                                             crossAxisAlignment:
@@ -172,12 +167,12 @@ class _OrderDetais extends State<OrderDetais> {
                                       flex: 4,
                                       child: InkWell(
                                         onTap: () {
-                                          Navigator.of(context).push(
-                                              new MaterialPageRoute(
-                                                  builder: (context) =>
-                                                  new ProductDetails(
-                                                      product['order_details'][0]
-                                                      ['product'])));
+//                                          Navigator.of(context).push(
+//                                              new MaterialPageRoute(
+//                                                  builder: (context) =>
+//                                                  new ProductDetails(
+//                                                      product['order_details'][0]
+//                                                      ['product'])));
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
@@ -489,7 +484,7 @@ class _OrderDetais extends State<OrderDetais> {
               ),
               Text(
                 "PRICE DETAILS",
-                style: CustomTextStyle.mediumTextStyle.copyWith(
+                style: TextStyle(
                     fontSize: 12,
                     color: Theme
                         .of(context)
@@ -516,18 +511,15 @@ class _OrderDetais extends State<OrderDetais> {
               ),
               createPriceItem(
                   "List Price",
-                  getFormattedCurrency(
-                      double.parse(product['grand_total'].toString())),
+                  "\u20b9 ${double.parse(product['grand_total'])}",
                   Colors.grey.shade700),
               createPriceItem(
                   "Extra Discount",
-                  getFormattedCurrency(
-                      double.parse(product['coupon_discount'].toString())),
+                  "\u20b9 ${double.parse(product['coupon_discount'])}",
                   Colors.red.shade300),
               createPriceItem(
                   "Shipping Fee",
-                  getFormattedCurrency(
-                      double.parse(product['order_details'][0]['shipping_cost'].toString())),
+                  "\u20b9 ${double.parse(product['order_details'][0]['shipping_cost'])}",
                   Colors.grey.shade700),
               SizedBox(
                 height: 8,
@@ -547,14 +539,11 @@ class _OrderDetais extends State<OrderDetais> {
                 children: <Widget>[
                   Text(
                     "Total",
-                    style: CustomTextStyle.boldTextStyle
-                        .copyWith(color: Colors.black, fontSize: 12),
+                    style:TextStyle(color: Colors.black, fontSize: 12),
                   ),
                   Text(
-                    getFormattedCurrency(
-                        double.parse(product['grand_total'].toString())),
-                    style: CustomTextStyle.mediumTextStyle
-                        .copyWith(color: Colors.black, fontSize: 12),
+                      "\u20b9 ${double.parse(product['grand_total'])}",
+                    style: TextStyle(color: Colors.black, fontSize: 12),
                   )
                 ],
               ),
@@ -566,15 +555,13 @@ class _OrderDetais extends State<OrderDetais> {
                   children: <Widget>[
                     Text(
                       "Payment Mode",
-                      style: CustomTextStyle.boldTextStyle
-                          .copyWith(color: Colors.grey, fontSize: 12),
+                      style:TextStyle(color: Colors.grey, fontSize: 12),
                     ),
                     Text(
                       product['payment_type'] != "cash_on_delivery"
                           ? 'Online Payment':
                            "Cash on Delivery",
-                      style: CustomTextStyle.boldTextStyle
-                          .copyWith(color: Colors.black, fontSize: 12),
+                      style: TextStyle(color: Colors.black, fontSize: 12),
                     )
                   ],
                 ),
@@ -587,13 +574,11 @@ class _OrderDetais extends State<OrderDetais> {
                   children: <Widget>[
                     Text(
                       "Payment Status",
-                      style: CustomTextStyle.boldTextStyle
-                          .copyWith(color: Colors.grey, fontSize: 12),
+                      style: TextStyle(color: Colors.grey, fontSize: 12),
                     ),
                     Text(
                       product['payment_status'],
-                      style: CustomTextStyle.boldTextStyle
-                          .copyWith(color: Colors.black, fontSize: 12),
+                      style: TextStyle(color: Colors.black, fontSize: 12),
                     )
                   ],
                 ),
@@ -605,15 +590,6 @@ class _OrderDetais extends State<OrderDetais> {
     );
   }
 
-  String getFormattedCurrency(double amount) {
-    FlutterMoneyFormatter fmf = new FlutterMoneyFormatter(amount: amount);
-    fmf.symbol = "₹";
-    fmf.thousandSeparator = ",";
-    fmf.decimalSeparator = ".";
-    fmf.spaceBetweenSymbolAndNumber = true;
-    return fmf.formattedLeftSymbol;
-  }
-
   createPriceItem(String key, String value, Color color) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 0, vertical: 3),
@@ -622,13 +598,11 @@ class _OrderDetais extends State<OrderDetais> {
         children: <Widget>[
           Text(
             key,
-            style: CustomTextStyle.mediumTextStyle
-                .copyWith(color: Colors.grey.shade700, fontSize: 12),
+            style: TextStyle(color: Colors.grey.shade700, fontSize: 12),
           ),
           Text(
             color == Colors.red.shade300 ? "- " + value : value,
-            style: CustomTextStyle.mediumTextStyle
-                .copyWith(color: color, fontSize: 12),
+            style: TextStyle(color: color, fontSize: 12),
           )
         ],
       ),

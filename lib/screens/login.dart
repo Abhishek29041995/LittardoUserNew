@@ -2,12 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:littardo/provider/UserData.dart';
 import 'package:littardo/screens/register.dart';
 import 'package:littardo/screens/verifynumber.dart';
 import 'package:littardo/services/api_services.dart';
 import 'package:littardo/utils/progressdialog.dart';
 import 'package:littardo/widgets/edittext.dart';
 import 'package:littardo/widgets/submitbutton.dart';
+import 'package:provider/provider.dart';
 
 import 'home.dart';
 
@@ -66,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           print(data);
                           presentToast(data['message'], context, 0);
                           if (data['code'] == 200) {
-                            storeLoginData(data['user'], data['cart_count']);
+                            Provider.of<UserData>(context, listen: false).storeLoginData(data['user'], data['cart_count']);
                             Navigator.pushAndRemoveUntil(
                               context,
                               new MaterialPageRoute(

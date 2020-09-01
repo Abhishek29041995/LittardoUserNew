@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:littardo/provider/UserData.dart';
 import 'package:littardo/services/api_services.dart';
 import 'package:littardo/utils/codeinput.dart';
+import 'package:provider/provider.dart';
 import 'home.dart';
 import 'package:littardo/utils/progressdialog.dart';
 
@@ -64,13 +66,16 @@ class _VerificationScreenState extends State<VerificationScreen> {
                           onResponse.stream
                               .transform(utf8.decoder)
                               .listen((value) {
-                            print(value);
                             Map data = json.decode(value);
                             print(data);
                             if (data["code"] == 200) {
-                              getProgressDialog(context, "Verifying")
-                                  .hide(context);
-
+                              Provider.of<UserData>(context, listen: false).storeLoginData(data['user'], data['cart_count']);
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                new MaterialPageRoute(
+                                    builder: (context) => Home()),
+                                    (Route<dynamic> route) => false,
+                              );
                             } else {
                               presentToast(data['message'], context, 2);
                               getProgressDialog(context, "Verifying")

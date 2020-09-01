@@ -33,6 +33,7 @@ Future<Response> commeonMethod1(String token, String method) async {
 }
 
 Future<Response> commeonMethod2(String url, String token) async {
+  print(token);
   final response = await get(
     url,
     headers: {
@@ -96,13 +97,6 @@ bool validateEmail(String email) {
           r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
       .hasMatch(email);
   return emailValid;
-}
-
-Future<Null> storeLoginData(Map data, int cartcount) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setString('token', 'loggedIn');
-  prefs.setString("cartCount", cartcount != null ? cartcount.toString() : "0");
-  prefs.setString('user', json.encode(data));
 }
 
 ProgressDialog getProgressDialog(BuildContext context, String message) {
