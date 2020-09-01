@@ -66,7 +66,7 @@ class TrendingItem extends StatelessWidget {
             height: 75,
             decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage(product.icon), fit: BoxFit.contain),
+                  image: NetworkImage(product.icon), fit: BoxFit.contain),
             ),
           ),
         )

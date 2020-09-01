@@ -114,7 +114,7 @@ class _HomeState extends State<Home> {
                           ],
                         ),
                       ),
-                      buildTrending(),
+                      buildTrending(userDataProvider.gethot_deals),
                       Padding(
                         padding: const EdgeInsets.all(6.0),
                         child: Row(
@@ -144,7 +144,7 @@ class _HomeState extends State<Home> {
                           ],
                         ),
                       ),
-                      buildTrending(),
+                      buildTrending(userDataProvider.getbestselling),
                       Occasions(),
                       Occasions(),
                     ],
@@ -161,99 +161,27 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Column buildTrending() {
+  Column buildTrending(List products) {
     return Column(
       children: <Widget>[
         Container(
           height: 180,
           child: ListView(
             scrollDirection: Axis.horizontal,
-            children: <Widget>[
-              TrendingItem(
+            children: List.generate(products.length, (index) {
+              print(products);
+              return TrendingItem(
                 product: Product(
-                    company: 'Apple',
-                    name: 'iPhone 11 (128GB)',
-                    icon: 'assets/phone1.jpeg',
-                    rating: 4.5,
-                    remainingQuantity: 5,
-                    price: '\$4,000'),
+                  company: products[index]["name"],
+                  name: 'iPhone 11 (128GB)',
+                  icon: products[index]["photos"].first,
+                  rating: 4.5,
+                  remainingQuantity: 5,
+                  price: '\$4,000',
+                ),
                 gradientColors: [Color(0XFFa466ec), Colors.purple[400]],
-              ),
-              TrendingItem(
-                product: Product(
-                    company: 'iPhone',
-                    name: 'iPhone 11 (64GB)',
-                    icon: 'assets/phone2.jpeg',
-                    rating: 4.5,
-                    price: '\$3,890'),
-                gradientColors: [Color(0XFF6eed8c), Colors.green[400]],
-              ),
-              TrendingItem(
-                product: Product(
-                    company: 'Xiaomi',
-                    name: 'Xiaomi Redmi Note8',
-                    icon: 'assets/mi1.png',
-                    rating: 3.5,
-                    price: '\$2,890'),
-                gradientColors: [Color(0XFFf28767), Colors.orange[400]],
-              ),
-              TrendingItem(
-                product: Product(
-                    company: 'Apple',
-                    name: 'iPhone 11 (128GB)',
-                    icon: 'assets/phone1.jpeg',
-                    rating: 4.5,
-                    remainingQuantity: 5,
-                    price: '\$4,000'),
-                gradientColors: [Color(0XFFa466ec), Colors.purple[400]],
-              ),
-              TrendingItem(
-                product: Product(
-                    company: 'iPhone',
-                    name: 'iPhone 11 (64GB)',
-                    icon: 'assets/phone2.jpeg',
-                    rating: 4.5,
-                    price: '\$3,890'),
-                gradientColors: [Color(0XFF6eed8c), Colors.green[400]],
-              ),
-              TrendingItem(
-                product: Product(
-                    company: 'Xiaomi',
-                    name: 'Xiaomi Redmi Note8',
-                    icon: 'assets/mi1.png',
-                    rating: 3.5,
-                    price: '\$2,890'),
-                gradientColors: [Color(0XFFf28767), Colors.orange[400]],
-              ),
-              TrendingItem(
-                product: Product(
-                    company: 'Apple',
-                    name: 'iPhone 11 (128GB)',
-                    icon: 'assets/phone1.jpeg',
-                    rating: 4.5,
-                    remainingQuantity: 5,
-                    price: '\$4,000'),
-                gradientColors: [Color(0XFFa466ec), Colors.purple[400]],
-              ),
-              TrendingItem(
-                product: Product(
-                    company: 'iPhone',
-                    name: 'iPhone 11 (64GB)',
-                    icon: 'assets/phone2.jpeg',
-                    rating: 4.5,
-                    price: '\$3,890'),
-                gradientColors: [Color(0XFF6eed8c), Colors.green[400]],
-              ),
-              TrendingItem(
-                product: Product(
-                    company: 'Xiaomi',
-                    name: 'Xiaomi Redmi Note8',
-                    icon: 'assets/mi1.png',
-                    rating: 3.5,
-                    price: '\$2,890'),
-                gradientColors: [Color(0XFFf28767), Colors.orange[400]],
-              ),
-            ],
+              );
+            }),
           ),
         )
       ],
@@ -262,53 +190,24 @@ class _HomeState extends State<Home> {
 
   CarouselSlider buildCarouselSlider() {
     return CarouselSlider(
-      height: 150,
-      viewportFraction: 0.9,
-      aspectRatio: 16 / 9,
-      autoPlay: true,
-      enlargeCenterPage: true,
-      items: imgList.map(
-        (url) {
-          return Stack(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.all(5.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  child: Image.network(
-                    url,
-                    fit: BoxFit.cover,
-                    width: 1000.0,
-                  ),
-                ),
+        height: 150,
+        viewportFraction: 0.9,
+        aspectRatio: 16 / 9,
+        autoPlay: true,
+        enlargeCenterPage: true,
+        items: List.generate(userDataProvider.getbannerOffers.length, (index) {
+          return Container(
+            margin: EdgeInsets.all(5.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              child: Image.network(
+                userDataProvider.getbannerOffers[index]["photo"],
+                fit: BoxFit.cover,
+                width: 1000.0,
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Text(
-                        "Sunny Getaways",
-                        style: TextStyle(color: Colors.white, fontSize: 24),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(
-                            "Lorem Ipsım Dolar Lorem Ipsım Dolar Lorem Ipsım Dolar",
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 14)),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            ],
+            ),
           );
-        },
-      ).toList(),
-    );
+        }));
   }
 
   BottomNavyBar buildBottomNavyBar(BuildContext context) {
