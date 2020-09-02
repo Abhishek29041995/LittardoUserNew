@@ -213,7 +213,15 @@ class _ProductListState extends State<ProductList> {
                                   isWishlisted: productList[index]
                                       ['wishlisted_count'],
                                   originalPrice: "\u20b9 " +
-                                      productList[index]['unit_price']),
+                                      productList[index]['unit_price'],
+                                  description: productList[index]
+                                      ['description'],
+                                  photos: productList[index]['photos'],
+                                  current_stock: productList[index]
+                                      ['current_stock'],
+                                  shipping_cost: productList[index]
+                                          ['shipping_cost']
+                                      .toString()),
                               gradientColors: [
                                 Color(0XFFa466ec),
                                 Colors.purple[400]
