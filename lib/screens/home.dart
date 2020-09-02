@@ -273,7 +273,11 @@ class _HomeState extends State<Home> {
                     remainingQuantity: 5,
                     price: '\u20b9 ${products[index]["purchase_price"]}',
                     isWishlisted: products[index]['wishlisted_count'],
-                    originalPrice: products[index]['unit_price']),
+                    originalPrice: products[index]['unit_price'],
+                    description: products[index]['description'],
+                    photos: products[index]['photos'],
+                    current_stock: products[index]['current_stock'],
+                    shipping_cost: products[index]['shipping_cost'].toString()),
                 gradientColors: [Color(0XFFa466ec), Colors.purple[400]],
               );
             }),
