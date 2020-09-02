@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_icons/ionicons.dart';
 import 'package:littardo/models/product.dart';
-import 'package:littardo/screens/product.dart';
+import 'package:littardo/screens/productPage.dart';
 import 'package:littardo/widgets/star_rating.dart';
 
 class TrendingItem extends StatelessWidget {

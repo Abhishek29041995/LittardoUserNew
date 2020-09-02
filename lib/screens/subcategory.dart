@@ -149,7 +149,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                         ],
                       ),
                     )),
-                pos == (subreportList.length - 1)
+                pos == (subreportList.length - 1) && (category != "Sub")
                     ? Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(

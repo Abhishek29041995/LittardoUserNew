@@ -2,7 +2,7 @@ import 'package:animated_splash/animated_splash.dart';
 import 'package:flutter/material.dart';
 import 'package:littardo/provider/UserData.dart';
 import 'package:littardo/screens/home.dart';
-import 'package:littardo/screens/product.dart';
+import 'package:littardo/screens/productPage.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

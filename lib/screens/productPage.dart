@@ -36,9 +36,9 @@ class _ProductPageState extends State<ProductPage> {
   int current_stock = 1;
   int _current = 0;
   final Widget placeholder = Container(color: Colors.grey);
-  List listSize = new List();
-  List listFabric = new List();
-  List listColor = new List();
+  List listSize = List();
+  List listFabric = List();
+  List listColor = List();
   var selectedSize = 0;
   var selectedFabric = 0;
   var selectedColor = 0;
@@ -54,15 +54,13 @@ class _ProductPageState extends State<ProductPage> {
   String lastStock = "";
   String lastWishListed = "";
   Map rating_counts;
-  List rating_review = new List();
+  List rating_review = List();
 
-  TextEditingController mobile = new TextEditingController();
+  TextEditingController mobile = TextEditingController();
 
-  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
     lastPrice = widget.product.price;
     lastStock = widget.product.current_stock;
     originallastPrice = widget.product.originalPrice;
@@ -70,6 +68,8 @@ class _ProductPageState extends State<ProductPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       getRatingInfo();
     });
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
@@ -118,19 +118,19 @@ class _ProductPageState extends State<ProductPage> {
                     )
                   ],
                 ),
-//            new Container(
+//             Container(
 //              color: Colors.transparent,
-//              child: new Container(
+//              child:  Container(
 //                  width: 48,
 //                  height: 48,
-//                  decoration: new BoxDecoration(
+//                  decoration:  BoxDecoration(
 //                    border: Border.all(width: 1.0, color: Colors.black26),
-//                    borderRadius: new BorderRadius.all(
+//                    borderRadius:  BorderRadius.all(
 //                      Radius.circular(8.0),
 //                    ),
 //                  ),
-//                  child: new Center(
-//                    child: new Icon(
+//                  child:  Center(
+//                    child:  Icon(
 //                      Ionicons.getIconData("ios-share"),
 //                      color: Colors.black54,
 //                    ),
@@ -181,7 +181,7 @@ class _ProductPageState extends State<ProductPage> {
 //                      ),
 //                      color: Colors.white,
 //                    ),
-//                    new Text(
+//                     Text(
 //                      "Buy Now",
 //                      style: TextStyle(color: Colors.white),
 //                    ),
@@ -199,8 +199,8 @@ class _ProductPageState extends State<ProductPage> {
                       setState(() {
                         addedtocart = false;
                       });
-                      Navigator.of(context).push(new MaterialPageRoute(
-                          builder: (context) => new ShoppingCart(true)));
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ShoppingCart(true)));
                     } else {
                       if (int.parse(lastStock) > 0) {
                         addToCart("cart/add", "cart");
@@ -245,7 +245,7 @@ class _ProductPageState extends State<ProductPage> {
                           ),
                           color: Colors.white,
                         ),
-                        new Text(
+                        Text(
                           addedtocart ? "GO TO CART" : "ADD TO CART",
                           style: TextStyle(color: Colors.white),
                         ),
@@ -435,8 +435,8 @@ class _ProductPageState extends State<ProductPage> {
                                     border: Border.all(color: Colors.grey),
                                     borderRadius: BorderRadius.circular(50)),
                                 child: Wrap(children: <Widget>[
-                                  new InkWell(
-                                    child: new Icon(
+                                  InkWell(
+                                    child: Icon(
                                       Icons.remove,
                                       size: 24,
                                     ),
@@ -448,13 +448,13 @@ class _ProductPageState extends State<ProductPage> {
                                       });
                                     },
                                   ),
-                                  new Padding(
+                                  Padding(
                                       padding:
                                           EdgeInsets.symmetric(horizontal: 20),
-                                      child: new Text(current_stock.toString(),
+                                      child: Text(current_stock.toString(),
                                           style: TextStyle(fontSize: 20))),
-                                  new InkWell(
-                                    child: new Icon(
+                                  InkWell(
+                                    child: Icon(
                                       Icons.add,
                                       size: 24,
                                     ),
@@ -557,7 +557,7 @@ class _ProductPageState extends State<ProductPage> {
                                                                           const EdgeInsets.all(
                                                                               4.0),
                                                                       child:
-                                                                          new TextField(
+                                                                          TextField(
                                                                         autofocus:
                                                                             true,
                                                                         controller:
@@ -566,16 +566,16 @@ class _ProductPageState extends State<ProductPage> {
                                                                             11,
                                                                         keyboardType:
                                                                             TextInputType.number,
-                                                                        decoration: new InputDecoration(
+                                                                        decoration: InputDecoration(
                                                                             counterStyle: TextStyle(
                                                                               height: double.minPositive,
                                                                             ),
                                                                             counterText: "",
                                                                             labelText: "Enter mobile number",
                                                                             contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-                                                                            border: new OutlineInputBorder(
-                                                                              borderRadius: new BorderRadius.circular(5.0),
-                                                                              borderSide: new BorderSide(),
+                                                                            border: OutlineInputBorder(
+                                                                              borderRadius: BorderRadius.circular(5.0),
+                                                                              borderSide: BorderSide(),
                                                                             )),
                                                                       ),
                                                                     ),
@@ -733,7 +733,7 @@ class _ProductPageState extends State<ProductPage> {
 //      "color": listColor.length>0?listColor[selectedColor]:"NA",
 //      "size": listSize.length>0?listSize[selectedSize]:"NA"
 //    };
-    var request = new MultipartRequest("POST", Uri.parse(api_url + method));
+    var request = MultipartRequest("POST", Uri.parse(api_url + method));
     request.fields['product_id'] = widget.product.id;
     request.fields["user_id"] =
         Provider.of<UserData>(context, listen: false).userData['user_id'];
@@ -766,8 +766,8 @@ class _ProductPageState extends State<ProductPage> {
                 context, data['message'], "", "success", from);
           } else {
             // Navigator.of(context).pop();
-            // Navigator.of(context).push(new MaterialPageRoute(
-            //     builder: (context) => new MyCart("Checkout", data['data'])));
+            // Navigator.of(context).push( MaterialPageRoute(
+            //     builder: (context) =>  MyCart("Checkout", data['data'])));
           }
         } else if (data['code'] == 402) {
           showThankYouBottomSheet(
@@ -828,8 +828,8 @@ class _ProductPageState extends State<ProductPage> {
                               Navigator.pop(context);
 //                              Navigator.pushAndRemoveUntil(
 //                                context,
-//                                new MaterialPageRoute(
-//                                    builder: (context) => new HomePage()),
+//                                 MaterialPageRoute(
+//                                    builder: (context) =>  HomePage()),
 //                                (Route<dynamic> route) => false,
 //                              );
                             },
@@ -895,7 +895,7 @@ class _ProductPageState extends State<ProductPage> {
   void addToWishList(String method, String accessToken, String productId) {
     getProgressDialog(context, "Adding to wishlist...").show();
     print(accessToken);
-    var request = new MultipartRequest("POST", Uri.parse(api_url + method));
+    var request = MultipartRequest("POST", Uri.parse(api_url + method));
     request.fields['product_id'] = productId;
     request.headers['Authorization'] = "Bearer " +
         Provider.of<UserData>(context, listen: false).userData['api_token'];
@@ -967,7 +967,7 @@ class _ProductPageState extends State<ProductPage> {
   void getPriceInfo() {
     getProgressDialog(context, "Fetching Details...").show();
     var request =
-        new MultipartRequest("POST", Uri.parse(api_url + "product_variant"));
+        MultipartRequest("POST", Uri.parse(api_url + "product_variant"));
     request.fields["id"] = widget.product.id;
     request.fields["attribute_id_1"] = listSize[selectedSize];
     request.fields["attribute_id_2"] = listFabric[selectedFabric];

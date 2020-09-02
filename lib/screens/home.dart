@@ -40,6 +40,13 @@ class _HomeState extends State<Home> {
   UserData userDataProvider;
 
   bool showSearchField = false;
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(

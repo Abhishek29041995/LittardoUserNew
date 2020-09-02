@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:littardo/utils/navigator.dart';
 import 'package:littardo/widgets/star_rating.dart';
-import 'package:littardo/screens/product.dart';
+import 'package:littardo/screens/productPage.dart';
 
 import '../models/product.dart';
 
