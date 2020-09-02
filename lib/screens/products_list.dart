@@ -43,6 +43,10 @@ class _ProductListState extends State<ProductList> {
   PanelController slidingUpController;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  TextEditingController searchController = new TextEditingController();
+  bool showSearchField = false;
+  String lastQuery = "";
+
   @override
   void initState() {
     // TODO: implement initState
@@ -68,10 +72,34 @@ class _ProductListState extends State<ProductList> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text(
-          widget.query != "" ? widget.query : widget.name,
-          style: TextStyle(color: Colors.black, fontSize: 16),
-        ),
+        title: showSearchField
+            ? TextField(
+                controller: searchController,
+                autofocus: true,
+                style: new TextStyle(
+                  color: Colors.black,
+                ),
+                decoration: new InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "Search",
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        Icons.search,
+                        color: Colors.orangeAccent,
+                      ),
+                      onPressed: () {
+                        if (searchController.text == "") {
+                          presentToast("Please enter search query", context, 2);
+                        } else {
+                          serachQuery(searchController.text);
+                        }
+                      },
+                    )),
+              )
+            : Text(
+                lastQuery != "" ? lastQuery : widget.name,
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
         leading: IconButton(
           icon:
               Icon(Ionicons.getIconData("ios-arrow-back"), color: Colors.black),
@@ -84,23 +112,14 @@ class _ProductListState extends State<ProductList> {
               height: 18.0,
               width: 18.0,
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    showSearchField = !showSearchField;
+                  });
+                },
                 icon: Icon(
-                  MaterialCommunityIcons.getIconData("magnify"),
-                  color: Colors.black,
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: SizedBox(
-              height: 18.0,
-              width: 18.0,
-              child: IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  MaterialCommunityIcons.getIconData("heart-outline"),
+                  MaterialCommunityIcons.getIconData(
+                      !showSearchField ? "magnify" : "close"),
                   color: Colors.black,
                 ),
               ),
@@ -183,12 +202,18 @@ class _ProductListState extends State<ProductList> {
                           return Center(
                             child: TrendingItem(
                               product: Product(
-                                  id: 'Apple',
-                                  name: 'iPhone 11 (128GB)',
-                                  icon: 'assets/phone1.jpeg',
-                                  rating: 4.5,
+                                  id: productList[index]['id'].toString(),
+                                  name: productList[index]['name'],
+                                  icon: productList[index]['thumbnail_img'],
+                                  rating: double.parse(
+                                      productList[index]['rating']),
                                   remainingQuantity: 5,
-                                  price: '\$4,000'),
+                                  price: "\u20b9 " +
+                                      productList[index]['purchase_price'],
+                                  isWishlisted: productList[index]
+                                      ['wishlisted_count'],
+                                  originalPrice: "\u20b9 " +
+                                      productList[index]['unit_price']),
                               gradientColors: [
                                 Color(0XFFa466ec),
                                 Colors.purple[400]
@@ -208,14 +233,20 @@ class _ProductListState extends State<ProductList> {
   }
 
   void serachQuery(String query) {
+    setState(() {
+      serviceCalled = false;
+      lastQuery = query;
+      productList.clear();
+    });
     getProgressDialog(context, "Fetching Products...").show();
-    commeonMethod2(api_url + "products?keyword=" + query,
+    commeonMethod2(api_url + "products?keyword=" + lastQuery,
             Provider.of<UserData>(context, listen: false).userData['api_token'])
         .then((onResponse) async {
       Map data = json.decode(onResponse.body);
-      presentToast(data['message'], context, 0);
       if (data['code'] == 200) {
         productList.addAll(data['data']);
+      } else {
+        presentToast(data['message'], context, 0);
       }
       setState(() {
         serviceCalled = true;

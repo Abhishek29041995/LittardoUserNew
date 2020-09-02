@@ -14,6 +14,7 @@ import 'package:littardo/screens/search.dart';
 import 'package:littardo/screens/shoppingcart.dart';
 import 'package:littardo/screens/usersettings.dart';
 import 'package:littardo/screens/whell.dart';
+import 'package:littardo/services/api_services.dart';
 import 'package:littardo/utils/constant.dart';
 import 'package:littardo/widgets/item_product.dart';
 import 'package:littardo/widgets/occasions.dart';
@@ -34,8 +35,10 @@ class _HomeState extends State<Home> {
   int currentIndex = 0;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  TextEditingController searchController = new TextEditingController();
   UserData userDataProvider;
 
+  bool showSearchField = false;
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -320,10 +323,39 @@ class _HomeState extends State<Home> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-      title: Text(
-        "Flutter Ecommerce Design",
-        style: TextStyle(color: Colors.black, fontSize: 16),
-      ),
+      title: showSearchField
+          ? TextField(
+              controller: searchController,
+              autofocus: true,
+              style: new TextStyle(
+                color: Colors.black,
+              ),
+              decoration: new InputDecoration(
+                  border: InputBorder.none,
+                  hintText: "Search",
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      Icons.search,
+                      color: Colors.orangeAccent,
+                    ),
+                    onPressed: () {
+                      if (searchController.text == "") {
+                        presentToast("Please enter search query", context, 2);
+                      } else {
+                        Navigator.of(context).push(new MaterialPageRoute(
+                            builder: (context) => new ProductList(
+                                id: "",
+                                name: "",
+                                type: "",
+                                query: searchController.text)));
+                      }
+                    },
+                  )),
+            )
+          : Text(
+              "Littardo Emporium",
+              style: TextStyle(color: Colors.black, fontSize: 16),
+            ),
       leading: new IconButton(
           icon: new Icon(MaterialCommunityIcons.getIconData("menu"),
               color: Colors.black),
@@ -331,16 +363,13 @@ class _HomeState extends State<Home> {
       actions: <Widget>[
         GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
-              PageTransition(
-                type: PageTransitionType.fade,
-                child: Search(),
-              ),
-            );
+            setState(() {
+              showSearchField = !showSearchField;
+            });
           },
           child: Icon(
-            MaterialCommunityIcons.getIconData("magnify"),
+            MaterialCommunityIcons.getIconData(
+                !showSearchField ? "magnify" : "close"),
             color: Colors.black,
           ),
         ),

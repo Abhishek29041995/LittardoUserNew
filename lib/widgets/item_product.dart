@@ -84,7 +84,7 @@ class TrendingItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         // Text(
-        //   product.id,
+        //   product.company,
         //   style: TextStyle(fontSize: 12, color: Color(0XFFb1bdef)),
         // ),
         Text(
