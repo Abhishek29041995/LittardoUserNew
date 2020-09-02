@@ -64,15 +64,18 @@ class TrendingItem extends StatelessWidget {
     return Stack(
       children: <Widget>[
         Center(
-          child: Container(
-            width: 75,
-            height: 75,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: CachedNetworkImageProvider(product.icon,),fit: BoxFit.contain,
+            child: Container(
+          width: 75,
+          height: 75,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: CachedNetworkImageProvider(
+                product.icon,
+              ),
+              fit: BoxFit.contain,
             ),
           ),
-        )
+        ))
       ],
     );
   }
