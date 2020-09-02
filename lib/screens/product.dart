@@ -763,7 +763,7 @@ class _ProductPageState extends State<ProductPage> {
             children: <Widget>[
               TrendingItem(
                 product: Product(
-                    company: 'Apple',
+                    id: 'Apple',
                     name: 'iPhone 7 plus (128GB)',
                     icon: 'assets/iphone_7.png',
                     rating: 4.5,
@@ -773,7 +773,7 @@ class _ProductPageState extends State<ProductPage> {
               ),
               TrendingItem(
                 product: Product(
-                    company: 'Apple',
+                    id: 'Apple',
                     name: 'iPhone 11 (128GB)',
                     icon: 'assets/phone1.jpeg',
                     rating: 4.5,
@@ -783,7 +783,7 @@ class _ProductPageState extends State<ProductPage> {
               ),
               TrendingItem(
                 product: Product(
-                    company: 'iPhone',
+                    id: 'iPhone',
                     name: 'iPhone 11 (64GB)',
                     icon: 'assets/phone2.jpeg',
                     rating: 4.5,
@@ -792,7 +792,7 @@ class _ProductPageState extends State<ProductPage> {
               ),
               TrendingItem(
                 product: Product(
-                    company: 'Xiaomi',
+                    id: 'Xiaomi',
                     name: 'Xiaomi Redmi Note8',
                     icon: 'assets/mi1.png',
                     rating: 3.5,
@@ -801,7 +801,7 @@ class _ProductPageState extends State<ProductPage> {
               ),
               TrendingItem(
                 product: Product(
-                    company: 'Apple',
+                    id: 'Apple',
                     name: 'iPhone 11 (128GB)',
                     icon: 'assets/phone1.jpeg',
                     rating: 4.5,
@@ -811,7 +811,7 @@ class _ProductPageState extends State<ProductPage> {
               ),
               TrendingItem(
                 product: Product(
-                    company: 'iPhone',
+                    id: 'iPhone',
                     name: 'iPhone 11 (64GB)',
                     icon: 'assets/phone2.jpeg',
                     rating: 4.5,
@@ -820,7 +820,7 @@ class _ProductPageState extends State<ProductPage> {
               ),
               TrendingItem(
                 product: Product(
-                    company: 'Xiaomi',
+                    id: 'Xiaomi',
                     name: 'Xiaomi Redmi Note8',
                     icon: 'assets/mi1.png',
                     rating: 3.5,
@@ -829,7 +829,7 @@ class _ProductPageState extends State<ProductPage> {
               ),
               TrendingItem(
                 product: Product(
-                    company: 'Apple',
+                    id: 'Apple',
                     name: 'iPhone 11 (128GB)',
                     icon: 'assets/phone1.jpeg',
                     rating: 4.5,
@@ -839,7 +839,7 @@ class _ProductPageState extends State<ProductPage> {
               ),
               TrendingItem(
                 product: Product(
-                    company: 'iPhone',
+                    id: 'iPhone',
                     name: 'iPhone 11 (64GB)',
                     icon: 'assets/phone2.jpeg',
                     rating: 4.5,
@@ -848,7 +848,7 @@ class _ProductPageState extends State<ProductPage> {
               ),
               TrendingItem(
                 product: Product(
-                    company: 'Xiaomi',
+                    id: 'Xiaomi',
                     name: 'Xiaomi Redmi Note8',
                     icon: 'assets/mi1.png',
                     rating: 3.5,

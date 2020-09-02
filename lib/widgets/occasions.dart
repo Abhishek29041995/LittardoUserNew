@@ -15,7 +15,7 @@ class Occasions extends StatelessWidget {
             context,
             ProductPage(
               product: Product(
-                  company: 'Apple',
+                  id: 'Apple',
                   name: 'iPhone 7 plus (128GB)',
                   icon: 'assets/iphone_7.png',
                   rating: 4.5,

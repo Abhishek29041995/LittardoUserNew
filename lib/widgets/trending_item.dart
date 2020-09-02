@@ -73,8 +73,10 @@ class TrendingItem extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => ProductList(
-                  product: product,
-                )));
+                id: product.id.toString(),
+                name: product.name,
+                type: "brand",
+                query: "")));
       },
     );
   }
@@ -112,7 +114,7 @@ class TrendingItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          product.company,
+          product.id,
           style: TextStyle(fontSize: 12, color: Color(0XFFb1bdef)),
         ),
         Text(

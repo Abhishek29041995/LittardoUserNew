@@ -101,7 +101,11 @@ class _HomeState extends State<Home> {
                                     context,
                                     PageTransition(
                                       type: PageTransitionType.fade,
-                                      child: ProductList(),
+                                      child: ProductList(
+                                          id: "",
+                                          name: "",
+                                          type: "",
+                                          query: "Hot Deals"),
                                     ),
                                   );
                                 },
@@ -216,7 +220,7 @@ class _HomeState extends State<Home> {
                                   userDataProvider.getbrands.length, (index) {
                                 return TrendingItem(
                                   product: Product(
-                                    company: userDataProvider.getbrands[index]
+                                    id: userDataProvider.getbrands[index]
                                         ["name"],
                                     name: userDataProvider.getbrands[index]
                                         ["name"],
@@ -258,7 +262,7 @@ class _HomeState extends State<Home> {
               print(products);
               return TrendingItem(
                 product: Product(
-                    company: products[index]["name"],
+                    id: products[index]["id"].toString(),
                     name: products[index]["name"],
                     icon: products[index]["thumbnail_img"],
                     rating: double.parse(products[index]["rating"]),

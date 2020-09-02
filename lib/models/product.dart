@@ -1,5 +1,5 @@
 class Product {
-  final String company;
+  final String id;
   final String name;
   final String icon;
   final double rating;
@@ -9,7 +9,7 @@ class Product {
   final int remainingQuantity;
 
   Product(
-      {this.company,
+      {this.id,
       this.name,
       this.icon,
       this.rating,

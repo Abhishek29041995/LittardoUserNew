@@ -1,23 +1,40 @@
+import 'dart:convert';
+
 import 'package:flutter_icons/ionicons.dart';
 import 'package:flutter_icons/material_community_icons.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:littardo/models/product.dart';
+import 'package:littardo/provider/UserData.dart';
+import 'package:littardo/services/api_services.dart';
 import 'package:littardo/widgets/filter.dart';
 import 'package:littardo/widgets/item_product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class ProductList extends StatefulWidget {
-  final Product product;
+  final String id;
+  final String name;
+  final String type;
+  final String query;
 
-  ProductList({this.product});
+  const ProductList({Key key, this.id, this.name, this.type, this.query})
+      : super(key: key);
 
   @override
   _ProductListState createState() => _ProductListState();
 }
 
 class _ProductListState extends State<ProductList> {
+  List productList = new List();
+  String categoryName = "";
+  String method = "";
+  int pagesize = 1;
+  bool serviceCalled = false;
+  bool iswishListed = false;
+
   BorderRadiusGeometry radius = BorderRadius.only(
     topLeft: Radius.circular(24.0),
     topRight: Radius.circular(24.0),
@@ -26,23 +43,20 @@ class _ProductListState extends State<ProductList> {
   PanelController slidingUpController;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  List<String> widgetList = [
-    'A',
-    'B',
-    'C',
-    'A',
-    'B',
-    'C',
-    'A',
-    'B',
-    'C',
-    'A',
-    'B',
-    'C',
-    'A',
-    'B',
-    'C'
-  ];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (widget.query != "") {
+        serachQuery(widget.query);
+      } else {
+        fetchProducts(widget.type == "cat"
+            ? "products?sub_sub_category_id="
+            : "products?brand_id=");
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +69,7 @@ class _ProductListState extends State<ProductList> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
-          "Man",
+          widget.query != "" ? widget.query : widget.name,
           style: TextStyle(color: Colors.black, fontSize: 16),
         ),
         leading: IconButton(
@@ -144,121 +158,90 @@ class _ProductListState extends State<ProductList> {
           ),
         ),
         borderRadius: radius,
-        body: Container(
-          padding: EdgeInsets.only(top: 18),
-          child: GridView.count(
-            crossAxisCount: 2,
-            childAspectRatio: (itemWidth / itemHeight) * 1.1,
-            controller: ScrollController(keepScrollOffset: false),
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            children: <Widget>[
-              Center(
-                child: TrendingItem(
-                  product: Product(
-                      company: 'Apple',
-                      name: 'iPhone 11 (128GB)',
-                      icon: 'assets/phone1.jpeg',
-                      rating: 4.5,
-                      remainingQuantity: 5,
-                      price: '\$4,000'),
-                  gradientColors: [Color(0XFFa466ec), Colors.purple[400]],
-                ),
-              ),
-              Center(
-                child: TrendingItem(
-                  product: Product(
-                      company: 'iPhone',
-                      name: 'iPhone 11 (64GB)',
-                      icon: 'assets/phone2.jpeg',
-                      rating: 4.5,
-                      price: '\$3,890'),
-                  gradientColors: [Color(0XFF6eed8c), Colors.green[400]],
-                ),
-              ),
-              Center(
-                child: TrendingItem(
-                  product: Product(
-                      company: 'Xiaomi',
-                      name: 'Xiaomi Redmi Note8',
-                      icon: 'assets/mi1.png',
-                      rating: 3.5,
-                      price: '\$2,890'),
-                  gradientColors: [Color(0XFFf28767), Colors.orange[400]],
-                ),
-              ),
-              Center(
-                child: TrendingItem(
-                  product: Product(
-                      company: 'Apple',
-                      name: 'iPhone 11 (128GB)',
-                      icon: 'assets/phone1.jpeg',
-                      rating: 4.5,
-                      remainingQuantity: 5,
-                      price: '\$4,000'),
-                  gradientColors: [Color(0XFFa466ec), Colors.purple[400]],
-                ),
-              ),
-              Center(
-                child: TrendingItem(
-                  product: Product(
-                      company: 'iPhone',
-                      name: 'iPhone 11 (64GB)',
-                      icon: 'assets/phone2.jpeg',
-                      rating: 4.5,
-                      price: '\$3,890'),
-                  gradientColors: [Color(0XFF6eed8c), Colors.green[400]],
-                ),
-              ),
-              Center(
-                child: TrendingItem(
-                  product: Product(
-                      company: 'Xiaomi',
-                      name: 'Xiaomi Redmi Note8',
-                      icon: 'assets/mi1.png',
-                      rating: 3.5,
-                      price: '\$2,890'),
-                  gradientColors: [Color(0XFFf28767), Colors.orange[400]],
-                ),
-              ),
-              Center(
-                child: TrendingItem(
-                  product: Product(
-                      company: 'Apple',
-                      name: 'iPhone 11 (128GB)',
-                      icon: 'assets/phone1.jpeg',
-                      rating: 4.5,
-                      remainingQuantity: 5,
-                      price: '\$4,000'),
-                  gradientColors: [Color(0XFFa466ec), Colors.purple[400]],
-                ),
-              ),
-              Center(
-                child: TrendingItem(
-                  product: Product(
-                      company: 'iPhone',
-                      name: 'iPhone 11 (64GB)',
-                      icon: 'assets/phone2.jpeg',
-                      rating: 4.5,
-                      price: '\$3,890'),
-                  gradientColors: [Color(0XFF6eed8c), Colors.green[400]],
-                ),
-              ),
-              Center(
-                child: TrendingItem(
-                  product: Product(
-                      company: 'Xiaomi',
-                      name: 'Xiaomi Redmi Note8',
-                      icon: 'assets/mi1.png',
-                      rating: 3.5,
-                      price: '\$2,890'),
-                  gradientColors: [Color(0XFFf28767), Colors.orange[400]],
-                ),
-              ),
-            ],
-          ),
-        ),
+        body: productList.length > 0
+            ? Container(
+                padding: EdgeInsets.only(top: 18),
+                child: LayoutBuilder(builder: (c, data) {
+                  return LazyLoadScrollView(
+                    onEndOfPage: () => fetchProducts(widget.type == "cat"
+                        ? "products?sub_sub_category_id="
+                        : "products?brand_id="),
+                    scrollOffset: 100,
+                    child: GridView.builder(
+                        gridDelegate:
+                            new SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 3.0,
+                          childAspectRatio: (itemWidth / itemHeight) * 1.1,
+                          mainAxisSpacing: 3.0,
+                        ),
+                        itemCount: productList.length,
+                        controller: ScrollController(keepScrollOffset: false),
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Center(
+                            child: TrendingItem(
+                              product: Product(
+                                  id: 'Apple',
+                                  name: 'iPhone 11 (128GB)',
+                                  icon: 'assets/phone1.jpeg',
+                                  rating: 4.5,
+                                  remainingQuantity: 5,
+                                  price: '\$4,000'),
+                              gradientColors: [
+                                Color(0XFFa466ec),
+                                Colors.purple[400]
+                              ],
+                            ),
+                          );
+                        }),
+                  );
+                }))
+            : serviceCalled
+                ? Center(
+                    child: Image.asset("assets/norecordfound.png"),
+                  )
+                : SizedBox(),
       ),
     );
+  }
+
+  void serachQuery(String query) {
+    getProgressDialog(context, "Fetching Products...").show();
+    commeonMethod2(api_url + "products?keyword=" + query,
+            Provider.of<UserData>(context, listen: false).userData['api_token'])
+        .then((onResponse) async {
+      Map data = json.decode(onResponse.body);
+      presentToast(data['message'], context, 0);
+      if (data['code'] == 200) {
+        productList.addAll(data['data']);
+      }
+      setState(() {
+        serviceCalled = true;
+      });
+      getProgressDialog(context, "Fetching Products...").hide(context);
+    });
+  }
+
+  fetchProducts(String method) {
+    getProgressDialog(context, "Fetching Products...").show();
+    commeonMethod2(api_url + method + widget.id,
+            Provider.of<UserData>(context, listen: false).userData['api_token'])
+        .then((onResponse) {
+      Map data = json.decode(onResponse.body);
+      if (data['code'] == 200) {
+        productList.addAll(data['products']['data']);
+        setState(() {
+          pagesize += 1;
+        });
+      } else {
+        presentToast(data['message'], context, 0);
+      }
+      setState(() {
+        serviceCalled = true;
+      });
+      getProgressDialog(context, "Fetching Product...").hide(context);
+    });
   }
 }
