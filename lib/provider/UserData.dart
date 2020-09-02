@@ -10,6 +10,7 @@ class UserData extends ChangeNotifier {
   String cartCount = "";
   List featured = new List();
   List bannerOffers = new List();
+  List<Widget> bannerOffersWidget = new List();
   List bestselling = new List();
   List hot_deals = new List();
   List brands = new List();
@@ -19,6 +20,7 @@ class UserData extends ChangeNotifier {
 
   get getfeatured => featured;
   get getbannerOffers => bannerOffers;
+  get getBannersWidgets => bannerOffersWidget;
   get getbestselling => bestselling;
   get gethot_deals => hot_deals;
   get getbrands => brands;
@@ -73,8 +75,26 @@ class UserData extends ChangeNotifier {
         bestselling = data['data']['best_selling'];
         hot_deals = data['data']['hot_deals'];
         brands = data['data']['brands'];
+        buildBanner();
         notifyListeners();
       }
     }).catchError((onerr) {});
+  }
+
+  void buildBanner() {
+    bannerOffers.forEach((element) {
+      bannerOffersWidget.add(Container(
+        margin: EdgeInsets.all(5.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(5.0)),
+          child: Image.network(
+            element["photo"],
+            fit: BoxFit.cover,
+            width: 1000.0,
+          ),
+        ),
+      ));
+    });
+    notifyListeners();
   }
 }

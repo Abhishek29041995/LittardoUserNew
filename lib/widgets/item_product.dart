@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_icons/ionicons.dart';
@@ -31,7 +32,9 @@ class TrendingItem extends StatelessWidget {
                       children: <Widget>[
                         Spacer(),
                         Icon(
-                          Ionicons.getIconData("ios-heart-empty"),
+                          Ionicons.getIconData(product.isWishlisted == "1"
+                              ? "ios-heart"
+                              : "ios-heart-empty"),
                           color: Colors.black54,
                         )
                       ],
@@ -66,7 +69,7 @@ class TrendingItem extends StatelessWidget {
             height: 75,
             decoration: BoxDecoration(
               image: DecorationImage(
-                  image: NetworkImage(product.icon), fit: BoxFit.contain),
+                  image: CachedNetworkImageProvider(product.icon,),fit: BoxFit.contain,
             ),
           ),
         )
@@ -78,31 +81,35 @@ class TrendingItem extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
-          product.company,
-          style: TextStyle(fontSize: 12, color: Color(0XFFb1bdef)),
-        ),
+        // Text(
+        //   product.company,
+        //   style: TextStyle(fontSize: 12, color: Color(0XFFb1bdef)),
+        // ),
         Text(
           product.name,
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11),
         ),
-        StarRating(rating: product.rating, size: 10),
-        Row(
-          children: <Widget>[
-            Text(product.price,
-                style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red)),
-            Text(
-              '#00.000',
-              style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 10,
-                  decoration: TextDecoration.lineThrough),
-            )
-          ],
-        )
+        product.rating != null
+            ? StarRating(rating: product.rating, size: 10)
+            : SizedBox(),
+        product.price != null
+            ? Row(
+                children: <Widget>[
+                  Text(product.price,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red)),
+                  Text(
+                    product.originalPrice,
+                    style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 10,
+                        decoration: TextDecoration.lineThrough),
+                  )
+                ],
+              )
+            : SizedBox()
       ],
     );
   }

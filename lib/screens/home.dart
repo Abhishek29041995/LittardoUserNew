@@ -75,7 +75,9 @@ class _HomeState extends State<Home> {
                   child: Column(
                     children: <Widget>[
                       CategoriesListView(),
-                      buildCarouselSlider(),
+                      userDataProvider.bannerOffersWidget.length > 0
+                          ? buildCarouselSlider()
+                          : SizedBox(),
                       SizedBox(
                         height: 5.0,
                       ),
@@ -85,7 +87,7 @@ class _HomeState extends State<Home> {
                           children: <Widget>[
                             Expanded(
                               child: Text(
-                                "Popular Trendings",
+                                "Hot Deals",
                                 style: TextStyle(
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.bold),
@@ -121,6 +123,36 @@ class _HomeState extends State<Home> {
                           children: <Widget>[
                             Expanded(
                               child: Text(
+                                "Featured Products",
+                                style: TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  print("Clicked");
+                                },
+                                child: Text(
+                                  "View All",
+                                  style: TextStyle(
+                                      fontSize: 18.0, color: Colors.blue),
+                                  textAlign: TextAlign.end,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      buildTrending(userDataProvider.getfeatured),
+                      Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Text(
                                 "Best Selling",
                                 style: TextStyle(
                                     fontSize: 20.0,
@@ -145,8 +177,62 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                       buildTrending(userDataProvider.getbestselling),
-                      Occasions(),
-                      Occasions(),
+                      Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Text(
+                                "Top Brands",
+                                style: TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  print("Clicked");
+                                },
+                                child: Text(
+                                  "View All",
+                                  style: TextStyle(
+                                      fontSize: 18.0, color: Colors.blue),
+                                  textAlign: TextAlign.end,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Column(
+                        children: <Widget>[
+                          Container(
+                            height: 160,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: List.generate(
+                                  userDataProvider.getbrands.length, (index) {
+                                return TrendingItem(
+                                  product: Product(
+                                    company: userDataProvider.getbrands[index]
+                                        ["name"],
+                                    name: userDataProvider.getbrands[index]
+                                        ["name"],
+                                    icon: userDataProvider.getbrands[index]
+                                        ["logo"],
+                                  ),
+                                  gradientColors: [
+                                    Color(0XFFa466ec),
+                                    Colors.purple[400]
+                                  ],
+                                );
+                              }),
+                            ),
+                          )
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -172,13 +258,14 @@ class _HomeState extends State<Home> {
               print(products);
               return TrendingItem(
                 product: Product(
-                  company: products[index]["name"],
-                  name: 'iPhone 11 (128GB)',
-                  icon: products[index]["photos"].first,
-                  rating: 4.5,
-                  remainingQuantity: 5,
-                  price: '\$4,000',
-                ),
+                    company: products[index]["name"],
+                    name: products[index]["name"],
+                    icon: products[index]["thumbnail_img"],
+                    rating: double.parse(products[index]["rating"]),
+                    remainingQuantity: 5,
+                    price: '\u20b9 ${products[index]["purchase_price"]}',
+                    isWishlisted: products[index]['wishlisted_count'],
+                    originalPrice: products[index]['unit_price']),
                 gradientColors: [Color(0XFFa466ec), Colors.purple[400]],
               );
             }),
@@ -195,19 +282,7 @@ class _HomeState extends State<Home> {
         aspectRatio: 16 / 9,
         autoPlay: true,
         enlargeCenterPage: true,
-        items: List.generate(userDataProvider.getbannerOffers.length, (index) {
-          return Container(
-            margin: EdgeInsets.all(5.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              child: Image.network(
-                userDataProvider.getbannerOffers[index]["photo"],
-                fit: BoxFit.cover,
-                width: 1000.0,
-              ),
-            ),
-          );
-        }));
+        items: userDataProvider.bannerOffersWidget);
   }
 
   BottomNavyBar buildBottomNavyBar(BuildContext context) {

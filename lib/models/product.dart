@@ -4,6 +4,8 @@ class Product {
   final String icon;
   final double rating;
   final String price;
+  final String isWishlisted;
+  final String originalPrice;
   final int remainingQuantity;
 
   Product(
@@ -12,5 +14,7 @@ class Product {
       this.icon,
       this.rating,
       this.price,
+      this.isWishlisted,
+      this.originalPrice,
       this.remainingQuantity});
 }
