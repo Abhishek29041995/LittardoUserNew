@@ -64,18 +64,17 @@ class TrendingItem extends StatelessWidget {
     return Stack(
       children: <Widget>[
         Center(
-            child: Container(
-          width: 75,
-          height: 75,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: CachedNetworkImageProvider(
-                product.icon,
-              ),
-              fit: BoxFit.contain,
+          child: Container(
+            width: 75,
+            height: 75,
+            child: Image.network(
+              product.icon,
+              errorBuilder: (context, _, __) {
+                return Image.asset("assets/littardo_logo.png");
+              },
             ),
           ),
-        ))
+        )
       ],
     );
   }
@@ -90,27 +89,34 @@ class TrendingItem extends StatelessWidget {
         // ),
         Text(
           product.name,
+          maxLines: 2,
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11),
         ),
         product.rating != null
             ? StarRating(rating: product.rating, size: 10)
             : SizedBox(),
         product.price != null
-            ? Row(
-                children: <Widget>[
-                  Text(product.price,
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red)),
-                  Text(
-                    product.originalPrice,
-                    style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 10,
-                        decoration: TextDecoration.lineThrough),
-                  )
-                ],
+            ? FittedBox(
+                child: Row(
+                  children: <Widget>[
+                    Text(product.price,
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red)),
+                    SizedBox(
+                      width: 6,
+                    ),
+                    if (product.price != "\u20b9 " + product.originalPrice)
+                      Text(
+                        product.originalPrice,
+                        style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 10,
+                            decoration: TextDecoration.lineThrough),
+                      )
+                  ],
+                ),
               )
             : SizedBox()
       ],

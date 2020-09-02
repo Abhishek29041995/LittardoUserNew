@@ -27,7 +27,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
   TextEditingController price = new TextEditingController();
   String isCash = "";
   List mycartData = new List();
-  
+
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
   @override
   void initState() {
@@ -44,6 +44,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
         key: _scaffoldKey,
         appBar: widget.showAppBar
             ? AppBar(
+                centerTitle: true,
                 title: Text(
                   "Shopping Cart",
                   style: TextStyle(color: Colors.black, fontSize: 16),
@@ -69,216 +70,251 @@ class _ShoppingCartState extends State<ShoppingCart> {
                             return buildShoppingCartItem(
                                 context, mycartData[index]);
                           }),
-                      Container(
-                        padding:
-                            EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
-                        height: 120,
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
                         child: Card(
-                          child: Column(
-                            children: <Widget>[
-                             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text("Subtotal",
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
-                Text("\u20b9 " + getSubTotalPrice(),
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
-              ],
-            ),
-            isCash == "Online Payment"
-                ? SizedBox(
-                    height: 10.0,
-                  )
-                : SizedBox(),
-            isCash == "Online Payment"
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Wrap(
-                        direction: Axis.vertical,
-                        children: <Widget>[
-                          Text("Addition 2% discount",
-                              style: TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.w600)),
-                          Text("(Only for pre-paid orders)",
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  fontStyle: FontStyle.italic,
-                                  fontWeight: FontWeight.w600)),
-                        ],
-                      ),
-                      Text(
-                          "-" +
-                              (double.parse(getSubTotalPrice()) * 0.02)
-                                  .toStringAsFixed(2),
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.red)),
-                    ],
-                  )
-                : SizedBox(),
-            SizedBox(
-              height: 10.0,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text("Shipping Charges",
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
-                Text(
-                    double.parse(getSubTotalPrice()) < 599
-                        ? "\u20b9 49"
-                        : "\u20b9 0",
-                    style:TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
-              ],
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text("Total",
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
-                Text("\u20b9 " + getTotalPrice(),
-                    style:TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
-              ],
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 20),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Flexible(
-                    flex: 1,
-                    child: Center(
-                      child: new Text(
-                        "PAYMENT MODE",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                          decoration: TextDecoration.none,
-                        ),
-                        textAlign: TextAlign.left, // has impact
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 2,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 8),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          Flexible(
-                            flex: 1,
-                            child: GestureDetector(
-                              onTap: () {
-                                showThankYouBottomSheet(context,
-                                    'Additional 2% discount on Online Payment');
-                              },
-                              behavior: HitTestBehavior.translucent,
-                              child: FittedBox(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Column(
+                              children: <Widget>[
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    Text(
-                                      "Online Payment",
-                                      style: TextStyle(
-                                          fontFamily: 'Montserrat',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                          color: Color(0xff34a953)),
-                                    ),
-                                    (isCash != null &&
-                                            isCash == "Online Payment")
-                                        ? Icon(Icons.check_circle,
-                                            color: Colors.red)
-                                        : SizedBox(),
+                                    Text("Subtotal",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600)),
+                                    Text("\u20b9 " + getSubTotalPrice(),
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600)),
                                   ],
                                 ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            height: 18,
-                            width: 1,
-                            color: Colors.grey,
-                          ),
-                          Flexible(
-                            flex: 1,
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  isCash = "cash_on_delivery";
-                                });
-                              },
-                              behavior: HitTestBehavior.translucent,
-                              child: FittedBox(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                isCash == "Online Payment"
+                                    ? SizedBox(
+                                        height: 10.0,
+                                      )
+                                    : SizedBox(),
+                                isCash == "Online Payment"
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Wrap(
+                                            direction: Axis.vertical,
+                                            children: <Widget>[
+                                              Text("Addition 2% discount",
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w600)),
+                                              Text("(Only for pre-paid orders)",
+                                                  style: TextStyle(
+                                                      fontSize: 10,
+                                                      fontStyle:
+                                                          FontStyle.italic,
+                                                      fontWeight:
+                                                          FontWeight.w600)),
+                                            ],
+                                          ),
+                                          Text(
+                                              "-" +
+                                                  (double.parse(
+                                                              getSubTotalPrice()) *
+                                                          0.02)
+                                                      .toStringAsFixed(2),
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.red)),
+                                        ],
+                                      )
+                                    : SizedBox(),
+                                SizedBox(
+                                  height: 10.0,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    SizedBox(
-                                      width: 5,
-                                    ),
+                                    Text("Shipping Charges",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600)),
                                     Text(
-                                      "Pay Cash",
-                                      style: TextStyle(
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                        color: Color(0xff34a953),
+                                        double.parse(getSubTotalPrice()) < 599
+                                            ? "\u20b9 49"
+                                            : "\u20b9 0",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600)),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 10.0,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text("Total",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600)),
+                                    Text("\u20b9 " + getTotalPrice(),
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600)),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 10.0,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(8),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Flexible(
+                                        flex: 1,
+                                        child: Center(
+                                          child: new Text(
+                                            "PAYMENT MODE",
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 12,
+                                              decoration: TextDecoration.none,
+                                            ),
+                                            textAlign:
+                                                TextAlign.left, // has impact
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                    (isCash != null &&
-                                            isCash == "cash_on_delivery")
-                                        ? Icon(Icons.check_circle,
-                                            color: Colors.red)
-//                                        )
-                                        : SizedBox(),
-                                  ],
+                                      Flexible(
+                                        flex: 2,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 8.0, right: 8),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: <Widget>[
+                                              Flexible(
+                                                flex: 1,
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    showThankYouBottomSheet(
+                                                        context,
+                                                        'Additional 2% discount on Online Payment');
+                                                  },
+                                                  behavior: HitTestBehavior
+                                                      .translucent,
+                                                  child: FittedBox(
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: <Widget>[
+                                                        Text(
+                                                          "Online Payment",
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  'Montserrat',
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 18,
+                                                              color: Color(
+                                                                  0xff34a953)),
+                                                        ),
+                                                        (isCash != null &&
+                                                                isCash ==
+                                                                    "Online Payment")
+                                                            ? Icon(
+                                                                Icons
+                                                                    .check_circle,
+                                                                color:
+                                                                    Colors.red)
+                                                            : SizedBox(),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                height: 18,
+                                                width: 1,
+                                                color: Colors.grey,
+                                              ),
+                                              Flexible(
+                                                flex: 1,
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      isCash =
+                                                          "cash_on_delivery";
+                                                    });
+                                                  },
+                                                  behavior: HitTestBehavior
+                                                      .translucent,
+                                                  child: FittedBox(
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: <Widget>[
+                                                        SizedBox(
+                                                          width: 5,
+                                                        ),
+                                                        Text(
+                                                          "Pay Cash",
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                'Montserrat',
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 18,
+                                                            color: Color(
+                                                                0xff34a953),
+                                                          ),
+                                                        ),
+                                                        (isCash != null &&
+                                                                isCash ==
+                                                                    "cash_on_delivery")
+                                                            ? Icon(
+                                                                Icons
+                                                                    .check_circle,
+                                                                color:
+                                                                    Colors.red)
+                                                            : SizedBox(),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
-                          )
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
-            RaisedButton(
-              color: Colors.green,
-              onPressed: () {
-                if (isCash == "") {
-                  presentToast('Select payment mode', context, 0);
-                } else {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>Checkout()));
-                }
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Text("Continue to Checkout",
-                      style: TextStyle(color: Colors.white)),
-                  Text(getTotalPrice(), style: TextStyle(color: Colors.white)),
-                ],
-              ),
-            )
-                            ],
                           ),
                         ),
                       ),
+                      //  if (isCash == "") {
+                      //               presentToast(
+                      //                   'Select payment mode', context, 0);
+                      //             } else {
+                      //               Navigator.of(context).push(
+                      //                   MaterialPageRoute(
+                      //                       builder: (context) => Checkout()));
+                      //             }
                       Padding(
                         padding: EdgeInsets.only(
                             top: 8.0, left: 8.0, right: 8.0, bottom: 16.0),
@@ -324,7 +360,6 @@ class _ShoppingCartState extends State<ShoppingCart> {
   Container buildShoppingCartItem(BuildContext context, item) {
     return Container(
       padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
-      height: 220,
       child: Card(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -347,7 +382,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                           icon: Icon(Icons.remove_circle_outline),
                           onPressed: () {
                             updateCart(item['id'].toString(),
-                                mycartData.indexOf(item), "inc");
+                                mycartData.indexOf(item), "dec");
                           },
                         ),
                         Text(
@@ -358,7 +393,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                           icon: Icon(Icons.add_circle_outline),
                           onPressed: () {
                             updateCart(item['id'].toString(),
-                                mycartData.indexOf(item), "dec");
+                                mycartData.indexOf(item), "inc");
                           },
                         ),
                       ],
@@ -487,16 +522,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
                         Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: Text(
-                            "\$ 2.500",
+                            "\u20B9 " + item['product']['unit_price'],
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Text(
-                            "Show Details",
-                            style: TextStyle(color: Colors.blue),
                           ),
                         ),
                       ],
@@ -535,7 +563,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
   }
 
   void updateCart(String id, int index, String val) {
-    getProgressDialog(context, "Updating Cart...").hide(context);
+    getProgressDialog(context, "Updating Cart...").show();
     var request =
         new MultipartRequest("POST", Uri.parse(api_url + "cart/update"));
     request.fields['cart_id'] = id;
@@ -560,7 +588,8 @@ class _ShoppingCartState extends State<ShoppingCart> {
               }
             } else {
               if (val == "inc") {
-                mycartData[index]['quantity'] += 1;
+                mycartData[index]['quantity'] =
+                    (int.parse(mycartData[index]['quantity']) + 1).toString();
               } else {
                 mycartData.removeAt(index);
                 Provider.of<UserData>(context, listen: false)
@@ -577,7 +606,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
   }
 
   void removeCartProduct(String id, int index) {
-    getProgressDialog(context, "Removing Item...").hide(context);
+    getProgressDialog(context, "Removing Item...").show();
     var request =
         new MultipartRequest("POST", Uri.parse(api_url + "cart/delete"));
     request.fields['cart_id'] = id;
@@ -628,6 +657,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
         ? (total - double.parse(getSubTotalPrice()) * 0.02).toStringAsFixed(2)
         : total.toStringAsFixed(2);
   }
+
   showThankYouBottomSheet(BuildContext context, String message1) {
     return _scaffoldKey.currentState.showBottomSheet((context) {
       return Container(
@@ -699,5 +729,4 @@ class _ShoppingCartState extends State<ShoppingCart> {
         backgroundColor: Colors.white,
         elevation: 2);
   }
-
 }
