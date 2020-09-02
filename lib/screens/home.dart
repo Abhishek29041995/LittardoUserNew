@@ -12,6 +12,7 @@ import 'package:littardo/screens/myOrders.dart';
 import 'package:littardo/screens/products_list.dart';
 import 'package:littardo/screens/search.dart';
 import 'package:littardo/screens/shoppingcart.dart';
+import 'package:littardo/screens/subcategory.dart';
 import 'package:littardo/screens/usersettings.dart';
 import 'package:littardo/screens/whell.dart';
 import 'package:littardo/services/api_services.dart';
@@ -647,7 +648,16 @@ class CategoriesListView extends StatelessWidget {
                       context,
                       PageTransition(
                         type: PageTransitionType.fade,
-                        child: ProductList(),
+                        ctx: context,
+                        child: SubCategoryPage(
+                          categoryId:
+                              Provider.of<UserData>(context, listen: false)
+                                  .getcategories[index]["id"]
+                                  .toString(),
+                          categoryName:
+                              Provider.of<UserData>(context, listen: false)
+                                  .getcategories[index]["name"],
+                        ),
                       ),
                     );
                   },

@@ -49,7 +49,6 @@ class _ProductListState extends State<ProductList> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (widget.query != "") {
@@ -266,6 +265,7 @@ class _ProductListState extends State<ProductList> {
         setState(() {
           pagesize += 1;
         });
+        print(productList.length);
       } else {
         presentToast(data['message'], context, 0);
       }
