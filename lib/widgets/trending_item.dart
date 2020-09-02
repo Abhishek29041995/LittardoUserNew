@@ -1,3 +1,4 @@
+import 'package:littardo/screens/productPage.dart';
 import 'package:littardo/screens/products_list.dart';
 import 'package:littardo/widgets/clip_shadow_path.dart';
 import 'package:littardo/models/product.dart';
@@ -72,11 +73,9 @@ class TrendingItem extends StatelessWidget {
       ),
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ProductList(
-                id: product.id.toString(),
-                name: product.name,
-                type: "brand",
-                query: "")));
+            builder: (context) => ProductPage(
+                  product: product,
+                )));
       },
     );
   }

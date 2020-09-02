@@ -194,7 +194,7 @@ class _ProductPageState extends State<ProductPage> {
                 ),
                 RaisedButton(
                   onPressed: () {
-                    _alert(context);
+                    // _alert(context);
                     if (addedtocart) {
                       setState(() {
                         addedtocart = false;
@@ -719,7 +719,7 @@ class _ProductPageState extends State<ProductPage> {
                                       : SizedBox(),
                                   _buildDescription(context),
                                   _buildComments(context),
-                                  _buildProducts(context),
+                                  // _buildProducts(context),
                                 ],
                               ),
                             )),
@@ -950,7 +950,7 @@ class _ProductPageState extends State<ProductPage> {
           product_code = data['product']['product_code'].toString();
           if (data['product']['choice_options'].length > 0) {
             listSize = data['product']['choice_options'][0]['values'];
-            listFabric = data['product']['choice_options'][1]['values'];
+            listFabric = data['product']['choice_options'][0]['values'];
             listColor = data['product']['colors'];
           }
           if (data['product']['reviews'] != null) {
@@ -1335,23 +1335,27 @@ class _ProductPageState extends State<ProductPage> {
             ),
             ListView.builder(
                 shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
+                itemCount: rating_review.length,
                 itemBuilder: (context, index) {
+                  print(rating_review[index]);
                   return ListTile(
                     leading: CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          "https://pbs.twimg.com/profile_images/1020903668240052225/_6uVaH4c.jpg"),
+                      backgroundImage: AssetImage("assets/user.png"),
                     ),
-                    subtitle: Text(
-                        "I think I will buy the red car, or I will lease the blue one."),
+                    subtitle: Text(rating_review[index]['comment']),
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        StarRating(rating: 4, size: 15),
+                        StarRating(
+                            rating:
+                                double.parse(rating_review[index]['rating']),
+                            size: 15),
                         SizedBox(
                           width: 8,
                         ),
                         Text(
-                          "25 Sep 2019",
+                          rating_review[index]['created_at'],
                           style: TextStyle(fontSize: 12, color: Colors.black54),
                         ),
                       ],

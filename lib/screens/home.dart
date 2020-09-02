@@ -270,7 +270,6 @@ class _HomeState extends State<Home> {
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: List.generate(products.length, (index) {
-              print(products);
               return TrendingItem(
                 product: Product(
                     id: products[index]["id"].toString(),
@@ -283,7 +282,7 @@ class _HomeState extends State<Home> {
                     originalPrice: products[index]['unit_price'],
                     description: products[index]['description'],
                     photos: products[index]['photos'],
-                    current_stock: products[index]['current_stock'],
+                    current_stock: products[index]['current_stock'].toString(),
                     shipping_cost: products[index]['shipping_cost'].toString()),
                 gradientColors: [Color(0XFFa466ec), Colors.purple[400]],
               );
