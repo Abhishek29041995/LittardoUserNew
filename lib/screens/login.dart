@@ -1,5 +1,6 @@
 import 'dart:convert';
-
+import 'dart:io';
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:littardo/provider/UserData.dart';
@@ -10,6 +11,7 @@ import 'package:littardo/utils/progressdialog.dart';
 import 'package:littardo/widgets/edittext.dart';
 import 'package:littardo/widgets/submitbutton.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'home.dart';
 
@@ -22,6 +24,8 @@ class _LoginScreenState extends State<LoginScreen> {
   ProgressDialog progressDialog;
   TextEditingController _emailcontroller = TextEditingController();
   TextEditingController _passcontroller = TextEditingController();
+  String _deviceid = 'Unknown';
+  String fcmtoken = "";
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +72,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           print(data);
                           presentToast(data['message'], context, 0);
                           if (data['code'] == 200) {
-                            Provider.of<UserData>(context, listen: false).storeLoginData(data['user'], data['cart_count']);
+                            Provider.of<UserData>(context, listen: false)
+                                .storeLoginData(
+                                    data['user'], data['cart_count']);
                             Navigator.pushAndRemoveUntil(
                               context,
                               new MaterialPageRoute(

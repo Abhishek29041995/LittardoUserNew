@@ -1,5 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:device_info/device_info.dart';
 
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:littardo/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,6 +19,9 @@ class UserData extends ChangeNotifier {
   List brands = new List();
   List categories = new List();
   List banners = new List();
+  String _deviceid = 'Unknown';
+  String fcmtoken = "";
+  String identifier = "";
   get userData => _userData;
 
   get getfeatured => featured;
@@ -45,6 +51,7 @@ class UserData extends ChangeNotifier {
   Future<void> getLoggedInData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _userData = jsonDecode(prefs.getString("user"));
+    fcmtoken = prefs.getString("fcmtoken");
     token = "loggedIn";
     if (prefs.getString("cartCount") == null) {
       prefs.setString("cartCount", _userData['cart_count']);
@@ -55,6 +62,24 @@ class UserData extends ChangeNotifier {
     }
     getDashBoardData();
     notifyListeners();
+  }
+
+  Future<String> getDeviceDetails() async {
+    final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
+    try {
+      if (Platform.isAndroid) {
+        var build = await deviceInfoPlugin.androidInfo;
+        identifier = build.androidId; //UUID for Android
+
+      } else if (Platform.isIOS) {
+        var data = await deviceInfoPlugin.iosInfo;
+        identifier = data.identifierForVendor; //UUID for iOS
+        print("IoS ID: " + identifier);
+      }
+    } on PlatformException {
+      print('Failed to get platform version');
+    }
+    return identifier;
   }
 
   Future<void> saveCartCount(int length) async {

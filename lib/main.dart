@@ -1,4 +1,5 @@
 import 'package:animated_splash/animated_splash.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:littardo/provider/UserData.dart';
 import 'package:littardo/screens/home.dart';
@@ -8,11 +9,35 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'screens/login.dart';
 
-void main() => runApp(MultiProvider(
-    providers: [ChangeNotifierProvider(create: (context) => UserData())],
-    child: EcommerceApp()));
+class PushMessaging extends StatefulWidget {
+  @override
+  _PushMessagingState createState() => _PushMessagingState();
+}
 
-class EcommerceApp extends StatelessWidget {
+class _PushMessagingState extends State<PushMessaging> {
+  String _homeScreenText = "Waiting for token...";
+  String _messageText = "Waiting for message...";
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
+  @override
+  void initState() {
+    super.initState();
+    _firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(sound: true, badge: true, alert: true));
+    _firebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings settings) {
+      print("Settings registered: $settings");
+    });
+    _firebaseMessaging.getToken().then((String token) async {
+      assert(token != null);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('fcmtoken', token);
+
+      print(prefs.getString("fcmtoken"));
+      print(token);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Future<String> isLoggedIn() async {
@@ -60,6 +85,10 @@ class EcommerceApp extends StatelessWidget {
     );
   }
 }
+
+void main() => runApp(MultiProvider(
+    providers: [ChangeNotifierProvider(create: (context) => UserData())],
+    child: PushMessaging()));
 
 class TabLayoutDemo extends StatelessWidget {
   @override
