@@ -1,15 +1,18 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import 'package:geocoder/geocoder.dart';
 import 'package:http/http.dart';
-import 'package:littardo/myOrders.dart';
+import 'package:littardo/screens/home.dart';
+
 import 'package:lottie/lottie.dart';
-import 'package:littardo/homepage.dart';
+
 import 'package:littardo/services/api_services.dart';
-import 'package:littardo/widgets/custom_textstyle.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'myOrders.dart';
 
 class AddNewAddress extends StatefulWidget {
   String isCash;
@@ -67,21 +70,19 @@ class _AddNewAddress extends State<AddNewAddress> {
       customer_name.text = address['customer_name'];
       phone_number.text = address['customer_phone'];
       email.text = address['customer_email'];
-      if(address['lat']==lat) {
+      if (address['lat'] == lat) {
         flat_house.text = address['customer_address'].toString().split(", ")[0];
         street_colony.text =
-        address['customer_address'].toString().split(", ")[1];
+            address['customer_address'].toString().split(", ")[1];
         pin.text = address['customer_pincode'];
-      }else{
+      } else {
         flat_house.text = addrMap.subThoroughfare;
-        street_colony.text =
-            addrMap.thoroughfare;
+        street_colony.text = addrMap.thoroughfare;
         pin.text = addrMap.postalCode;
       }
     } else {
       flat_house.text = addrMap.subThoroughfare;
-      street_colony.text =
-          addrMap.thoroughfare;
+      street_colony.text = addrMap.thoroughfare;
       pin.text = addrMap.postalCode;
     }
     country.text = addrMap.countryName;
@@ -341,7 +342,8 @@ class _AddNewAddress extends State<AddNewAddress> {
                                     height:
                                         MediaQuery.of(context).size.height / 18,
                                     child: TextField(
-                                        enabled:country.text==""?true:false,
+                                        enabled:
+                                            country.text == "" ? true : false,
                                         controller: country,
                                         decoration: InputDecoration(
                                             hintText: "",
@@ -372,7 +374,7 @@ class _AddNewAddress extends State<AddNewAddress> {
                                     height:
                                         MediaQuery.of(context).size.height / 18,
                                     child: TextField(
-                                      enabled:city.text==""?true:false,
+                                        enabled: city.text == "" ? true : false,
                                         controller: city,
                                         decoration: InputDecoration(
                                             hintText: "",
@@ -413,22 +415,6 @@ class _AddNewAddress extends State<AddNewAddress> {
                 ),
               )),
         )),
-        _isLoading
-            ? new Stack(
-                children: [
-                  new Opacity(
-                    opacity: 0.3,
-                    child: const ModalBarrier(
-                        dismissible: false, color: Colors.grey),
-                  ),
-                  new Center(
-                    child: SpinKitRotatingPlain(
-                      itemBuilder: _customicon,
-                    ),
-                  ),
-                ],
-              )
-            : SizedBox()
       ],
     );
   }
@@ -629,14 +615,14 @@ class _AddNewAddress extends State<AddNewAddress> {
                         textAlign: TextAlign.center,
                         text: TextSpan(
                             text: "#" + message1,
-                            style: CustomTextStyle.mediumTextStyle.copyWith(
+                            style: TextStyle(
                                 fontSize: 18,
                                 color: Colors.grey.shade800,
                                 fontWeight: FontWeight.bold),
                             children: [
                               TextSpan(
                                 text: "\n\n" + message2,
-                                style: CustomTextStyle.mediumTextStyle.copyWith(
+                                style: TextStyle(
                                     fontSize: 14, color: Colors.grey.shade800),
                               )
                             ])),
@@ -652,7 +638,7 @@ class _AddNewAddress extends State<AddNewAddress> {
                           Navigator.pushAndRemoveUntil(
                             context,
                             new MaterialPageRoute(
-                                builder: (context) => new HomePage()),
+                                builder: (context) => new Home()),
                             (Route<dynamic> route) => false,
                           );
                         } else {
@@ -662,8 +648,7 @@ class _AddNewAddress extends State<AddNewAddress> {
                       padding: EdgeInsets.only(left: 48, right: 48),
                       child: Text(
                         "OK",
-                        style: CustomTextStyle.mediumTextStyle
-                            .copyWith(color: Colors.white),
+                        style: TextStyle(color: Colors.white),
                       ),
                       color: Colors.pink,
                       shape: RoundedRectangleBorder(

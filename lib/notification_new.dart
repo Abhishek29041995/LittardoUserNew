@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:littardo/utils/custom_textstyle.dart';
-import 'package:littardo/utils/custom_utils.dart';
 
 class NotificationPage extends StatefulWidget {
   @override
@@ -15,7 +13,7 @@ class _NotificationPageState extends State<NotificationPage> {
         backgroundColor: Colors.white,
         title: Text(
           "Notifications",
-          style: CustomTextStyle.boldTextStyle.copyWith(fontSize: 18,color: Colors.black),
+          style: TextStyle(fontSize: 18, color: Colors.black),
         ),
         leading: IconButton(
             icon: Icon(
@@ -86,8 +84,7 @@ class _NotificationPageState extends State<NotificationPage> {
                     children: <Widget>[
                       Text(
                         "Payment Complete",
-                        style: CustomTextStyle.blackTextStyle
-                            .copyWith(fontSize: 16),
+                        style: TextStyle(fontSize: 16),
                       ),
                       IconButton(icon: Icon(Icons.close), onPressed: () {})
                     ],
@@ -98,8 +95,7 @@ class _NotificationPageState extends State<NotificationPage> {
                       "Thank you for your recent payment. Your monthly subscription has been activated until June 2020.",
                       softWrap: true,
                       textAlign: TextAlign.start,
-                      style: CustomTextStyle.mediumTextStyle
-                          .copyWith(color: Colors.grey, fontSize: 12),
+                      style: TextStyle(color: Colors.grey, fontSize: 12),
                     ),
                   )
                 ],
@@ -125,7 +121,7 @@ class _NotificationPageState extends State<NotificationPage> {
               Icons.delete,
               color: Colors.white,
             ),
-            Utils.getSizedBox(width: 16)
+            SizedBox(width: 16)
           ],
         ),
       ),

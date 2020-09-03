@@ -1,17 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:html';
 import 'dart:typed_data';
 
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:geocoder/geocoder.dart';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:littardo/addNewAddrress.dart';
-import 'package:littardo/widgets/searchMapPlaceWidget.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'addNewAddrress.dart';
 
 class AddLocation extends StatefulWidget {
   String isCash;
@@ -81,6 +83,7 @@ class _AddLocationState extends State<AddLocation> {
     setState(() {
       _isLoading = true;
     });
+
     final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
     bool locationenabled = await geolocator.isLocationServiceEnabled();
     if (!locationenabled) {
@@ -302,22 +305,6 @@ class _AddLocationState extends State<AddLocation> {
           },
         ));
     list.add(searchbar);
-    if (_isLoading) {
-      var modal = new Stack(
-        children: [
-          new Opacity(
-            opacity: 0.3,
-            child: const ModalBarrier(dismissible: false, color: Colors.grey),
-          ),
-          new Center(
-            child: SpinKitRotatingPlain(
-              itemBuilder: _customicon,
-            ),
-          ),
-        ],
-      );
-      list.add(modal);
-    }
 
     return list;
   }
