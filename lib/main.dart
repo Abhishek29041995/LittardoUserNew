@@ -86,9 +86,12 @@ class _PushMessagingState extends State<PushMessaging> {
   }
 }
 
-void main() => runApp(MultiProvider(
-    providers: [ChangeNotifierProvider(create: (context) => UserData())],
-    child: PushMessaging()));
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MultiProvider(
+      providers: [ChangeNotifierProvider(create: (context) => UserData())],
+      child: PushMessaging()));
+}
 
 class TabLayoutDemo extends StatelessWidget {
   @override

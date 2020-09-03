@@ -326,10 +326,7 @@ class _ProductPageState extends State<ProductPage> {
                         fontSize: 16.0,
                       ),
                     ),
-                    background: Padding(
-                      padding: EdgeInsets.only(top: 48.0),
-                      child: dottedSlider(),
-                    ),
+                    background: dottedSlider(),
                   ),
                 ),
               ];
@@ -1095,18 +1092,16 @@ class _ProductPageState extends State<ProductPage> {
 
   _productSlideImage(String imageUrl) {
     return Container(
-      height: 200,
-      width: double.infinity,
       child: CachedNetworkImage(
         imageUrl: imageUrl,
-        fit: BoxFit.fill,
+        fit: BoxFit.cover,
       ),
     );
   }
 
   dottedSlider() {
     return DottedSlider(
-        maxHeight: 200,
+        maxHeight: 300,
         children: List.generate(widget.product.photos.length, (index) {
           return _productSlideImage(widget.product.photos[index]);
         }));
@@ -1375,7 +1370,7 @@ class _ProductPageState extends State<ProductPage> {
                           width: 8,
                         ),
                         Text(
-                          rating_review[index]['created_at'],
+                          rating_review[index]['formatted_time'],
                           style: TextStyle(fontSize: 12, color: Colors.black54),
                         ),
                       ],
