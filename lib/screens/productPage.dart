@@ -43,13 +43,14 @@ class _ProductPageState extends State<ProductPage> {
   var selectedFabric = 0;
   var selectedColor = 0;
   bool isWishlisted = false;
-
+  List realatedProduct = new List();
   bool addedtocart = false;
 
   String product_code;
   String rating_count;
 
   String lastPrice = "";
+  String seller_name = "";
   String originallastPrice = "";
   String lastStock = "";
   String lastWishListed = "";
@@ -480,8 +481,25 @@ class _ProductPageState extends State<ProductPage> {
                                 children: <Widget>[
                                   Padding(
                                     padding: const EdgeInsets.only(bottom: 8.0),
-                                    child: Text(widget.product.name,
-                                        style: TextStyle(fontSize: 14)),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Flexible(
+                                          flex: 8,
+                                          child: Text(widget.product.name,
+                                              style: TextStyle(fontSize: 14)),
+                                        ),
+                                        Flexible(
+                                          flex: 4,
+                                          child: Text(
+                                              seller_name != ""
+                                                  ? "Seller - " + seller_name
+                                                  : "",
+                                              style: TextStyle(fontSize: 14)),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(top: 4.0),
@@ -719,7 +737,7 @@ class _ProductPageState extends State<ProductPage> {
                                       : SizedBox(),
                                   _buildDescription(context),
                                   _buildComments(context),
-                                  // _buildProducts(context),
+                                  _buildProducts(context),
                                 ],
                               ),
                             )),
@@ -947,6 +965,8 @@ class _ProductPageState extends State<ProductPage> {
       Map data = json.decode(onResponse.body);
       if (data['code'] == 200) {
         setState(() {
+          realatedProduct = data['related_products'];
+          seller_name = data['seller_name'];
           product_code = data['product']['product_code'].toString();
           if (data['product']['choice_options'].length > 0) {
             listSize = data['product']['choice_options'][0]['values'];
@@ -1400,7 +1420,7 @@ class _ProductPageState extends State<ProductPage> {
             ],
           ),
         ),
-        // buildTrending()
+        buildTrending()
       ],
     );
   }
@@ -1411,104 +1431,28 @@ class _ProductPageState extends State<ProductPage> {
         Container(
           height: 180,
           child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: <Widget>[
-              TrendingItem(
-                product: Product(
-                    id: 'Apple',
-                    name: 'iPhone 7 plus (128GB)',
-                    icon: 'assets/iphone_7.png',
-                    rating: 4.5,
-                    remainingQuantity: 5,
-                    price: '\$2,000'),
-                gradientColors: [Color(0XFFa466ec), Colors.purple[400]],
-              ),
-              TrendingItem(
-                product: Product(
-                    id: 'Apple',
-                    name: 'iPhone 11 (128GB)',
-                    icon: 'assets/phone1.jpeg',
-                    rating: 4.5,
-                    remainingQuantity: 5,
-                    price: '\$4,000'),
-                gradientColors: [Color(0XFFa466ec), Colors.purple[400]],
-              ),
-              TrendingItem(
-                product: Product(
-                    id: 'iPhone',
-                    name: 'iPhone 11 (64GB)',
-                    icon: 'assets/phone2.jpeg',
-                    rating: 4.5,
-                    price: '\$3,890'),
-                gradientColors: [Color(0XFF6eed8c), Colors.green[400]],
-              ),
-              TrendingItem(
-                product: Product(
-                    id: 'Xiaomi',
-                    name: 'Xiaomi Redmi Note8',
-                    icon: 'assets/mi1.png',
-                    rating: 3.5,
-                    price: '\$2,890'),
-                gradientColors: [Color(0XFFf28767), Colors.orange[400]],
-              ),
-              TrendingItem(
-                product: Product(
-                    id: 'Apple',
-                    name: 'iPhone 11 (128GB)',
-                    icon: 'assets/phone1.jpeg',
-                    rating: 4.5,
-                    remainingQuantity: 5,
-                    price: '\$4,000'),
-                gradientColors: [Color(0XFFa466ec), Colors.purple[400]],
-              ),
-              TrendingItem(
-                product: Product(
-                    id: 'iPhone',
-                    name: 'iPhone 11 (64GB)',
-                    icon: 'assets/phone2.jpeg',
-                    rating: 4.5,
-                    price: '\$3,890'),
-                gradientColors: [Color(0XFF6eed8c), Colors.green[400]],
-              ),
-              TrendingItem(
-                product: Product(
-                    id: 'Xiaomi',
-                    name: 'Xiaomi Redmi Note8',
-                    icon: 'assets/mi1.png',
-                    rating: 3.5,
-                    price: '\$2,890'),
-                gradientColors: [Color(0XFFf28767), Colors.orange[400]],
-              ),
-              TrendingItem(
-                product: Product(
-                    id: 'Apple',
-                    name: 'iPhone 11 (128GB)',
-                    icon: 'assets/phone1.jpeg',
-                    rating: 4.5,
-                    remainingQuantity: 5,
-                    price: '\$4,000'),
-                gradientColors: [Color(0XFFa466ec), Colors.purple[400]],
-              ),
-              TrendingItem(
-                product: Product(
-                    id: 'iPhone',
-                    name: 'iPhone 11 (64GB)',
-                    icon: 'assets/phone2.jpeg',
-                    rating: 4.5,
-                    price: '\$3,890'),
-                gradientColors: [Color(0XFF6eed8c), Colors.green[400]],
-              ),
-              TrendingItem(
-                product: Product(
-                    id: 'Xiaomi',
-                    name: 'Xiaomi Redmi Note8',
-                    icon: 'assets/mi1.png',
-                    rating: 3.5,
-                    price: '\$2,890'),
-                gradientColors: [Color(0XFFf28767), Colors.orange[400]],
-              ),
-            ],
-          ),
+              scrollDirection: Axis.horizontal,
+              children: List.generate(realatedProduct.length, (index) {
+                return TrendingItem(
+                  product: Product(
+                      id: realatedProduct[index]["id"].toString(),
+                      name: realatedProduct[index]["name"],
+                      icon: realatedProduct[index]["thumbnail_img"],
+                      rating: double.parse(realatedProduct[index]["rating"]),
+                      remainingQuantity: 5,
+                      price:
+                          '\u20b9 ${realatedProduct[index]["purchase_price"]}',
+                      isWishlisted: realatedProduct[index]['wishlisted_count'],
+                      originalPrice: realatedProduct[index]['unit_price'],
+                      description: realatedProduct[index]['description'],
+                      photos: realatedProduct[index]['photos'],
+                      current_stock:
+                          realatedProduct[index]['current_stock'].toString(),
+                      shipping_cost:
+                          realatedProduct[index]['shipping_cost'].toString()),
+                  gradientColors: [Color(0XFFa466ec), Colors.purple[400]],
+                );
+              })),
         )
       ],
     );
