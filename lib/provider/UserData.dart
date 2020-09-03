@@ -19,11 +19,13 @@ class UserData extends ChangeNotifier {
   List brands = new List();
   List categories = new List();
   List banners = new List();
-  String _deviceid = 'Unknown';
-  String fcmtoken = "";
-  String identifier = "";
-  get userData => _userData;
 
+  String fcmtoken = "";
+
+  String deviceId = "";
+  get userData => _userData;
+  get fcmKey => fcmtoken;
+  get deviceID => deviceId;
   get getfeatured => featured;
   get getbannerOffers => bannerOffers;
   get getBannersWidgets => bannerOffersWidget;
@@ -37,6 +39,7 @@ class UserData extends ChangeNotifier {
 
   UserData() {
     getLoggedInData();
+    getDeviceDetails();
   }
 
   Future<Null> storeLoginData(Map data, int cartcount) async {
@@ -50,8 +53,9 @@ class UserData extends ChangeNotifier {
 
   Future<void> getLoggedInData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    _userData = jsonDecode(prefs.getString("user"));
     fcmtoken = prefs.getString("fcmtoken");
+    notifyListeners();
+    _userData = jsonDecode(prefs.getString("user"));
     token = "loggedIn";
     if (prefs.getString("cartCount") == null) {
       prefs.setString("cartCount", _userData['cart_count']);
@@ -64,22 +68,21 @@ class UserData extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<String> getDeviceDetails() async {
+  void getDeviceDetails() async {
     final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
     try {
       if (Platform.isAndroid) {
         var build = await deviceInfoPlugin.androidInfo;
-        identifier = build.androidId; //UUID for Android
+        deviceId = build.androidId; //UUID for Android
 
       } else if (Platform.isIOS) {
         var data = await deviceInfoPlugin.iosInfo;
-        identifier = data.identifierForVendor; //UUID for iOS
-        print("IoS ID: " + identifier);
+        deviceId = data.identifierForVendor; //UUID for iOS
       }
     } on PlatformException {
       print('Failed to get platform version');
     }
-    return identifier;
+    notifyListeners();
   }
 
   Future<void> saveCartCount(int length) async {

@@ -24,8 +24,6 @@ class _LoginScreenState extends State<LoginScreen> {
   ProgressDialog progressDialog;
   TextEditingController _emailcontroller = TextEditingController();
   TextEditingController _passcontroller = TextEditingController();
-  String _deviceid = 'Unknown';
-  String fcmtoken = "";
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +62,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           "POST", Uri.parse(api_url + "login"));
                       request.fields['email'] = _emailcontroller.text;
                       request.fields['password'] = _passcontroller.text;
+                      request.fields['fcm_token'] =
+                          Provider.of<UserData>(context, listen: false).fcmKey;
+                      request.fields['device_id'] =
+                          Provider.of<UserData>(context, listen: false)
+                              .deviceID;
+                      print(request.fields);
                       commonMethod(request).then((onResponse) {
                         onResponse.stream
                             .transform(utf8.decoder)

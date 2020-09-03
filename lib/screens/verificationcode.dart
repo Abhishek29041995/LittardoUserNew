@@ -61,6 +61,12 @@ class _VerificationScreenState extends State<VerificationScreen> {
                             "POST", Uri.parse(api_url + "verify_otp"));
                         request.fields['phone'] = widget.phoneNumber;
                         request.fields['otp'] = value;
+                        request.fields['fcm_token'] =
+                            Provider.of<UserData>(context, listen: false)
+                                .fcmKey;
+                        request.fields['device_id'] =
+                            Provider.of<UserData>(context, listen: false)
+                                .deviceID;
                         print(request.fields);
                         commonMethod(request).then((onResponse) {
                           onResponse.stream
@@ -69,12 +75,14 @@ class _VerificationScreenState extends State<VerificationScreen> {
                             Map data = json.decode(value);
                             print(data);
                             if (data["code"] == 200) {
-                              Provider.of<UserData>(context, listen: false).storeLoginData(data['user'], data['cart_count']);
+                              Provider.of<UserData>(context, listen: false)
+                                  .storeLoginData(
+                                      data['user'], data['cart_count']);
                               Navigator.pushAndRemoveUntil(
                                 context,
                                 new MaterialPageRoute(
                                     builder: (context) => Home()),
-                                    (Route<dynamic> route) => false,
+                                (Route<dynamic> route) => false,
                               );
                             } else {
                               presentToast(data['message'], context, 2);
