@@ -13,6 +13,7 @@ import 'package:littardo/screens/products_list.dart';
 import 'package:littardo/screens/search.dart';
 import 'package:littardo/screens/shoppingcart.dart';
 import 'package:littardo/screens/subcategory.dart';
+import 'package:littardo/screens/notification_new.dart';
 import 'package:littardo/screens/usersettings.dart';
 import 'package:littardo/screens/whell.dart';
 import 'package:littardo/services/api_services.dart';
@@ -528,7 +529,7 @@ class _HomeState extends State<Home> {
                     fontWeight: FontWeight.w600,
                     color: blackColor)),
             onTap: () {
-              Nav.route(context, Checkout());
+              Nav.route(context, NotificationPage());
             },
           ),
 //          ListTile(

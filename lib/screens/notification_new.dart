@@ -1,4 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:littardo/services/api_services.dart';
+import 'package:provider/provider.dart';
+import 'package:littardo/provider/UserData.dart';
 
 class NotificationPage extends StatefulWidget {
   @override
@@ -6,6 +11,16 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
+  List notifications = new List();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      getNotifications();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,11 +43,45 @@ class _NotificationPageState extends State<NotificationPage> {
         itemBuilder: (context, index) {
           return createNotificationListItem(index);
         },
-        itemCount: getDummyList().length,
+        itemCount: notifications.length,
       ),
     );
   }
 
+  getNotifications() {
+    getProgressDialog(context, "Fetching notifications...").show();
+    commeonMethod2(api_url + "notifications",
+            Provider.of<UserData>(context, listen: false).userData['api_token'])
+        .then((onResponse) {
+      Map data = json.decode(onResponse.body);
+      print(data);
+      if (data['code'] == 200) {
+        setState(() {
+          notifications = data['data'];
+        });
+      } else {
+        presentToast(data['message'], context, 0);
+      }
+      getProgressDialog(context, "Fetching address...").hide(context);
+    }).catchError((onerr) {
+      getProgressDialog(context, "Fetching address...").hide(context);
+    });
+  }
+
+  void deleteNotification(String id) {
+    getProgressDialog(context, "Deleting notification...").show();
+    commeonMethod2(api_url + "notifications/delete?id=$id",
+            Provider.of<UserData>(context, listen: false).userData['api_token'])
+        .then((onResponse) {
+      Map data = json.decode(onResponse.body);
+      print(data);
+      presentToast(data['message'], context, 0);
+      if (data['code'] == 200) {
+        getNotifications();
+      }
+      getProgressDialog(context, "Deleting address...").hide(context);
+    });
+  }
   /*createItem(){
     return ListTile(
       title: Text(
@@ -77,22 +126,25 @@ class _NotificationPageState extends State<NotificationPage> {
             ),
             Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
                       Text(
-                        "Payment Complete",
+                        notifications[index]['title'],
                         style: TextStyle(fontSize: 16),
                       ),
-                      IconButton(icon: Icon(Icons.close), onPressed: () {})
+                      IconButton(icon: Icon(Icons.close), onPressed: () {
+                         deleteNotification(notifications[index]['id'].toString());
+                      })
                     ],
                   ),
                   Container(
                     margin: EdgeInsets.only(right: 6),
                     child: Text(
-                      "Thank you for your recent payment. Your monthly subscription has been activated until June 2020.",
+                      notifications[index]['body'],
                       softWrap: true,
                       textAlign: TextAlign.start,
                       style: TextStyle(color: Colors.grey, fontSize: 12),
@@ -105,10 +157,10 @@ class _NotificationPageState extends State<NotificationPage> {
           ],
         ),
       ),
-      key: Key("key_1"),
+      key: Key("key_1" + notifications[index]['id'].toString()),
       direction: DismissDirection.endToStart,
       onDismissed: (DismissDirection direction) {
-        getDummyList().removeAt(index);
+        deleteNotification(notifications[index]['id'].toString());
       },
       background: Container(
         color: Colors.green,
@@ -125,12 +177,5 @@ class _NotificationPageState extends State<NotificationPage> {
         ),
       ),
     );
-  }
-
-  static List getDummyList() {
-    List list = List.generate(10, (i) {
-      return "Item ${i + 1}";
-    });
-    return list;
   }
 }

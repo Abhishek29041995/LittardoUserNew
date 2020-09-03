@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/ionicons.dart';
 import 'package:http/http.dart';
+import 'package:provider/provider.dart';
 import 'package:littardo/provider/UserData.dart';
 import 'package:littardo/screens/add_location.dart';
 import 'package:littardo/services/api_services.dart';
-import 'package:provider/provider.dart';
 
 class Checkout extends StatefulWidget {
   final String isCash;
