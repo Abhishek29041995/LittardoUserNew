@@ -89,34 +89,54 @@ class _ProductPageState extends State<ProductPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    SizedBox(
-                      child: Divider(
-                        color: Colors.black26,
-                        height: 4,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: <Widget>[
+                        SizedBox(
+                          child: Divider(
+                            color: Colors.black26,
+                            height: 4,
+                          ),
+                          height: 24,
+                        ),
+                        Column(
+                          children: [],
+                        ),
+                        Text(
+                          originallastPrice != ""
+                              ? "\u20b9 " + originallastPrice
+                              : "",
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontSize: 16,
+                              decoration: TextDecoration.lineThrough),
+                        ),
+                        SizedBox(
+                          width: 6,
+                        ),
+                        Text(
+                          lastPrice,
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700),
+                        ),
+                        SizedBox(
+                          width: 6,
+                        ),
+                      ],
+                    ),
+                    Text(
+                      "12 % off",
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
                       ),
-                      height: 24,
                     ),
-                    Text(
-                      originallastPrice != ""
-                          ? "\u20b9 " + originallastPrice
-                          : "",
-                      style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 18,
-                          decoration: TextDecoration.lineThrough),
-                    ),
-                    SizedBox(
-                      width: 6,
-                    ),
-                    Text(
-                      lastPrice,
-                      style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700),
-                    )
                   ],
                 ),
 //             Container(
@@ -751,7 +771,7 @@ class _ProductPageState extends State<ProductPage> {
     var request = MultipartRequest("POST", Uri.parse(api_url + method));
     request.fields['product_id'] = widget.product.id;
     request.fields["user_id"] =
-        Provider.of<UserData>(context, listen: false).userData['user_id'];
+        Provider.of<UserData>(context, listen: false).userData['id'].toString();
     request.fields["price"] = lastPrice;
     request.fields["quantity"] = current_stock.toString();
     request.fields["color"] =
@@ -1092,11 +1112,20 @@ class _ProductPageState extends State<ProductPage> {
 
   _productSlideImage(String imageUrl) {
     return Container(
-      child: CachedNetworkImage(
-        imageUrl: imageUrl,
-        fit: BoxFit.cover,
-      ),
-    );
+        child: Image.network(
+      imageUrl,
+      fit: BoxFit.cover,
+      errorBuilder: (context, _, __) {
+        return Image.asset("assets/littardo_logo.png");
+      },
+    )
+
+        // CachedNetworkImage(
+
+        //   imageUrl: imageUrl,
+        //   fit: BoxFit.cover,
+        // ),
+        );
   }
 
   dottedSlider() {
@@ -1271,7 +1300,7 @@ class _ProductPageState extends State<ProductPage> {
               height: 8,
             ),
             Text(
-              widget.product.description,
+              widget.product.description ?? "",
               maxLines: 3,
             ),
             SizedBox(

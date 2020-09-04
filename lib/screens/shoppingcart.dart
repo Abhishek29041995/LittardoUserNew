@@ -307,14 +307,6 @@ class _ShoppingCartState extends State<ShoppingCart> {
                           ),
                         ),
                       ),
-                      //  if (isCash == "") {
-                      //               presentToast(
-                      //                   'Select payment mode', context, 0);
-                      //             } else {
-                      //               Navigator.of(context).push(
-                      //                   MaterialPageRoute(
-                      //                       builder: (context) => Checkout()));
-                      //             }
                       Padding(
                         padding: EdgeInsets.only(
                             top: 8.0, left: 8.0, right: 8.0, bottom: 16.0),
@@ -323,7 +315,14 @@ class _ShoppingCartState extends State<ShoppingCart> {
                             borderRadius: BorderRadius.circular(4.0),
                           ),
                           color: Colors.blueGrey,
-                          onPressed: () => {Nav.route(context, Checkout())},
+                          onPressed: () {
+                            if (isCash == "") {
+                              presentToast('Select payment mode', context, 0);
+                            } else {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => Checkout()));
+                            }
+                          },
                           child: Container(
                             padding: EdgeInsets.symmetric(
                               vertical: 15.0,
@@ -446,7 +445,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                       Padding(
                         padding: EdgeInsets.all(5),
                         child: Text(
-                          "\u20B9 " + item['price'].toString(),
+                          "\u20B9 " + item['product']['unit_price'].toString(),
                           style: TextStyle(
                               fontSize: 13, fontWeight: FontWeight.bold),
                         ),
@@ -525,6 +524,17 @@ class _ShoppingCartState extends State<ShoppingCart> {
                             "\u20B9 " + item['product']['unit_price'],
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 12.0),
+                          child: Text(
+                            item['product']['discount'] + " % off",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
+                            ),
                           ),
                         ),
                       ],

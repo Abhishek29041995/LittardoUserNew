@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
+import 'package:littardo/provider/UserData.dart';
+import 'package:littardo/services/api_services.dart';
+import 'package:provider/provider.dart';
 
 class Filtre extends StatefulWidget {
   @override
@@ -9,6 +14,21 @@ class Filtre extends StatefulWidget {
 class _FiltreState extends State<Filtre> {
   double _lowerValue = 60;
   double _upperValue = 1000;
+
+  @override
+  void initState() {
+    // print(Provider.of<UserData>(context, listen: false).getcategories);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      fetchProducts(
+          "category",
+          Provider.of<UserData>(context, listen: false)
+              .getcategories
+              .first["slug"]);
+    });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -207,5 +227,24 @@ class _FiltreState extends State<Filtre> {
         },
       ),
     );
+  }
+
+  fetchProducts(String type, String slug) {
+    getProgressDialog(context, "Fetching filer...").show();
+    print(api_url + "search?$type=$slug");
+    commeonMethod2(
+      "https://littardo-api.xyz/api/user/" + "search?$type=$slug",
+      Provider.of<UserData>(context, listen: false).userData['api_token'],
+    ).then((onResponse) {
+      print(onResponse.body);
+      Map data = json.decode(onResponse.body);
+      if (data['code'] == 200) {
+        print(data);
+      } else {
+        presentToast(data['message'], context, 0);
+      }
+
+      // getProgressDialog(context, "Fetching Product...").hide(context);
+    });
   }
 }
