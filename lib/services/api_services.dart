@@ -33,7 +33,7 @@ Future<Response> commeonMethod1(String token, String method) async {
 }
 
 Future<Response> commeonMethod2(String url, String token) async {
-  print(token);
+  print(url);
   final response = await get(
     url,
     headers: {
@@ -42,6 +42,15 @@ Future<Response> commeonMethod2(String url, String token) async {
       "Accept": "application/json",
       "Content-Type": "application/json"
     },
+  );
+  return response;
+}
+
+Future<Response> commeonMethod5(String url, String token) async {
+  print(url);
+  final response = await get(
+    url,
+    headers: {'Authorization': "Bearer $token", "APP": "ECOM"},
   );
   return response;
 }

@@ -30,6 +30,7 @@ class _CheckoutState extends State<Checkout> {
 
   @override
   Widget build(BuildContext context) {
+    print("iscash" + widget.isCash);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -60,6 +61,7 @@ class _CheckoutState extends State<Checkout> {
                     Text("Delivery Adress"),
                     ListView.builder(
                         shrinkWrap: true,
+                        physics: ClampingScrollPhysics(),
                         itemCount: addresses.length,
                         itemBuilder: (context, index) {
                           return InkWell(
@@ -125,7 +127,7 @@ class _CheckoutState extends State<Checkout> {
                             children: <Widget>[
                               Expanded(
                                 child: Text(
-                                  "Payment",
+                                  "Add New Address",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: Colors.white,

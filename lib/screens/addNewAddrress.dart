@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 
 import 'package:geocoder/geocoder.dart';
 import 'package:http/http.dart';
+import 'package:littardo/provider/UserData.dart';
 import 'package:littardo/screens/home.dart';
 
 import 'package:lottie/lottie.dart';
 
 import 'package:littardo/services/api_services.dart';
+import 'package:provider/provider.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -66,43 +68,34 @@ class _AddNewAddress extends State<AddNewAddress> {
     this.lattitude = lat;
     this.longitude = lon;
     this.addrMap = addrMap;
-    if (address != null) {
-      customer_name.text = address['customer_name'];
-      phone_number.text = address['customer_phone'];
-      email.text = address['customer_email'];
-      if (address['lat'] == lat) {
-        flat_house.text = address['customer_address'].toString().split(", ")[0];
-        street_colony.text =
-            address['customer_address'].toString().split(", ")[1];
-        pin.text = address['customer_pincode'];
+    if (addrMap != null) {
+      if (address != null) {
+        customer_name.text = address['customer_name'];
+        phone_number.text = address['customer_phone'];
+        email.text = address['customer_email'];
+        if (address['lat'] == lat) {
+          flat_house.text =
+              address['customer_address'].toString().split(", ")[0];
+          street_colony.text =
+              address['customer_address'].toString().split(", ")[1];
+          pin.text = address['customer_pincode'];
+        } else {
+          flat_house.text =
+              addrMap.subThoroughfare != null ? addrMap.subThoroughfare : "";
+          street_colony.text =
+              addrMap.thoroughfare != null ? addrMap.thoroughfare : "";
+          pin.text = addrMap.postalCode != null ? addrMap.postalCode : "";
+        }
       } else {
-        flat_house.text = addrMap.subThoroughfare;
-        street_colony.text = addrMap.thoroughfare;
-        pin.text = addrMap.postalCode;
+        flat_house.text =
+            addrMap.subThoroughfare != null ? addrMap.subThoroughfare : "";
+        street_colony.text =
+            addrMap.thoroughfare != null ? addrMap.thoroughfare : "";
+        pin.text = addrMap.postalCode != null ? addrMap.postalCode : "";
       }
-    } else {
-      flat_house.text = addrMap.subThoroughfare;
-      street_colony.text = addrMap.thoroughfare;
-      pin.text = addrMap.postalCode;
+      country.text = addrMap.countryName;
+      city.text = addrMap.locality != null ? addrMap.locality : "";
     }
-    country.text = addrMap.countryName;
-    city.text = addrMap.subLocality;
-  }
-
-  bool _isLoading = false;
-  String accessToken = "";
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    checkSavedData();
-  }
-
-  Future<void> checkSavedData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    user = jsonDecode(prefs.getString("user"));
-    accessToken = user['api_token'];
   }
 
   @override
@@ -443,9 +436,8 @@ class _AddNewAddress extends State<AddNewAddress> {
   }
 
   placeOrder() {
-    setState(() {
-      _isLoading = true;
-    });
+    print(Uri.parse(
+        from == "Checkout" ? api_url + "order?buy" : api_url + "order"));
     var request = new MultipartRequest(
         "POST",
         Uri.parse(
@@ -461,17 +453,16 @@ class _AddNewAddress extends State<AddNewAddress> {
     request.fields["payment_option"] = isCash;
     request.fields["lat"] = lattitude;
     request.fields["lon"] = longitude;
-    request.headers['Authorization'] = "Bearer " + user['api_token'];
+    request.headers['Authorization'] = "Bearer " +
+        Provider.of<UserData>(context, listen: false).userData['api_token'];
     request.headers['Accept'] = "application/json";
     request.headers['Content-Type'] = "application/json";
     request.headers["APP"] = "ECOM";
+    print(request.fields);
     commonMethod(request).then((onResponse) {
       onResponse.stream.transform(utf8.decoder).listen((value) async {
-        setState(() {
-          _isLoading = false;
-        });
         Map data = json.decode(value);
-        print(data);
+        print(data.toString() + "===");
         if (data['code'] == 200) {
 //        if (isCash == "COD") {
           SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -484,9 +475,7 @@ class _AddNewAddress extends State<AddNewAddress> {
 //        }
         } else {
           presentToast(data['message'], context, 0);
-          setState(() {
-            _isLoading = false;
-          });
+          getProgressDialog(context, "Placing Order...").hide(context);
         }
       });
     });
@@ -671,9 +660,7 @@ class _AddNewAddress extends State<AddNewAddress> {
   }
 
   void addAddress() {
-    setState(() {
-      _isLoading = true;
-    });
+    getProgressDialog(context, "Placing Order...").show();
     var request = new MultipartRequest(
         "POST",
         Uri.parse(address != null
@@ -692,7 +679,8 @@ class _AddNewAddress extends State<AddNewAddress> {
     request.fields["customer_phone"] = phone_number.text;
     request.fields["lat"] = lattitude;
     request.fields["lon"] = longitude;
-    request.headers['Authorization'] = "Bearer " + user['api_token'];
+    request.headers['Authorization'] = "Bearer " +
+        Provider.of<UserData>(context, listen: false).userData['api_token'];
     request.headers['Accept'] = "application/json";
     request.headers['Content-Type'] = "application/json";
     request.headers["APP"] = "ECOM";
@@ -701,18 +689,13 @@ class _AddNewAddress extends State<AddNewAddress> {
     print(request.fields);
     commonMethod(request).then((onResponse) {
       onResponse.stream.transform(utf8.decoder).listen((value) async {
-        setState(() {
-          _isLoading = false;
-        });
         Map data = json.decode(value);
         print(data);
         if (data['code'] == 200) {
           placeOrder();
         } else {
           presentToast(data['message'], context, 0);
-          setState(() {
-            _isLoading = false;
-          });
+          getProgressDialog(context, "Placing Order...").hide(context);
         }
       });
     });

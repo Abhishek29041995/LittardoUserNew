@@ -33,13 +33,13 @@ class _OrderDetais extends State<OrderDetais> {
           child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.white,
           leading: new IconButton(
-              icon: new Icon(Icons.arrow_back, color: Colors.white),
+              icon: new Icon(Icons.arrow_back, color: Colors.black),
               onPressed: () => {Navigator.pop(context, showReview)}),
           title: Text(
             "Order Detail",
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.black),
           ),
         ),
         body: SingleChildScrollView(

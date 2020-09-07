@@ -320,7 +320,8 @@ class _ShoppingCartState extends State<ShoppingCart> {
                               presentToast('Select payment mode', context, 0);
                             } else {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => Checkout()));
+                                  builder: (context) => Checkout(
+                                      isCash: isCash, from: "Shopping Cart")));
                             }
                           },
                           child: Container(

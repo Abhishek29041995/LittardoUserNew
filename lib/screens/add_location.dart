@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:littardo/services/api_services.dart';
 import 'package:littardo/widgets/searchMapPlaceWidget.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,7 +39,6 @@ class _AddLocationState extends State<AddLocation> {
   Set<Marker> markers = Set();
   Completer<GoogleMapController> _controller = Completer();
   BitmapDescriptor myIcon;
-  bool _isLoading = true;
 
   String cityName = "";
   String locationTitle = "";
@@ -51,7 +51,6 @@ class _AddLocationState extends State<AddLocation> {
 
   TextEditingController _namecontroller = new TextEditingController();
   TextEditingController _address1controller = new TextEditingController();
-  Map userData = null;
   String isCash;
   Map address;
   String from;
@@ -65,31 +64,18 @@ class _AddLocationState extends State<AddLocation> {
 
   @override
   void initState() {
-    getLocation();
-    setIcons();
-    checkIsLogin();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      getLocation();
+      setIcons();
+    });
     super.initState();
   }
 
-  Future<Null> checkIsLogin() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    JsonCodec codec = new JsonCodec();
-    userData = codec.decode(prefs.getString("userData"));
-    acccessToken = prefs.getString("accessToken");
-  }
-
   getLocation() async {
-    print("ddddd");
-    setState(() {
-      _isLoading = true;
-    });
-
+    getProgressDialog(context, "Fetching location...").show();
     final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
     bool locationenabled = await geolocator.isLocationServiceEnabled();
     if (!locationenabled) {
-      setState(() {
-        _isLoading = false;
-      });
       showInSnackBar(
           'Please allow permission to access location',
           SnackBarAction(
@@ -99,6 +85,7 @@ class _AddLocationState extends State<AddLocation> {
 //              SystemNavigator.pop();
             },
           ));
+      getProgressDialog(context, "Fetching location...").hide(context);
     }
     geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
@@ -250,11 +237,6 @@ class _AddLocationState extends State<AddLocation> {
                 child: RaisedButton(
                     child: new Text('CONFIRM'),
                     onPressed: () {
-                      Map data = {
-                        "address": fulladdress,
-                        "lat": lattitude,
-                        "lon": longitude
-                      };
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => AddNewAddress(isCash, address,
                               from, lattitude, longitude, addrMap)));
@@ -363,15 +345,15 @@ class _AddLocationState extends State<AddLocation> {
       addrMap = addresses.first;
       lattitude = latitude.toString();
       longitude = long.toString();
-      cityName = first.subLocality;
-      locationTitle = first.subLocality;
+      cityName = first.locality != null ? first.locality : "";
+      locationTitle = first.subLocality != null ? first.subLocality : "";
       _namecontroller.text = lattitude;
       _address1controller.text = longitude;
       fulladdress = first.addressLine;
-      _isLoading = false;
     });
     print(
         ' ${first.locality}, ${first.adminArea},${first.subLocality}, ${first.subAdminArea},${first.addressLine}, ${first.featureName},${first.thoroughfare}, ${first.subThoroughfare}');
+    getProgressDialog(context, "Fetching location...").hide(context);
   }
 
   void showInSnackBar(String value, SnackBarAction snackBarAction) {

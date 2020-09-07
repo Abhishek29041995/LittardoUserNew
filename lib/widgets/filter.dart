@@ -230,10 +230,9 @@ class _FiltreState extends State<Filtre> {
   }
 
   fetchProducts(String type, String slug) {
-    getProgressDialog(context, "Fetching filer...").show();
-    print(api_url + "search?$type=$slug");
-    commeonMethod2(
-      "https://littardo-api.xyz/api/user/" + "search?$type=$slug",
+    getProgressDialog(context, "Fetching filter...").show();
+    commeonMethod5(
+      api_url + "search?$type=$slug",
       Provider.of<UserData>(context, listen: false).userData['api_token'],
     ).then((onResponse) {
       print(onResponse.body);
