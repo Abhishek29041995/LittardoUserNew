@@ -33,7 +33,7 @@ class Product {
   String price;
   String currentStock;
   String shippingCost;
-  List<String> photos;
+  List photos;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
         id: json["id"],

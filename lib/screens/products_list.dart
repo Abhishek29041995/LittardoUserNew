@@ -227,9 +227,9 @@ class _ProductListState extends State<ProductList> {
                                   description: productList[index]
                                       ['description'],
                                   photos: productList[index]['photos'],
-                                  current_stock: productList[index]
+                                  currentStock: productList[index]
                                       ['current_stock'],
-                                  shipping_cost: productList[index]
+                                  shippingCost: productList[index]
                                           ['shipping_cost']
                                       .toString()),
                               gradientColors: [
