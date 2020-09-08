@@ -14,6 +14,34 @@ class Filtre extends StatefulWidget {
 class _FiltreState extends State<Filtre> {
   double _lowerValue = 60;
   double _upperValue = 1000;
+  String selectedCategory = "";
+  List subCategoryList = [];
+  List subSubCategoryList = [];
+  List attributes = [];
+  List allColors = [];
+  List products = [];
+  String sortByValue = "";
+  int sortByIndex = 1;
+  String selectedColor = "";
+  List selectedSizes = [];
+  List selectedFabric = [];
+
+  List<String> sortByList = [
+    "Newest",
+    "Oldest",
+    "Price low to high",
+    "Price high to low",
+  ];
+
+  void resetFilter() {
+    sortByValue = "";
+    sortByIndex = 1;
+    selectedSizes = [];
+    selectedFabric = [];
+    selectedColor = "";
+    sortByValue = "";
+    setState(() {});
+  }
 
   @override
   void initState() {
@@ -31,206 +59,344 @@ class _FiltreState extends State<Filtre> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(12.0),
-      color: Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text("Reset"),
-              Text("Filters"),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Divider(
-              color: Colors.black26,
-              height: 2,
-            ),
-          ),
-          SingleChildScrollView(
-            child: Row(
-              children: <Widget>[
-                buildChip("American", Colors.grey.shade400, "A",
-                    Colors.grey.shade600),
-                buildChip("Turkish", Theme.of(context).primaryColor, "A",
-                    Theme.of(context).primaryColor),
-                buildChip(
-                    "Asia", Colors.grey.shade400, "A", Colors.grey.shade600),
-                buildChip(
-                    "Europe", Colors.grey.shade400, "A", Colors.grey.shade600),
-              ],
-            ),
-          ),
-          Row(
-            children: <Widget>[
-              buildChip(
-                  "Lorem", Colors.grey.shade400, "A", Colors.grey.shade600),
-              buildChip(
-                  "Ipsum", Colors.grey.shade400, "A", Colors.grey.shade600),
-              buildChip(
-                  "Dolır", Colors.grey.shade400, "A", Colors.grey.shade600),
-              buildChip(
-                  "Sit amed", Colors.grey.shade400, "A", Colors.grey.shade600),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("SORT BY"),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Top Rated",
-                  style: TextStyle(color: Theme.of(context).primaryColor),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(
-                  Icons.check,
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 1.0),
-            child: Divider(
-              color: Colors.black26,
-              height: 2,
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("Nearest Me"),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 1.0),
-            child: Divider(
-              color: Colors.black26,
-              height: 2,
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("Cost Hight to Low"),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 1.0),
-            child: Divider(
-              color: Colors.black26,
-              height: 2,
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("Cost Low to Hight"),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 1.0),
-            child: Divider(
-              color: Colors.black26,
-              height: 2,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-                top: 16.0, bottom: 8.0, left: 8.0, right: 8.0),
-            child: Text("PRICE"),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
-            child: Row(
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 1,
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        title: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text("\$ " + '$_lowerValue'),
-                Text("\$ " + '$_upperValue'),
+                InkWell(
+                  onTap: resetFilter,
+                  child: Text(
+                    "Reset",
+                    style: TextStyle(color: Colors.blueGrey),
+                  ),
+                ),
+                Text(
+                  "Filters",
+                  style: TextStyle(color: Colors.blueGrey),
+                ),
               ],
             ),
-          ),
-          FlutterSlider(
-            tooltip: FlutterSliderTooltip(
-              leftPrefix: Icon(
-                Icons.attach_money,
-                size: 19,
-                color: Colors.black45,
-              ),
-              rightSuffix: Icon(
-                Icons.attach_money,
-                size: 19,
-                color: Colors.black45,
+          ],
+        ),
+      ),
+      body: Container(
+        padding: EdgeInsets.all(12.0),
+        color: Colors.white,
+        child: ListView(
+          shrinkWrap: true,
+          physics: ClampingScrollPhysics(),
+          children: <Widget>[
+            Wrap(
+              children: List.generate(
+                Provider.of<UserData>(context, listen: false)
+                    .getcategories
+                    .length,
+                (index) => buildChip(
+                    Provider.of<UserData>(context, listen: false)
+                        .getcategories[index],
+                    Colors.grey.shade400,
+                    "sub",
+                    Colors.grey.shade600),
               ),
             ),
-            trackBar: FlutterSliderTrackBar(
-              inactiveTrackBar: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.black12,
-                border: Border.all(width: 3, color: Colors.blue),
-              ),
-              activeTrackBar: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  color: Colors.red.withOpacity(0.5)),
+            subCategoryList.isNotEmpty
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Divider(
+                      color: Colors.black26,
+                      height: 2,
+                    ),
+                  )
+                : SizedBox(),
+            subCategoryList.isNotEmpty
+                ? Wrap(
+                    children: List.generate(
+                      subCategoryList.length,
+                      (index) => buildChip(
+                        subCategoryList[index],
+                        Colors.grey.shade400,
+                        "subsub",
+                        Colors.grey.shade600,
+                      ),
+                    ),
+                  )
+                : SizedBox(),
+            subSubCategoryList.isNotEmpty
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Divider(
+                      color: Colors.black26,
+                      height: 2,
+                    ),
+                  )
+                : SizedBox(),
+            subSubCategoryList.isNotEmpty
+                ? Wrap(
+                    children: List.generate(
+                      subSubCategoryList.length,
+                      (index) => buildChip(
+                        subSubCategoryList[index],
+                        Colors.grey.shade400,
+                        "A",
+                        Colors.grey.shade600,
+                      ),
+                    ),
+                  )
+                : SizedBox(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text("SORT BY"),
             ),
-            values: [30, 420],
-            rangeSlider: true,
-            max: 500,
-            min: 0,
-            onDragging: (handlerIndex, lowerValue, upperValue) {
-              _lowerValue = lowerValue;
-              _upperValue = upperValue;
-              setState(() {});
-            },
-          )
-        ],
+            ListView.separated(
+              physics: ClampingScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) => InkWell(
+                onTap: () {
+                  setState(() {
+                    sortByValue = sortByList[index];
+                    sortByIndex = index + 1;
+                  });
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 2.0, horizontal: 8.0),
+                      child: Text(
+                        sortByList[index],
+                        style: sortByValue == sortByList[index]
+                            ? TextStyle(color: Theme.of(context).primaryColor)
+                            : TextStyle(color: Colors.blueGrey),
+                      ),
+                    ),
+                    sortByValue == sortByList[index]
+                        ? Icon(
+                            Icons.check,
+                            color: Theme.of(context).primaryColor,
+                          )
+                        : SizedBox(),
+                  ],
+                ),
+              ),
+              separatorBuilder: (context, index) => Divider(),
+              itemCount: sortByList.length,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Divider(
+                color: Colors.black26,
+                height: 2,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  top: 8.0, bottom: 8.0, left: 8.0, right: 8.0),
+              child: Text("PRICE"),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text("\u20b9 " + '$_lowerValue'),
+                  Text("\u20b9 " + '$_upperValue'),
+                ],
+              ),
+            ),
+            FlutterSlider(
+              tooltip: FlutterSliderTooltip(
+                leftPrefix: Icon(
+                  Icons.attach_money,
+                  size: 19,
+                  color: Colors.black45,
+                ),
+                rightSuffix: Icon(
+                  Icons.attach_money,
+                  size: 19,
+                  color: Colors.black45,
+                ),
+              ),
+              trackBar: FlutterSliderTrackBar(
+                inactiveTrackBar: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.black12,
+                  border: Border.all(width: 3, color: Colors.blue),
+                ),
+                activeTrackBar: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    color: Colors.red.withOpacity(0.5)),
+              ),
+              values: [1, 45000],
+              rangeSlider: true,
+              max: 50000,
+              min: 0,
+              onDragging: (handlerIndex, lowerValue, upperValue) {
+                _lowerValue = lowerValue;
+                _upperValue = upperValue;
+                setState(() {});
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Divider(
+                color: Colors.black26,
+                height: 2,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  top: 8.0, bottom: 8.0, left: 8.0, right: 8.0),
+              child: Text("FILTER BY COLOR"),
+            ),
+            Row(
+              children: List.generate(
+                allColors.length,
+                (index) => Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        selectedColor = allColors[index];
+                      });
+                    },
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: Colors.blueGrey,
+                          child: CircleAvatar(
+                            maxRadius: 18,
+                            backgroundColor: Color(int.parse("0xFF" +
+                                allColors[index]
+                                    .toString()
+                                    .replaceAll("#", ""))),
+                          ),
+                        ),
+                        selectedColor == allColors[index]
+                            ? Icon(
+                                Icons.check,
+                                color: Colors.black45,
+                              )
+                            : SizedBox(),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Divider(
+                color: Colors.black26,
+                height: 2,
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(
+                attributes.length,
+                (indexFirst) {
+                  // if (attributes[index]["id"] == 1) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 8.0, bottom: 8.0, left: 8.0, right: 8.0),
+                        child: Text(attributes[indexFirst]["id"] == "1"
+                            ? "FILTER BY SIZE"
+                            : "FILTER BY FABRIC"),
+                      ),
+                      ListView.builder(
+                        physics: ClampingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) => CheckboxListTile(
+                          controlAffinity: ListTileControlAffinity.leading,
+                          value: attributes[indexFirst]["id"] == "1"
+                              ? selectedSizes.contains(
+                                  attributes[indexFirst]["values"][index])
+                              : selectedFabric.contains(
+                                  attributes[indexFirst]["values"][index]),
+                          onChanged: (value) {
+                            if (attributes[indexFirst]["id"] == "1") {
+                              if (value) {
+                                selectedSizes.add(
+                                    attributes[indexFirst]["values"][index]);
+                              } else {
+                                selectedSizes.remove(
+                                    attributes[indexFirst]["values"][index]);
+                              }
+                            } else {
+                              if (value) {
+                                selectedFabric.add(
+                                    attributes[indexFirst]["values"][index]);
+                              } else {
+                                selectedFabric.remove(
+                                    attributes[indexFirst]["values"][index]);
+                              }
+                            }
+                            setState(() {});
+                          },
+                          title: Text(attributes[indexFirst]["values"][index]),
+                        ),
+                        itemCount: attributes[indexFirst]["values"].length,
+                      )
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Padding buildChip(
-      String label, Color color, String avatarTitle, Color textColor) {
+      Map label, Color color, String categoryType, Color textColor) {
     return Padding(
       padding: const EdgeInsets.only(top: 2.0, right: 2.0, left: 2.0),
       child: FilterChip(
         padding: EdgeInsets.all(4.0),
         label: Text(
-          label,
-          style: TextStyle(color: textColor),
+          label["name"],
+          style: TextStyle(
+              color:
+                  selectedCategory == label["name"] ? Colors.white : textColor),
         ),
-        backgroundColor: Colors.transparent,
+        backgroundColor: selectedCategory == label["name"]
+            ? Theme.of(context).primaryColor
+            : Colors.transparent,
         shape: StadiumBorder(
-          side: BorderSide(color: color),
+          side: selectedCategory == label["name"]
+              ? BorderSide.none
+              : BorderSide(color: color),
         ),
         onSelected: (bool value) {
-          print("selected");
+          setState(() {
+            selectedCategory = label["name"];
+          });
+          if (categoryType == "sub") {
+            getSubCategory(label["id"].toString());
+          } else if (categoryType == "subsub") {
+            getSubSubCategory(label["id"].toString());
+          } else {
+            fetchProducts("subsubcategory", label["slug"]);
+          }
         },
       ),
     );
   }
 
   fetchProducts(String type, String slug) {
-    getProgressDialog(context, "Fetching filter...").show();
     commeonMethod5(
       api_url + "search?$type=$slug",
       Provider.of<UserData>(context, listen: false).userData['api_token'],
@@ -238,12 +404,72 @@ class _FiltreState extends State<Filtre> {
       print(onResponse.body);
       Map data = json.decode(onResponse.body);
       if (data['code'] == 200) {
+        attributes = data["filter_data"]["attributes"];
+        products = data["filter_data"]["products"]["data"];
+        allColors = data["filter_data"]["all_colors"];
         print(data);
+        setState(() {});
       } else {
         presentToast(data['message'], context, 0);
       }
+    });
+  }
 
-      // getProgressDialog(context, "Fetching Product...").hide(context);
+  void getSubCategory(String categoryId) {
+    setState(() {
+      getProgressDialog(context, "Fetching sub category").show();
+    });
+    print(api_url + "sub-categories?category_id=" + categoryId);
+    commeonMethod2(api_url + "sub-categories?category_id=" + categoryId,
+            Provider.of<UserData>(context, listen: false).userData['api_token'])
+        .then((onResponse) {
+      setState(() {
+        getProgressDialog(context, "").hide(context);
+      });
+      Map data = json.decode(onResponse.body);
+      // print(data);
+      if (data['code'] == 200) {
+        setState(() {
+          subCategoryList = data['sub_categories'];
+          fetchProducts("subcategory", data["slug"]);
+          print(subCategoryList);
+        });
+      } else {
+        presentToast(data['message'], context, 0);
+      }
+    }).catchError((onerr) {
+      setState(() {
+        getProgressDialog(context, "").hide(context);
+      });
+    });
+  }
+
+  Future<void> getSubSubCategory(String categoryId) async {
+    setState(() {
+      getProgressDialog(context, "Fetching sub sub category").show();
+    });
+    print(api_url + "sub-sub-categories?sub_category_id=" + categoryId);
+    commeonMethod2(api_url + "sub-sub-categories?sub_category_id=" + categoryId,
+            Provider.of<UserData>(context, listen: false).userData['api_token'])
+        .then((onResponse) {
+      setState(() {
+        getProgressDialog(context, "").hide(context);
+      });
+      Map data = json.decode(onResponse.body);
+      print(data);
+      if (data['code'] == 200) {
+        setState(() {
+          subSubCategoryList = data['sub_sub_categories'];
+          // brandList = data['brands'];
+        });
+        fetchProducts("subsubcategory", data["slug"]);
+      } else {
+        presentToast(data['message'], context, 0);
+      }
+    }).catchError((onerr) {
+      setState(() {
+        getProgressDialog(context, "").hide(context);
+      });
     });
   }
 }

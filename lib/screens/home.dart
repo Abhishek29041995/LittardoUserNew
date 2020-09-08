@@ -27,6 +27,7 @@ import 'package:littardo/widgets/occasions.dart';
 import 'package:littardo/utils/navigator.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'wallet.dart';
 
 import 'checkout.dart';
 import 'products_list.dart';
@@ -550,7 +551,7 @@ class _HomeState extends State<Home> {
                 context,
                 PageTransition(
                   type: PageTransitionType.fade,
-                  child: WhellFortune(),
+                  child: MyWallet(),
                 ),
               );
             },

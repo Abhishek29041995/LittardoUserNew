@@ -25,7 +25,6 @@ class _MyWallet extends State<MyWallet> {
   var logoImage;
   List wishListData = new List();
   bool serviceCalled = false;
-  Map user;
 
   void changeTheme() async {
     if (colorSwitched) {
@@ -137,7 +136,8 @@ class _MyWallet extends State<MyWallet> {
                             style: TextStyle(fontSize: 18, color: Colors.black),
                           ),
                           Text(
-                            user['name'],
+                            Provider.of<UserData>(context, listen: false)
+                                .userData['name'],
                             style: TextStyle(
                                 fontSize: 24,
                                 color: Colors.black,
@@ -175,7 +175,10 @@ class _MyWallet extends State<MyWallet> {
                                     child: ListView(
                                       children: <Widget>[
                                         Text(
-                                          '\u20b9 ' + user['balance'],
+                                          '\u20b9 ' +
+                                              Provider.of<UserData>(context,
+                                                      listen: false)
+                                                  .userData['balance'],
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               color: _textColor,
