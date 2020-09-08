@@ -7,13 +7,18 @@ import 'package:littardo/services/api_services.dart';
 import 'package:provider/provider.dart';
 
 class Filtre extends StatefulWidget {
+  final Function(String) productCallBack;
+
+  Filtre({this.productCallBack});
+
   @override
   _FiltreState createState() => _FiltreState();
 }
 
 class _FiltreState extends State<Filtre> {
-  double _lowerValue = 60;
-  double _upperValue = 1000;
+  double _lowerValue = 1;
+  double _upperValue = 50000;
+  bool _isDragged = false;
   String selectedCategory = "";
   List subCategoryList = [];
   List subSubCategoryList = [];
@@ -21,10 +26,12 @@ class _FiltreState extends State<Filtre> {
   List allColors = [];
   List products = [];
   String sortByValue = "";
-  int sortByIndex = 1;
+  int sortByIndex = 0;
   String selectedColor = "";
   List selectedSizes = [];
   List selectedFabric = [];
+  String filterData = "";
+  String lastFetchUrl = "";
 
   List<String> sortByList = [
     "Newest",
@@ -41,6 +48,39 @@ class _FiltreState extends State<Filtre> {
     selectedColor = "";
     sortByValue = "";
     setState(() {});
+  }
+
+  ///https://littardo-api.xyz/search?
+  ///attribute_1[]=L
+  ///&attribute_1[]=M
+  ///&category=Demo-category-1
+  ///&q=
+  ///&sort_by=2
+  ///&brand=
+  ///&seller_id=
+  ///&min_price=
+  ///&max_price
+
+  void generateFilterData() {
+    if (lastFetchUrl.isNotEmpty) {
+      if (sortByIndex > 0) {
+        lastFetchUrl += "&sort_by=$sortByIndex";
+      }
+      if (selectedColor.isNotEmpty) {
+        lastFetchUrl += "&color=${selectedColor.replaceFirst("#", "%23")}";
+      }
+      selectedSizes.forEach((size) {
+        lastFetchUrl += "&attribute_1[]=$size";
+      });
+      selectedFabric.forEach((fabric) {
+        lastFetchUrl += "&attribute_2[]=$fabric";
+      });
+      if (_isDragged) {
+        lastFetchUrl += "&min_price=$_lowerValue&max_price=$_upperValue";
+      }
+    }
+    print(lastFetchUrl);
+    widget.productCallBack(lastFetchUrl);
   }
 
   @override
@@ -77,9 +117,12 @@ class _FiltreState extends State<Filtre> {
                     style: TextStyle(color: Colors.blueGrey),
                   ),
                 ),
-                Text(
-                  "Filters",
-                  style: TextStyle(color: Colors.blueGrey),
+                InkWell(
+                  onTap: generateFilterData,
+                  child: Text(
+                    "Filters",
+                    style: TextStyle(color: Colors.blueGrey),
+                  ),
                 ),
               ],
             ),
@@ -241,6 +284,7 @@ class _FiltreState extends State<Filtre> {
               onDragging: (handlerIndex, lowerValue, upperValue) {
                 _lowerValue = lowerValue;
                 _upperValue = upperValue;
+                _isDragged = true;
                 setState(() {});
               },
             ),
@@ -397,6 +441,7 @@ class _FiltreState extends State<Filtre> {
   }
 
   fetchProducts(String type, String slug) {
+    print(api_url + "search?$type=$slug");
     commeonMethod5(
       api_url + "search?$type=$slug",
       Provider.of<UserData>(context, listen: false).userData['api_token'],
@@ -407,6 +452,7 @@ class _FiltreState extends State<Filtre> {
         attributes = data["filter_data"]["attributes"];
         products = data["filter_data"]["products"]["data"];
         allColors = data["filter_data"]["all_colors"];
+        lastFetchUrl = api_url + "search?$type=$slug";
         print(data);
         setState(() {});
       } else {

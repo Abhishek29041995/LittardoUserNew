@@ -40,7 +40,7 @@ Future<Response> commeonMethod2(String url, String token) async {
       'Authorization': "Bearer $token",
       "APP": "ECOM",
       "Accept": "application/json",
-      "Content-Type": "application/json"
+      // "Content-Type": "application/json"
     },
   );
   return response;
