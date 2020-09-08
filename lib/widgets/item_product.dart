@@ -9,12 +9,14 @@ import 'package:littardo/widgets/star_rating.dart';
 class TrendingItem extends StatelessWidget {
   final Product product;
   final List<Color> gradientColors;
+  final Function updateWishList;
 
-  TrendingItem({this.product, this.gradientColors});
+  TrendingItem({this.product, this.gradientColors, this.updateWishList});
 
   @override
   Widget build(BuildContext context) {
     double trendCardWidth = 140;
+    print(product.isWishlisted);
 
     return GestureDetector(
       child: Stack(
@@ -31,11 +33,14 @@ class TrendingItem extends StatelessWidget {
                     Row(
                       children: <Widget>[
                         Spacer(),
-                        Icon(
-                          Ionicons.getIconData(product.isWishlisted == "1"
-                              ? "ios-heart"
-                              : "ios-heart-empty"),
-                          color: Colors.black54,
+                        InkWell(
+                          onTap: updateWishList,
+                          child: Icon(
+                            Ionicons.getIconData(product.isWishlisted == "1"
+                                ? "ios-heart"
+                                : "ios-heart-empty"),
+                            color: Colors.black54,
+                          ),
                         )
                       ],
                     ),

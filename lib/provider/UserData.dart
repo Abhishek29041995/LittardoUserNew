@@ -23,9 +23,11 @@ class UserData extends ChangeNotifier {
   String fcmtoken = "";
 
   String deviceId = "";
+  String referral_code = "";
   get userData => _userData;
   get fcmKey => fcmtoken;
   get deviceID => deviceId;
+  get referralCode => referral_code;
   get getfeatured => featured;
   get getbannerOffers => bannerOffers;
   get getBannersWidgets => bannerOffersWidget;
@@ -45,6 +47,9 @@ class UserData extends ChangeNotifier {
   Future<Null> storeLoginData(Map data, int cartcount) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('token', 'loggedIn');
+    // if (prefs.getString("referral_code") != null) {
+    //   referral_code = prefs.getString("referral_code");
+    // }
     prefs.setString(
         "cartCount", cartcount != null ? cartcount.toString() : "0");
     prefs.setString('user', json.encode(data));
@@ -57,6 +62,9 @@ class UserData extends ChangeNotifier {
     notifyListeners();
     _userData = jsonDecode(prefs.getString("user"));
     token = "loggedIn";
+    if (prefs.getString("referral_code") != null) {
+      referral_code = prefs.getString("referral_code");
+    }
     if (prefs.getString("cartCount") == null) {
       prefs.setString("cartCount", _userData['cart_count']);
       cartCount =

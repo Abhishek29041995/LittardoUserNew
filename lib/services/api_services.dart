@@ -47,7 +47,6 @@ Future<Response> commeonMethod2(String url, String token) async {
 }
 
 Future<Response> commeonMethod5(String url, String token) async {
-  print(url);
   final response = await get(
     url,
     headers: {'Authorization': "Bearer $token", "APP": "ECOM"},
@@ -60,8 +59,6 @@ Future<Response> verifyMobile(String userId, String phone) async {
     "user_id": userId,
     "phone": phone,
   };
-
-  print(body);
   final response = await post(
     api_url + "user/verify",
     body: body,

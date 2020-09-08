@@ -2,14 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter_icons/ionicons.dart';
 import 'package:flutter_icons/material_community_icons.dart';
+import 'package:http/http.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:littardo/models/product.dart';
 import 'package:littardo/provider/UserData.dart';
+import 'package:littardo/screens/shoppingcart.dart';
 import 'package:littardo/services/api_services.dart';
 import 'package:littardo/widgets/filter.dart';
-import 'package:littardo/widgets/item_product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:littardo/widgets/item_product.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -139,7 +141,7 @@ class _ProductListState extends State<ProductList> {
                     context,
                     PageTransition(
                       type: PageTransitionType.fade,
-                      child: ProductList(),
+                      child: ShoppingCart(true),
                     ),
                   );
                 },
@@ -200,6 +202,15 @@ class _ProductListState extends State<ProductList> {
                         itemBuilder: (BuildContext context, int index) {
                           return Center(
                             child: TrendingItem(
+                              updateWishList: () {
+                                addToWishList(
+                                    productList[index]['wishlisted_count'] ==
+                                            "1"
+                                        ? "wishlist/remove"
+                                        : "wishlist/add",
+                                    productList[index]["id"].toString(),
+                                    index);
+                              },
                               product: Product(
                                   id: productList[index]['id'].toString(),
                                   name: productList[index]['name'],
@@ -237,6 +248,33 @@ class _ProductListState extends State<ProductList> {
                 : SizedBox(),
       ),
     );
+  }
+
+  void addToWishList(String method, String productId, int index) {
+    getProgressDialog(context, "Adding to wishlist...").show();
+    var request = MultipartRequest("POST", Uri.parse(api_url + method));
+    request.fields['product_id'] = productId;
+    request.headers['Authorization'] = "Bearer " +
+        Provider.of<UserData>(context, listen: false).userData['api_token'];
+    request.headers["APP"] = "ECOM";
+    request.headers["Accept"] = "application/json";
+    print(request);
+    print(request.headers);
+    print(request.fields);
+    commonMethod(request).then((onResponse) {
+      onResponse.stream.transform(utf8.decoder).listen((value) {
+        Map data = json.decode(value);
+        print(data);
+        presentToast(data['message'], context, 0);
+        if (data['code'] == 200) {
+          setState(() {
+            productList[index]['wishlisted_count'] =
+                method == "wishlist/add" ? "1" : "0";
+          });
+        }
+        getProgressDialog(context, "Adding to wishlist...").hide(context);
+      });
+    });
   }
 
   void serachQuery(String query) {

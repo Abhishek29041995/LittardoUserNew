@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -5,10 +7,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:http/http.dart';
 import 'package:littardo/models/product.dart';
 import 'package:littardo/painters/circlepainters.dart';
 import 'package:littardo/provider/UserData.dart';
 import 'package:littardo/screens/myOrders.dart';
+import 'package:littardo/screens/my_wishlist.dart';
 import 'package:littardo/screens/products_list.dart';
 import 'package:littardo/screens/search.dart';
 import 'package:littardo/screens/shoppingcart.dart';
@@ -132,7 +136,7 @@ class _HomeState extends State<Home> {
                           ],
                         ),
                       ),
-                      buildTrending(userDataProvider.gethot_deals),
+                      buildTrending(userDataProvider.gethot_deals, "hotdeals"),
                       Padding(
                         padding: const EdgeInsets.all(6.0),
                         child: Row(
@@ -162,7 +166,7 @@ class _HomeState extends State<Home> {
                           ],
                         ),
                       ),
-                      buildTrending(userDataProvider.getfeatured),
+                      buildTrending(userDataProvider.getfeatured, "featured"),
                       Padding(
                         padding: const EdgeInsets.all(6.0),
                         child: Row(
@@ -192,7 +196,8 @@ class _HomeState extends State<Home> {
                           ],
                         ),
                       ),
-                      buildTrending(userDataProvider.getbestselling),
+                      buildTrending(
+                          userDataProvider.getbestselling, "bestselling"),
                       Padding(
                         padding: const EdgeInsets.all(6.0),
                         child: Row(
@@ -231,6 +236,7 @@ class _HomeState extends State<Home> {
                               children: List.generate(
                                   userDataProvider.getbrands.length, (index) {
                                 return TrendingItem(
+                                  updateWishList: () {},
                                   product: Product(
                                     id: userDataProvider.getbrands[index]
                                         ["name"],
@@ -263,7 +269,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Column buildTrending(List products) {
+  Column buildTrending(List products, String type) {
     return Column(
       children: <Widget>[
         Container(
@@ -271,7 +277,17 @@ class _HomeState extends State<Home> {
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: List.generate(products.length, (index) {
+              print(products[index]);
               return TrendingItem(
+                updateWishList: () {
+                  addToWishList(
+                      products[index]['wishlisted_count'] == "1"
+                          ? "wishlist/remove"
+                          : "wishlist/add",
+                      products[index]["id"].toString(),
+                      type,
+                      index);
+                },
                 product: Product(
                     id: products[index]["id"].toString(),
                     name: products[index]["name"],
@@ -405,6 +421,46 @@ class _HomeState extends State<Home> {
     );
   }
 
+  void addToWishList(String method, String productId, String type, int index) {
+    getProgressDialog(context, "Adding to wishlist...").show();
+    var request = MultipartRequest("POST", Uri.parse(api_url + method));
+    request.fields['product_id'] = productId;
+    request.headers['Authorization'] = "Bearer " +
+        Provider.of<UserData>(context, listen: false).userData['api_token'];
+    request.headers["APP"] = "ECOM";
+    request.headers["Accept"] = "application/json";
+    print(request);
+    print(request.headers);
+    print(request.fields);
+    commonMethod(request).then((onResponse) {
+      onResponse.stream.transform(utf8.decoder).listen((value) {
+        Map data = json.decode(value);
+        print(data);
+        presentToast(data['message'], context, 0);
+        if (data['code'] == 200) {
+          try {
+            userDataProvider.bestselling[userDataProvider.bestselling
+                    .indexWhere(
+                        (element) => element['id'].toString() == productId)]
+                ['wishlisted_count'] = method == "wishlist/add" ? "1" : "0";
+          } catch (e) {}
+          try {
+            userDataProvider.featured[userDataProvider.featured.indexWhere(
+                    (element) => element['id'].toString() == productId)]
+                ['wishlisted_count'] = method == "wishlist/add" ? "1" : "0";
+          } catch (e) {}
+          try {
+            userDataProvider.hot_deals[userDataProvider.hot_deals.indexWhere(
+                    (element) => element['id'].toString() == productId)]
+                ['wishlisted_count'] = method == "wishlist/add" ? "1" : "0";
+          } catch (e) {}
+          userDataProvider.notifyListeners();
+        }
+        getProgressDialog(context, "Adding to wishlist...").hide(context);
+      });
+    });
+  }
+
   leftDrawerMenu() {
     Color blackColor = Colors.black.withOpacity(0.6);
     return Container(
@@ -477,28 +533,28 @@ class _HomeState extends State<Home> {
               );
             },
           ),
-//          ListTile(
-//            trailing: Icon(
-//              Ionicons.getIconData('ios-radio-button-on'),
-//              color: Color(0xFFFB7C7A),
-//              size: 18,
-//            ),
-//            leading: Icon(Feather.getIconData('gift'), color: blackColor),
-//            title: Text('Wheel Spin(Free)',
-//                style: TextStyle(
-//                    fontSize: 16,
-//                    fontWeight: FontWeight.w600,
-//                    color: blackColor)),
-//            onTap: () {
-//              Navigator.push(
-//                context,
-//                PageTransition(
-//                  type: PageTransitionType.fade,
-//                  child: WhellFortune(),
-//                ),
-//              );
-//            },
-//          ),
+          ListTile(
+            trailing: Icon(
+              Ionicons.getIconData('ios-radio-button-on'),
+              color: Color(0xFFFB7C7A),
+              size: 18,
+            ),
+            leading: Icon(Feather.getIconData('briefcase'), color: blackColor),
+            title: Text('Wallet',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: blackColor)),
+            onTap: () {
+              Navigator.push(
+                context,
+                PageTransition(
+                  type: PageTransitionType.fade,
+                  child: WhellFortune(),
+                ),
+              );
+            },
+          ),
 //          ListTile(
 //            leading: Icon(Feather.getIconData('search'), color: blackColor),
 //            title: Text('Search',
@@ -566,6 +622,19 @@ class _HomeState extends State<Home> {
               Navigator.pop(context);
               Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => MyOrders()));
+            },
+          ),
+          ListTile(
+            leading: Icon(Feather.getIconData('list'), color: blackColor),
+            title: Text('My WishList',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: blackColor)),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => MyWishList()));
             },
           ),
           ListTile(
