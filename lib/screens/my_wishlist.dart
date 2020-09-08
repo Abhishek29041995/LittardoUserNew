@@ -88,9 +88,9 @@ class _MyWishList extends State<MyWishList> {
                       originalPrice: wishListData[index]['unit_price'],
                       description: wishListData[index]['description'],
                       photos: wishListData[index]['photos'],
-                      current_stock:
+                      currentStock:
                           wishListData[index]['current_stock'].toString(),
-                      shipping_cost:
+                      shippingCost:
                           wishListData[index]['shipping_cost'].toString()),
                 )));
       },

@@ -300,8 +300,8 @@ class _HomeState extends State<Home> {
                     originalPrice: products[index]['unit_price'],
                     description: products[index]['description'],
                     photos: products[index]['photos'],
-                    current_stock: products[index]['current_stock'].toString(),
-                    shipping_cost: products[index]['shipping_cost'].toString()),
+                    currentStock: products[index]['current_stock'].toString(),
+                    shippingCost: products[index]['shipping_cost'].toString()),
                 gradientColors: [Color(0XFFa466ec), Colors.purple[400]],
               );
             }),
