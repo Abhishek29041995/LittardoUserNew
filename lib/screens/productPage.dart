@@ -20,6 +20,7 @@ import 'package:lottie/lottie.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'compare_products.dart';
 
 class ProductPage extends StatefulWidget {
   final Product product;
@@ -63,7 +64,7 @@ class _ProductPageState extends State<ProductPage> {
   @override
   void initState() {
     lastPrice = widget.product.price;
-    lastStock = widget.product.current_stock;
+    lastStock = widget.product.currentStock;
     originallastPrice = widget.product.originalPrice;
     lastWishListed = widget.product.isWishlisted;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -778,7 +779,7 @@ class _ProductPageState extends State<ProductPage> {
         listColor.length > 0 ? listColor[selectedColor] : "NA";
     request.fields["size"] =
         listSize.length > 0 ? listSize[selectedSize] : "NA";
-    request.fields["shipping_cost"] = widget.product.shipping_cost;
+    request.fields["shipping_cost"] = widget.product.shippingCost;
     request.headers['Authorization'] = "Bearer " +
         Provider.of<UserData>(context, listen: false).userData['api_token'];
     request.headers["APP"] = "ECOM";
@@ -1288,13 +1289,39 @@ class _ProductPageState extends State<ProductPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            Text(
-              "Description",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.black45,
-                fontSize: 18,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  "Description",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black45,
+                    fontSize: 18,
+                  ),
+                ),
+                RaisedButton(
+                  color: Colors.orange,
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  onPressed: () {
+                    Provider.of<UserData>(context, listen: false)
+                        .updateCompare(widget.product)
+                        .then((value) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => CompareProducts(
+                                product: widget.product,
+                              )));
+                    });
+                  },
+                  highlightElevation: 1.0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25)),
+                  child: Text(
+                    "ADD TO COMPARE",
+                    style: TextStyle(color: Colors.white70),
+                  ),
+                )
+              ],
             ),
             SizedBox(
               height: 8,
@@ -1470,9 +1497,9 @@ class _ProductPageState extends State<ProductPage> {
                       originalPrice: realatedProduct[index]['unit_price'],
                       description: realatedProduct[index]['description'],
                       photos: realatedProduct[index]['photos'],
-                      current_stock:
+                      currentStock:
                           realatedProduct[index]['current_stock'].toString(),
-                      shipping_cost:
+                      shippingCost:
                           realatedProduct[index]['shipping_cost'].toString()),
                   gradientColors: [Color(0XFFa466ec), Colors.purple[400]],
                 );
