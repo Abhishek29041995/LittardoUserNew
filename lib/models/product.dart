@@ -1,29 +1,67 @@
-class Product {
-  final String id;
-  final String name;
-  final String icon;
-  final double rating;
-  final String price;
-  final String isWishlisted;
-  final String originalPrice;
-  final String description;
-  final int remainingQuantity;
-  String shipping_cost;
-  final String current_stock;
-  final List photos;
+import 'dart:convert';
 
+List<Product> welcomeFromJson(String str) =>
+    List<Product>.from(json.decode(str).map((x) => Product.fromJson(x)));
+
+String welcomeToJson(List<Product> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class Product {
   Product({
     this.id,
     this.name,
     this.icon,
     this.rating,
-    this.price,
     this.isWishlisted,
+    this.price,
     this.originalPrice,
     this.description,
     this.remainingQuantity,
-    this.current_stock,
-    this.shipping_cost,
+    this.currentStock,
+    this.shippingCost,
     this.photos,
   });
+
+  String id;
+  String name;
+  String icon;
+  double rating;
+  String isWishlisted;
+  String originalPrice;
+  String description;
+  int remainingQuantity;
+  String price;
+  String currentStock;
+  String shippingCost;
+  List<String> photos;
+
+  factory Product.fromJson(Map<String, dynamic> json) => Product(
+        id: json["id"],
+        name: json["name"],
+        icon: json["icon"],
+        rating: json["rating"],
+        isWishlisted: json["isWishlisted"],
+        originalPrice: json["originalPrice"],
+        description: json["description"],
+        price: json["price"],
+        remainingQuantity: json["remainingQuantity"],
+        currentStock: json["current_stock"],
+        shippingCost: json["shipping_cost"],
+        photos: List<String>.from(json["photos"].map((x) => x)),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "icon": icon,
+        "rating": rating,
+        "isWishlisted": isWishlisted,
+        "originalPrice": originalPrice,
+        "description": description,
+        "price": price,
+        "remainingQuantity": remainingQuantity,
+        "current_stock": currentStock,
+        "shipping_cost": shippingCost,
+        "photos": List<dynamic>.from(photos.map((x) => x)),
+      };
 }

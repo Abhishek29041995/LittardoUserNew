@@ -501,11 +501,8 @@ class _MyWallet extends State<MyWallet> {
       print(data);
       presentToast(data['message'], context, 0);
       if (data['code'] == 200) {
-        setState(() {
-          Provider.of<UserData>(context, listen: false).referral_code =
-              data['user']['referral_code'];
-          Provider.of<UserData>(context, listen: false).notifyListeners();
-        });
+        Provider.of<UserData>(context, listen: false)
+            .updateReferalCode(data['user']['referral_code']);
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString("referral_code", data['user']['referral_code']);
         getProgressDialog(context, "Generating code...").hide(context);

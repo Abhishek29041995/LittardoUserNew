@@ -4,6 +4,7 @@ import 'package:device_info/device_info.dart';
 
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:littardo/models/product.dart';
 import 'package:littardo/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,6 +20,8 @@ class UserData extends ChangeNotifier {
   List brands = new List();
   List categories = new List();
   List banners = new List();
+
+  List compareList = new List();
 
   String fcmtoken = "";
 
@@ -37,6 +40,8 @@ class UserData extends ChangeNotifier {
   get getcategories => categories;
   get getbanners => banners;
 
+  get getCompareList => compareList;
+
   get getToken => token;
 
   UserData() {
@@ -47,12 +52,10 @@ class UserData extends ChangeNotifier {
   Future<Null> storeLoginData(Map data, int cartcount) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('token', 'loggedIn');
-    // if (prefs.getString("referral_code") != null) {
-    //   referral_code = prefs.getString("referral_code");
-    // }
     prefs.setString(
         "cartCount", cartcount != null ? cartcount.toString() : "0");
     prefs.setString('user', json.encode(data));
+    prefs.setString("referral_code", data['referral_code']);
     getLoggedInData();
   }
 
@@ -72,7 +75,26 @@ class UserData extends ChangeNotifier {
     } else {
       cartCount = prefs.getString("cartCount");
     }
+    if (prefs.getString("compare_list") != null) {
+      compareList = welcomeFromJson(prefs.getString("compare_list"));
+    }
     getDashBoardData();
+    notifyListeners();
+  }
+
+  Future updateCompare(Product product) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (compareList.indexWhere((element) => element.id == product.id) == -1) {
+      compareList.add(product);
+      prefs.setString("compare_list", welcomeToJson(compareList));
+    }
+    notifyListeners();
+  }
+
+  updateReferalCode(String code) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    referral_code = code;
+    prefs.setString("referral_code", code);
     notifyListeners();
   }
 
