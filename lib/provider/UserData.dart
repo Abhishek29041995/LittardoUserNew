@@ -21,7 +21,7 @@ class UserData extends ChangeNotifier {
   List categories = new List();
   List banners = new List();
 
-  List compareList = new List();
+  List<Product> compareList = new List();
 
   String fcmtoken = "";
 
@@ -43,7 +43,7 @@ class UserData extends ChangeNotifier {
   get getCompareList => compareList;
 
   get getToken => token;
-
+  get getCartCount => cartCount;
   UserData() {
     getLoggedInData();
     getDeviceDetails();

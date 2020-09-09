@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -303,8 +303,20 @@ class _ProductPageState extends State<ProductPage> {
                     Stack(
                       children: <Widget>[
                         IconButton(
-                          icon: Icon(
-                            MaterialCommunityIcons.getIconData("cart-outline"),
+                          icon: Badge(
+                            badgeContent: Text(
+                              Provider.of<UserData>(context, listen: true)
+                                  .cartCount,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            badgeColor: Colors.red,
+                            animationType: BadgeAnimationType.slide,
+                            child: Icon(
+                              MaterialCommunityIcons.getIconData(
+                                "cart-outline",
+                              ),
+                              color: Colors.black,
+                            ),
                           ),
                           color: Colors.black,
                           onPressed: () {
@@ -312,7 +324,7 @@ class _ProductPageState extends State<ProductPage> {
                               context,
                               PageTransition(
                                 type: PageTransitionType.fade,
-                                child: UserSettings(),
+                                child: ShoppingCart(true),
                               ),
                             );
                           },

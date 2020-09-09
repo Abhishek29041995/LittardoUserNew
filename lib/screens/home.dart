@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:badges/badges.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -11,6 +12,7 @@ import 'package:http/http.dart';
 import 'package:littardo/models/product.dart';
 import 'package:littardo/painters/circlepainters.dart';
 import 'package:littardo/provider/UserData.dart';
+import 'package:littardo/screens/login.dart';
 import 'package:littardo/screens/myOrders.dart';
 import 'package:littardo/screens/my_wishlist.dart';
 import 'package:littardo/screens/products_list.dart';
@@ -27,6 +29,7 @@ import 'package:littardo/widgets/occasions.dart';
 import 'package:littardo/utils/navigator.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'wallet.dart';
 
 import 'checkout.dart';
@@ -339,7 +342,17 @@ class _HomeState extends State<Home> {
             title: Text('Categories'),
             activeColor: Theme.of(context).primaryColor),
         BottomNavyBarItem(
-            icon: Icon(Icons.shopping_cart),
+            icon: Badge(
+              badgeContent: Text(
+                Provider.of<UserData>(context, listen: true).cartCount,
+                style: TextStyle(color: Colors.white),
+              ),
+              badgeColor: Colors.red,
+              animationType: BadgeAnimationType.slide,
+              child: Icon(
+                Icons.shopping_cart,
+              ),
+            ),
             title: Text('Shopping Cart'),
             activeColor: Theme.of(context).primaryColor),
         BottomNavyBarItem(
@@ -403,8 +416,16 @@ class _HomeState extends State<Home> {
           ),
         ),
         IconButton(
-          icon: Icon(
-            MaterialCommunityIcons.getIconData("cart-outline"),
+          icon: Badge(
+            badgeContent: Text(
+              Provider.of<UserData>(context, listen: true).cartCount,
+              style: TextStyle(color: Colors.white),
+            ),
+            badgeColor: Colors.red,
+            animationType: BadgeAnimationType.slide,
+            child: Icon(
+              MaterialCommunityIcons.getIconData("cart-outline"),
+            ),
           ),
           color: Colors.black,
           onPressed: () {
@@ -419,6 +440,20 @@ class _HomeState extends State<Home> {
         ),
       ],
       backgroundColor: Colors.white,
+    );
+  }
+
+  Future<Null> clearPreference(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('token', '');
+    prefs.setString('cartCount', null);
+    prefs.setString('referral_code', null);
+    prefs.setString("compare_list", null);
+    prefs.setString('userData', '');
+    Navigator.pushAndRemoveUntil(
+      context,
+      new MaterialPageRoute(builder: (context) => new LoginScreen()),
+      (Route<dynamic> route) => false,
     );
   }
 
@@ -698,7 +733,23 @@ class _HomeState extends State<Home> {
                     fontWeight: FontWeight.w600,
                     color: blackColor)),
             onTap: () {
-              SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+              showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                        title: Text("Logout"),
+                        content: Text("Are You sure you want to logout?"),
+                        actions: <Widget>[
+                          FlatButton(
+                            child: Text("No"),
+                            onPressed: () => Navigator.pop(context, false),
+                          ),
+                          FlatButton(
+                              child: Text("Yes"),
+                              onPressed: () => {
+                                    clearPreference(context),
+                                  }),
+                        ],
+                      ));
             },
           ),
         ],
