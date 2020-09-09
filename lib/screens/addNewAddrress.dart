@@ -23,9 +23,11 @@ class AddNewAddress extends StatefulWidget {
   String lon;
   Map address;
   Address addrMap;
+  final double grandTotal;
+  final double couponDiscount;
 
   AddNewAddress(String isCash, Map address, String from, String lat, String lon,
-      Address addrMap) {
+      Address addrMap, this.grandTotal, this.couponDiscount) {
     this.isCash = isCash;
     this.from = from;
     this.address = address;
@@ -453,6 +455,8 @@ class _AddNewAddress extends State<AddNewAddress> {
     request.fields["payment_option"] = isCash;
     request.fields["lat"] = lattitude;
     request.fields["lon"] = longitude;
+    request.fields["coupon_discount"] = widget.couponDiscount.toString();
+    request.fields["grand_total"] = widget.grandTotal.toString();
     request.headers['Authorization'] = "Bearer " +
         Provider.of<UserData>(context, listen: false).userData['api_token'];
     request.headers['Accept'] = "application/json";

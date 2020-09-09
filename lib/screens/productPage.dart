@@ -1388,11 +1388,6 @@ class _ProductPageState extends State<ProductPage> {
                       fontWeight: FontWeight.w500,
                       color: Colors.black54),
                 ),
-                Text(
-                  "View All",
-                  style: TextStyle(fontSize: 18.0, color: Colors.blue),
-                  textAlign: TextAlign.end,
-                ),
               ],
             ),
             SizedBox(height: 12),
@@ -1466,18 +1461,6 @@ class _ProductPageState extends State<ProductPage> {
                       fontWeight: FontWeight.w600,
                       color: Colors.black54),
                   textAlign: TextAlign.start,
-                ),
-              ),
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    print("Clicked");
-                  },
-                  child: Text(
-                    "View All",
-                    style: TextStyle(fontSize: 18.0, color: Colors.blue),
-                    textAlign: TextAlign.end,
-                  ),
                 ),
               ),
             ],

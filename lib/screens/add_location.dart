@@ -20,8 +20,11 @@ class AddLocation extends StatefulWidget {
   String isCash;
   String from;
   Map address;
+  final double grandTotal;
+  final double couponDiscount;
 
-  AddLocation(String isCash, Map address, String from) {
+  AddLocation(String isCash, Map address, String from, this.grandTotal,
+      this.couponDiscount) {
     this.isCash = isCash;
     this.from = from;
     this.address = address;
@@ -238,8 +241,16 @@ class _AddLocationState extends State<AddLocation> {
                     child: new Text('CONFIRM'),
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => AddNewAddress(isCash, address,
-                              from, lattitude, longitude, addrMap)));
+                          builder: (context) => AddNewAddress(
+                                isCash,
+                                address,
+                                from,
+                                lattitude,
+                                longitude,
+                                addrMap,
+                                widget.grandTotal,
+                                widget.couponDiscount,
+                              )));
                     },
                     textColor: Colors.white,
                     color: Colors.lightGreen,

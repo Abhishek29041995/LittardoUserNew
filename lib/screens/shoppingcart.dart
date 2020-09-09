@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/ionicons.dart';
@@ -25,8 +24,11 @@ class _ShoppingCartState extends State<ShoppingCart> {
   bool emptycart = true;
   bool serviceCalled = false;
   TextEditingController price = new TextEditingController();
+  TextEditingController couponCode = TextEditingController();
   String isCash = "";
   List mycartData = new List();
+  bool isLoading = false;
+  double couponValue = 0.0;
 
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
   @override
@@ -162,7 +164,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                         style: TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.w600)),
-                                    Text("\u20b9 " + getTotalPrice(),
+                                    Text(
+                                        "\u20b9 " +
+                                            "${double.parse(getTotalPrice()) - couponValue}",
                                         style: TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.w600)),
@@ -308,6 +312,35 @@ class _ShoppingCartState extends State<ShoppingCart> {
                         ),
                       ),
                       Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextField(
+                          controller: couponCode,
+                          cursorColor: Colors.black,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.card_giftcard),
+                            hintText: "Enter Coupon code",
+                            suffixIcon: IconButton(
+                                icon: Icon(Icons.check),
+                                onPressed: () {
+                                  verifyCoupon(couponCode.text);
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                }),
+                            errorMaxLines: 2,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 2,
+                              ),
+                            ),
+                          ),
+                          autocorrect: false,
+                        ),
+                      ),
+                      Padding(
                         padding: EdgeInsets.only(
                             top: 8.0, left: 8.0, right: 8.0, bottom: 16.0),
                         child: FlatButton(
@@ -319,9 +352,17 @@ class _ShoppingCartState extends State<ShoppingCart> {
                             if (isCash == "") {
                               presentToast('Select payment mode', context, 0);
                             } else {
-                              Navigator.of(context).push(MaterialPageRoute(
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
                                   builder: (context) => Checkout(
-                                      isCash: isCash, from: "Shopping Cart")));
+                                    isCash: isCash,
+                                    from: "Shopping Cart",
+                                    grandTotal: double.parse(getTotalPrice()) -
+                                        couponValue,
+                                    couponDiscount: couponValue,
+                                  ),
+                                ),
+                              );
                             }
                           },
                           child: Container(
@@ -548,6 +589,39 @@ class _ShoppingCartState extends State<ShoppingCart> {
         ),
       ),
     );
+  }
+
+  void verifyCoupon(String code) {
+    getProgressDialog(context, "Applying Coupon...").show();
+    commeonMethod5(api_url + "check-coupon?code=$code",
+            Provider.of<UserData>(context, listen: false).userData['api_token'])
+        .then((onResponse) async {
+      Map data = json.decode(onResponse.body);
+      print(data);
+      if (data['code'] == 200) {
+        if (DateTime.now().isAfter(DateTime.fromMillisecondsSinceEpoch(
+                int.parse(data["data"]["start_date"]) * 1000)) &&
+            DateTime.now().isBefore(DateTime.fromMillisecondsSinceEpoch(
+                int.parse(data["data"]["end_date"]) * 1000))) {
+          setState(() {
+            couponValue = data["data"]["discount_type"] == "amount"
+                ? double.parse(data["data"]["discount"])
+                : (double.parse(data["data"]["discount"]) *
+                    double.parse(getTotalPrice()) /
+                    100);
+          });
+        } else {
+          print(false);
+          print(DateTime.now().millisecondsSinceEpoch);
+          print(data["data"]["start_date"]);
+          print(data["data"]["end_date"]);
+        }
+      } else {}
+
+      setState(() {});
+
+      getProgressDialog(context, "").hide(context);
+    });
   }
 
   void getMyCartList() {

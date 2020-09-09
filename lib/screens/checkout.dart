@@ -10,8 +10,10 @@ import 'package:littardo/services/api_services.dart';
 class Checkout extends StatefulWidget {
   final String isCash;
   final String from;
+  final double grandTotal;
+  final double couponDiscount;
 
-  Checkout({this.isCash, this.from});
+  Checkout({this.isCash, this.from, this.grandTotal, this.couponDiscount});
 
   @override
   _CheckoutState createState() => _CheckoutState();
@@ -68,9 +70,12 @@ class _CheckoutState extends State<Checkout> {
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => AddLocation(
-                                      widget.isCash,
-                                      addresses[index],
-                                      widget.from)));
+                                        widget.isCash,
+                                        addresses[index],
+                                        widget.from,
+                                        widget.grandTotal,
+                                        widget.couponDiscount,
+                                      )));
                             },
                             child: Container(
                               margin: EdgeInsets.symmetric(vertical: 12.0),
@@ -115,7 +120,12 @@ class _CheckoutState extends State<Checkout> {
                         onPressed: () => {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => AddLocation(
-                                  widget.isCash, null, widget.from)))
+                                    widget.isCash,
+                                    null,
+                                    widget.from,
+                                    widget.grandTotal,
+                                    widget.couponDiscount,
+                                  )))
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(

@@ -67,27 +67,27 @@ class _HomeState extends State<Home> {
           key: _scaffoldKey,
           drawer: Drawer(child: leftDrawerMenu()),
           appBar: buildAppBar(context),
-          bottomNavigationBar: new TabBar(
-            tabs: [
-              Tab(
-                icon: new Icon(Icons.home),
-              ),
-              Tab(
-                icon: new Icon(Icons.attach_money),
-              ),
-              Tab(
-                icon: new Icon(Icons.shopping_cart),
-              ),
-              Tab(
-                icon: new Icon(Icons.account_circle),
-              )
-            ],
-            labelColor: Theme.of(context).primaryColor,
-            unselectedLabelColor: Colors.blueGrey,
-            indicatorSize: TabBarIndicatorSize.label,
-            indicatorPadding: EdgeInsets.all(8.0),
-            indicatorColor: Colors.red,
-          ),
+          // bottomNavigationBar: new TabBar(
+          //   tabs: [
+          //     Tab(
+          //       icon: new Icon(Icons.home),
+          //     ),
+          //     Tab(
+          //       icon: new Icon(Icons.attach_money),
+          //     ),
+          //     Tab(
+          //       icon: new Icon(Icons.shopping_cart),
+          //     ),
+          //     Tab(
+          //       icon: new Icon(Icons.account_circle),
+          //     )
+          //   ],
+          //   labelColor: Theme.of(context).primaryColor,
+          //   unselectedLabelColor: Colors.blueGrey,
+          //   indicatorSize: TabBarIndicatorSize.label,
+          //   indicatorPadding: EdgeInsets.all(8.0),
+          //   indicatorColor: Colors.red,
+          // ),
           body: TabBarView(
             children: [
               Container(
@@ -114,29 +114,6 @@ class _HomeState extends State<Home> {
                                 textAlign: TextAlign.start,
                               ),
                             ),
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    PageTransition(
-                                      type: PageTransitionType.fade,
-                                      child: ProductList(
-                                          id: "",
-                                          name: "",
-                                          type: "",
-                                          query: "Hot Deals"),
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  "View All",
-                                  style: TextStyle(
-                                      fontSize: 18.0, color: Colors.blue),
-                                  textAlign: TextAlign.end,
-                                ),
-                              ),
-                            ),
                           ],
                         ),
                       ),
@@ -152,19 +129,6 @@ class _HomeState extends State<Home> {
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.bold),
                                 textAlign: TextAlign.start,
-                              ),
-                            ),
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  print("Clicked");
-                                },
-                                child: Text(
-                                  "View All",
-                                  style: TextStyle(
-                                      fontSize: 18.0, color: Colors.blue),
-                                  textAlign: TextAlign.end,
-                                ),
                               ),
                             ),
                           ],
@@ -184,19 +148,6 @@ class _HomeState extends State<Home> {
                                 textAlign: TextAlign.start,
                               ),
                             ),
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  print("Clicked");
-                                },
-                                child: Text(
-                                  "View All",
-                                  style: TextStyle(
-                                      fontSize: 18.0, color: Colors.blue),
-                                  textAlign: TextAlign.end,
-                                ),
-                              ),
-                            ),
                           ],
                         ),
                       ),
@@ -213,19 +164,6 @@ class _HomeState extends State<Home> {
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.bold),
                                 textAlign: TextAlign.start,
-                              ),
-                            ),
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  print("Clicked");
-                                },
-                                child: Text(
-                                  "View All",
-                                  style: TextStyle(
-                                      fontSize: 18.0, color: Colors.blue),
-                                  textAlign: TextAlign.end,
-                                ),
                               ),
                             ),
                           ],
@@ -512,24 +450,24 @@ class _HomeState extends State<Home> {
                   Icons.chevron_right,
                   size: 28,
                 ),
-                subtitle: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                        type: PageTransitionType.fade,
-                        child: UserSettings(),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    "See Profile",
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: blackColor),
-                  ),
-                ),
+                // subtitle: GestureDetector(
+                //   onTap: () {
+                //     Navigator.push(
+                //       context,
+                //       PageTransition(
+                //         type: PageTransitionType.fade,
+                //         child: UserSettings(),
+                //       ),
+                //     );
+                //   },
+                //   child: Text(
+                //     "See Profile",
+                //     style: TextStyle(
+                //         fontSize: 14,
+                //         fontWeight: FontWeight.w500,
+                //         color: blackColor),
+                //   ),
+                // ),
                 title: Text(
                   userDataProvider.userData != null
                       ? userDataProvider.userData['name']
@@ -540,8 +478,7 @@ class _HomeState extends State<Home> {
                       color: blackColor),
                 ),
                 leading: CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      "https://miro.medium.com/fit/c/256/256/1*mZ3xXbns5BiBFxrdEwloKg.jpeg"),
+                  backgroundImage: AssetImage("assets/user.png"),
                 ),
               ),
               decoration: BoxDecoration(
@@ -673,58 +610,58 @@ class _HomeState extends State<Home> {
                   .push(MaterialPageRoute(builder: (context) => MyWishList()));
             },
           ),
-          ListTile(
-            leading: Icon(Feather.getIconData('award'), color: blackColor),
-            title: Text('Points',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: blackColor)),
-            onTap: () {
-              Nav.route(context, Checkout());
-            },
-          ),
-          ListTile(
-            leading:
-                Icon(Feather.getIconData('message-circle'), color: blackColor),
-            title: Text('Support',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: blackColor)),
-            onTap: () {
-              Nav.route(context, ProductList());
-            },
-          ),
-          ListTile(
-            leading:
-                Icon(Feather.getIconData('help-circle'), color: blackColor),
-            title: Text('Help',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: blackColor)),
-            onTap: () {
-              Nav.route(context, UserSettings());
-            },
-          ),
-          ListTile(
-            leading: Icon(Feather.getIconData('settings'), color: blackColor),
-            title: Text('Settings',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: blackColor)),
-            onTap: () {
-              Navigator.push(
-                context,
-                PageTransition(
-                  type: PageTransitionType.fade,
-                  child: UserSettings(),
-                ),
-              );
-            },
-          ),
+          // ListTile(
+          //   leading: Icon(Feather.getIconData('award'), color: blackColor),
+          //   title: Text('Points',
+          //       style: TextStyle(
+          //           fontSize: 16,
+          //           fontWeight: FontWeight.w600,
+          //           color: blackColor)),
+          //   onTap: () {
+          //     Nav.route(context, Checkout());
+          //   },
+          // ),
+          // ListTile(
+          //   leading:
+          //       Icon(Feather.getIconData('message-circle'), color: blackColor),
+          //   title: Text('Support',
+          //       style: TextStyle(
+          //           fontSize: 16,
+          //           fontWeight: FontWeight.w600,
+          //           color: blackColor)),
+          //   onTap: () {
+          //     Nav.route(context, ProductList());
+          //   },
+          // ),
+          // ListTile(
+          //   leading:
+          //       Icon(Feather.getIconData('help-circle'), color: blackColor),
+          //   title: Text('Help',
+          //       style: TextStyle(
+          //           fontSize: 16,
+          //           fontWeight: FontWeight.w600,
+          //           color: blackColor)),
+          //   onTap: () {
+          //     Nav.route(context, UserSettings());
+          //   },
+          // ),
+          // ListTile(
+          //   leading: Icon(Feather.getIconData('settings'), color: blackColor),
+          //   title: Text('Settings',
+          //       style: TextStyle(
+          //           fontSize: 16,
+          //           fontWeight: FontWeight.w600,
+          //           color: blackColor)),
+          //   onTap: () {
+          //     Navigator.push(
+          //       context,
+          //       PageTransition(
+          //         type: PageTransitionType.fade,
+          //         child: UserSettings(),
+          //       ),
+          //     );
+          //   },
+          // ),
           ListTile(
             leading: Icon(Feather.getIconData('x-circle'), color: blackColor),
             title: Text('Quit',
