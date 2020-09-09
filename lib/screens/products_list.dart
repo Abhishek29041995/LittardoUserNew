@@ -155,7 +155,9 @@ class _ProductListState extends State<ProductList> {
         controller: slidingUpController,
         minHeight: 42,
         color: Colors.blueGrey,
-        panel: Filtre(),
+        panel: Filtre(
+          productCallBack: getProductListFromFilter,
+        ),
         collapsed: Container(
           decoration:
               BoxDecoration(color: Colors.blueGrey, borderRadius: radius),
@@ -308,6 +310,28 @@ class _ProductListState extends State<ProductList> {
       Map data = json.decode(onResponse.body);
       if (data['code'] == 200) {
         productList.addAll(data['products']['data']);
+        setState(() {
+          pagesize += 1;
+        });
+        print(productList.length);
+      } else {
+        presentToast(data['message'], context, 0);
+      }
+      setState(() {
+        serviceCalled = true;
+      });
+      getProgressDialog(context, "Fetching Product...").hide(context);
+    });
+  }
+
+  getProductListFromFilter(String filterUrl) {
+    getProgressDialog(context, "Fetching Products...").show();
+    commeonMethod5(filterUrl,
+            Provider.of<UserData>(context, listen: false).userData['api_token'])
+        .then((onResponse) {
+      Map data = json.decode(onResponse.body);
+      if (data['code'] == 200) {
+        productList = (data['filter_data']['products']['data']);
         setState(() {
           pagesize += 1;
         });
