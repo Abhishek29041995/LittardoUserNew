@@ -1153,7 +1153,7 @@ class _ProductPageState extends State<ProductPage> {
 
   dottedSlider() {
     return DottedSlider(
-        maxHeight: 300,
+        maxHeight: 280,
         children: List.generate(widget.product.photos.length, (index) {
           return _productSlideImage(widget.product.photos[index]);
         }));
