@@ -1,19 +1,13 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:typed_data';
-
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:littardo/services/api_services.dart';
 import 'package:littardo/widgets/searchMapPlaceWidget.dart';
-
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'addNewAddrress.dart';
 
 class AddLocation extends StatefulWidget {

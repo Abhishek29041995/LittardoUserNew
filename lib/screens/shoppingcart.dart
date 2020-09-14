@@ -67,6 +67,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                     children: <Widget>[
                       ListView.builder(
                           shrinkWrap: true,
+                          physics: ClampingScrollPhysics(),
                           itemCount: mycartData.length,
                           itemBuilder: (context, index) {
                             return buildShoppingCartItem(
