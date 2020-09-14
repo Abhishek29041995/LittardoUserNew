@@ -289,500 +289,510 @@ class _ProductPageState extends State<ProductPage> {
             ),
           ),
         ),
-        body: NestedScrollView(
-            headerSliverBuilder:
-                (BuildContext context, bool innerBoxIsScrolled) {
-              return <Widget>[
-                SliverAppBar(
-                  actions: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.fade,
-                            child: Search(),
-                          ),
-                        );
-                      },
-                      child: Icon(
-                        MaterialCommunityIcons.getIconData("magnify"),
-                        color: Colors.black,
-                      ),
-                    ),
-                    Stack(
-                      children: <Widget>[
-                        IconButton(
-                          icon: Badge(
-                            badgeContent: Text(
-                              Provider.of<UserData>(context, listen: true)
-                                  .cartCount,
-                              style: TextStyle(color: Colors.white),
+        body: SafeArea(
+          child: NestedScrollView(
+              headerSliverBuilder:
+                  (BuildContext context, bool innerBoxIsScrolled) {
+                return <Widget>[
+                  SliverAppBar(
+                    actions: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.fade,
+                              child: Search(),
                             ),
-                            badgeColor: Colors.red,
-                            animationType: BadgeAnimationType.slide,
-                            child: Icon(
-                              MaterialCommunityIcons.getIconData(
-                                "cart-outline",
-                              ),
-                              color: Colors.black,
-                            ),
-                          ),
+                          );
+                        },
+                        child: Icon(
+                          MaterialCommunityIcons.getIconData("magnify"),
                           color: Colors.black,
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              PageTransition(
-                                type: PageTransitionType.fade,
-                                child: ShoppingCart(true),
-                              ),
-                            );
-                          },
                         ),
-                        isClicked
-                            ? Positioned(
-                                left: 9,
-                                bottom: 13,
-                                child: Icon(
-                                  Icons.looks_one,
-                                  size: 14,
-                                  color: Colors.red,
-                                ),
-                              )
-                            : Text(""),
-                      ],
-                    ),
-                  ],
-                  iconTheme: IconThemeData(
-                    color: Colors.black, //change your color here
-                  ),
-                  backgroundColor: Colors.white,
-                  expandedHeight: MediaQuery.of(context).size.height / 2.4,
-                  floating: false,
-                  pinned: true,
-                  flexibleSpace: FlexibleSpaceBar(
-                    centerTitle: true,
-                    title: Text(
-                      this.widget.product.name,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16.0,
                       ),
-                    ),
-                    background: dottedSlider(),
-                  ),
-                ),
-              ];
-            },
-            body: Container(
-                height: MediaQuery.of(context).size.height,
-                child: SingleChildScrollView(
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      Stack(
                         children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Flexible(
-                            flex: 8,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                (listFabric.length > 0 &&
-                                        listFabric[0] != "NA" &&
-                                        listFabric[0] != "N/A")
-                                    ? Container(
-                                        alignment: Alignment.topLeft,
-                                        margin: EdgeInsets.only(left: 8),
-                                        child: Text(
-                                          "Fabric",
-                                          style: TextStyle(fontSize: 12),
-                                        ),
-                                      )
-                                    : SizedBox(),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: buildChoice(),
+                          IconButton(
+                            icon: Badge(
+                              badgeContent: Text(
+                                Provider.of<UserData>(context, listen: true)
+                                    .cartCount,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              badgeColor: Colors.red,
+                              animationType: BadgeAnimationType.slide,
+                              child: Icon(
+                                MaterialCommunityIcons.getIconData(
+                                  "cart-outline",
                                 ),
-                                (listColor.length > 0 &&
-                                        listColor[0] != "NA" &&
-                                        listColor[0] != "N/A")
-                                    ? Container(
-                                        alignment: Alignment.topLeft,
-                                        margin: EdgeInsets.only(left: 8),
-                                        child: Text(
-                                          "Color",
-                                          style: TextStyle(fontSize: 12),
-                                        ),
-                                      )
-                                    : SizedBox(),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: buildChoiceColor(),
-                                ),
-                                (listSize.length > 0 &&
-                                        listSize[0] != "NA" &&
-                                        listSize[0] != "N/A")
-                                    ? Container(
-                                        alignment: Alignment.topLeft,
-                                        margin: EdgeInsets.only(left: 8),
-                                        child: Text(
-                                          "Size",
-                                          style: TextStyle(fontSize: 12),
-                                        ),
-                                      )
-                                    : SizedBox(),
-                                (listSize.length > 0 &&
-                                        listSize[0] != "NA" &&
-                                        listSize[0] != "N/A")
-                                    ? Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Wrap(
-                                          children: List<Widget>.generate(
-                                            listSize.length,
-                                            (int index) {
-                                              return Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 8.0),
-                                                child: ChoiceChip(
-                                                  label: Text(listSize[index]),
-                                                  selected:
-                                                      selectedSize == index,
-                                                  onSelected: (bool selected) {
-                                                    setState(() {
-                                                      selectedSize = selected
-                                                          ? index
-                                                          : null;
-                                                    });
-                                                    getPriceInfo();
-                                                  },
-                                                ),
-                                              );
-                                            },
-                                          ).toList(),
-                                        ))
-                                    : SizedBox(),
-                              ],
-                            ),
-                          ),
-                          Flexible(
-                            flex: 5,
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: Container(
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(50)),
-                                child: Wrap(children: <Widget>[
-                                  InkWell(
-                                    child: Icon(
-                                      Icons.remove,
-                                      size: 24,
-                                    ),
-                                    onTap: () {
-                                      setState(() {
-                                        current_stock = --current_stock == 0
-                                            ? 1
-                                            : current_stock;
-                                      });
-                                    },
-                                  ),
-                                  Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 20),
-                                      child: Text(current_stock.toString(),
-                                          style: TextStyle(fontSize: 20))),
-                                  InkWell(
-                                    child: Icon(
-                                      Icons.add,
-                                      size: 24,
-                                    ),
-                                    onTap: () {
-                                      setState(() {
-                                        current_stock++;
-                                      });
-                                    },
-                                  ),
-                                ]),
+                                color: Colors.black,
                               ),
                             ),
-                          )
+                            color: Colors.black,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                PageTransition(
+                                  type: PageTransitionType.fade,
+                                  child: ShoppingCart(true),
+                                ),
+                              );
+                            },
+                          ),
+                          isClicked
+                              ? Positioned(
+                                  left: 9,
+                                  bottom: 13,
+                                  child: Icon(
+                                    Icons.looks_one,
+                                    size: 14,
+                                    color: Colors.red,
+                                  ),
+                                )
+                              : Text(""),
                         ],
                       ),
-                      Card(
-                        child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              width: double.infinity,
+                    ],
+                    iconTheme: IconThemeData(
+                      color: Colors.black, //change your color here
+                    ),
+                    backgroundColor: Colors.white,
+                    expandedHeight: MediaQuery.of(context).size.height / 2.4,
+                    floating: false,
+                    pinned: true,
+                    flexibleSpace: FlexibleSpaceBar(
+                      centerTitle: true,
+                      title: Text(
+                        this.widget.product.name,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                      background: dottedSlider(),
+                    ),
+                  ),
+                ];
+              },
+              body: Container(
+                  height: MediaQuery.of(context).size.height,
+                  child: SingleChildScrollView(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Flexible(
+                              flex: 8,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Flexible(
-                                          flex: 8,
-                                          child: Text(widget.product.name,
-                                              style: TextStyle(fontSize: 14)),
-                                        ),
-                                        Flexible(
-                                          flex: 4,
+                                  (listFabric.length > 0 &&
+                                          listFabric[0] != "NA" &&
+                                          listFabric[0] != "N/A")
+                                      ? Container(
+                                          alignment: Alignment.topLeft,
+                                          margin: EdgeInsets.only(left: 8),
                                           child: Text(
-                                              seller_name != ""
-                                                  ? "Seller - " + seller_name
-                                                  : "",
-                                              style: TextStyle(fontSize: 14)),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 4.0),
-                                    child: Text('Shipping Charges \u20B9 49',
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            color:
-                                                Theme.of(context).brightness ==
-                                                        Brightness.dark
-                                                    ? Colors.green
-                                                    : Colors.teal)),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Wrap(
-                                        crossAxisAlignment:
-                                            WrapCrossAlignment.center,
-                                        children: <Widget>[
-                                          Container(
-                                            margin: EdgeInsets.only(
-                                                left: 8, right: 4),
-                                            child: Icon(
-                                                int.parse(lastStock) > 0
-                                                    ? Icons.check
-                                                    : Icons.error,
-                                                size: 15,
-                                                color: Colors.white),
-                                            decoration: ShapeDecoration(
-                                                color: int.parse(lastStock) > 0
-                                                    ? Colors.green
-                                                    : Colors.orange,
-                                                shape: CircleBorder()),
-                                            height: 20,
-                                          ),
-                                          Text(
-                                              int.parse(lastStock) > 0
-                                                  ? 'In Stock'
-                                                  : "Out of Stock",
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color:
-                                                      int.parse(lastStock) > 0
-                                                          ? Colors.green
-                                                          : Colors.orange)),
-                                        ],
-                                      ),
-                                      int.parse(lastStock) == 0
-                                          ? RaisedButton(
-                                              color: Colors.blue,
-                                              padding: EdgeInsets.all(0),
-                                              onPressed: () {
-                                                showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (context) =>
-                                                            AlertDialog(
-                                                              title: Text(
-                                                                  "Notify"),
-                                                              content:
-                                                                  SingleChildScrollView(
-                                                                child: Column(
-                                                                  mainAxisSize:
-                                                                      MainAxisSize
-                                                                          .min,
-                                                                  children: <
-                                                                      Widget>[
-                                                                    Padding(
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              4.0),
-                                                                      child:
-                                                                          TextField(
-                                                                        autofocus:
-                                                                            true,
-                                                                        controller:
-                                                                            mobile,
-                                                                        maxLength:
-                                                                            11,
-                                                                        keyboardType:
-                                                                            TextInputType.number,
-                                                                        decoration: InputDecoration(
-                                                                            counterStyle: TextStyle(
-                                                                              height: double.minPositive,
-                                                                            ),
-                                                                            counterText: "",
-                                                                            labelText: "Enter mobile number",
-                                                                            contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-                                                                            border: OutlineInputBorder(
-                                                                              borderRadius: BorderRadius.circular(5.0),
-                                                                              borderSide: BorderSide(),
-                                                                            )),
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                              actions: <Widget>[
-                                                                FlatButton(
-                                                                  child: Text(
-                                                                      "Notify"),
-                                                                  onPressed:
-                                                                      () {
-                                                                    if (mobile
-                                                                            .text
-                                                                            .length <
-                                                                        10) {
-                                                                      presentToast(
-                                                                          "Enter valid mobile number",
-                                                                          context,
-                                                                          2);
-                                                                    } else {
-                                                                      Navigator.pop(
-                                                                          context,
-                                                                          false);
-                                                                      presentToast(
-                                                                          "You will be notified",
-                                                                          context,
-                                                                          0);
-                                                                    }
-                                                                  },
-                                                                ),
-                                                              ],
-                                                            ));
-                                              },
-                                              highlightElevation: 1.0,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          25)),
-                                              child: Text(
-                                                "NOTIFY ME",
-                                                style: TextStyle(
-                                                    color: Colors.white70),
-                                              ),
-                                            )
-                                          : SizedBox()
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 8.0),
-                                    child: Wrap(
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.start,
-                                      children: <Widget>[
-                                        Icon(
-                                          Icons.directions_car,
-                                          color: Colors.blue,
-                                          size: 20,
-                                        ),
-                                        Wrap(
-                                          direction: Axis.vertical,
-                                          children: <Widget>[
-                                            RichText(
-                                                text: TextSpan(
-                                                    text: "Free ",
-                                                    style: TextStyle(
-                                                      fontSize: 10,
-                                                      color: Colors.green,
-                                                    ),
-                                                    children: [
-                                                  TextSpan(
-                                                      text: "\u20b9 49",
-                                                      style: TextStyle(
-                                                          fontSize: 10,
-                                                          color: Colors.grey,
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .lineThrough)),
-                                                ])),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 2),
-                                              child: Text(
-                                                  "If ordered before 9:20 PM",
-                                                  style: TextStyle(
-                                                    fontSize: 10,
-                                                    color: Colors.grey,
-                                                  )),
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                      padding: const EdgeInsets.only(top: 8.0),
-                                      child: Wrap(
-                                          crossAxisAlignment:
-                                              WrapCrossAlignment.center,
-                                          children: <Widget>[
-                                            Icon(
-                                              Icons.cancel,
-                                              color: Colors.red,
-                                              size: 20,
-                                            ),
-                                            Text("5 Day's return policy",
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Colors.grey,
-                                                ))
-                                          ])),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                        "Discounts on prepaid\n\nGet additional 2% discount on every prepaid order",
-                                        maxLines: descTextShowFlag ? 3 : 1,
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.grey,
-                                        )),
-                                  ),
-                                  !descTextShowFlag
-                                      ? InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              descTextShowFlag =
-                                                  !descTextShowFlag;
-                                            });
-                                          },
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 8.0, bottom: 8),
-                                            child: Text("View Offers",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.green,
-                                                )),
+                                            "Fabric",
+                                            style: TextStyle(fontSize: 12),
                                           ),
                                         )
                                       : SizedBox(),
-                                  _buildDescription(context),
-                                  _buildComments(context),
-                                  _buildProducts(context),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: buildChoice(),
+                                  ),
+                                  (listColor.length > 0 &&
+                                          listColor[0] != "NA" &&
+                                          listColor[0] != "N/A")
+                                      ? Container(
+                                          alignment: Alignment.topLeft,
+                                          margin: EdgeInsets.only(left: 8),
+                                          child: Text(
+                                            "Color",
+                                            style: TextStyle(fontSize: 12),
+                                          ),
+                                        )
+                                      : SizedBox(),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: buildChoiceColor(),
+                                  ),
+                                  (listSize.length > 0 &&
+                                          listSize[0] != "NA" &&
+                                          listSize[0] != "N/A")
+                                      ? Container(
+                                          alignment: Alignment.topLeft,
+                                          margin: EdgeInsets.only(left: 8),
+                                          child: Text(
+                                            "Size",
+                                            style: TextStyle(fontSize: 12),
+                                          ),
+                                        )
+                                      : SizedBox(),
+                                  (listSize.length > 0 &&
+                                          listSize[0] != "NA" &&
+                                          listSize[0] != "N/A")
+                                      ? Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Wrap(
+                                            children: List<Widget>.generate(
+                                              listSize.length,
+                                              (int index) {
+                                                return Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 8.0),
+                                                  child: ChoiceChip(
+                                                    label:
+                                                        Text(listSize[index]),
+                                                    selected:
+                                                        selectedSize == index,
+                                                    onSelected:
+                                                        (bool selected) {
+                                                      setState(() {
+                                                        selectedSize = selected
+                                                            ? index
+                                                            : null;
+                                                      });
+                                                      getPriceInfo();
+                                                    },
+                                                  ),
+                                                );
+                                              },
+                                            ).toList(),
+                                          ))
+                                      : SizedBox(),
                                 ],
                               ),
-                            )),
-                      )
-                    ])))));
+                            ),
+                            Flexible(
+                              flex: 5,
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: Container(
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(50)),
+                                  child: Wrap(children: <Widget>[
+                                    InkWell(
+                                      child: Icon(
+                                        Icons.remove,
+                                        size: 24,
+                                      ),
+                                      onTap: () {
+                                        setState(() {
+                                          current_stock = --current_stock == 0
+                                              ? 1
+                                              : current_stock;
+                                        });
+                                      },
+                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child: Text(current_stock.toString(),
+                                            style: TextStyle(fontSize: 20))),
+                                    InkWell(
+                                      child: Icon(
+                                        Icons.add,
+                                        size: 24,
+                                      ),
+                                      onTap: () {
+                                        setState(() {
+                                          current_stock++;
+                                        });
+                                      },
+                                    ),
+                                  ]),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        Card(
+                          child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                width: double.infinity,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 8.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Flexible(
+                                            flex: 8,
+                                            child: Text(widget.product.name,
+                                                style: TextStyle(fontSize: 14)),
+                                          ),
+                                          Flexible(
+                                            flex: 4,
+                                            child: Text(
+                                                seller_name != ""
+                                                    ? "Seller - " + seller_name
+                                                    : "",
+                                                style: TextStyle(fontSize: 14)),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 4.0),
+                                      child: Text('Shipping Charges \u20B9 49',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.dark
+                                                  ? Colors.green
+                                                  : Colors.teal)),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Wrap(
+                                          crossAxisAlignment:
+                                              WrapCrossAlignment.center,
+                                          children: <Widget>[
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                  left: 8, right: 4),
+                                              child: Icon(
+                                                  int.parse(lastStock) > 0
+                                                      ? Icons.check
+                                                      : Icons.error,
+                                                  size: 15,
+                                                  color: Colors.white),
+                                              decoration: ShapeDecoration(
+                                                  color:
+                                                      int.parse(lastStock) > 0
+                                                          ? Colors.green
+                                                          : Colors.orange,
+                                                  shape: CircleBorder()),
+                                              height: 20,
+                                            ),
+                                            Text(
+                                                int.parse(lastStock) > 0
+                                                    ? 'In Stock'
+                                                    : "Out of Stock",
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    color:
+                                                        int.parse(lastStock) > 0
+                                                            ? Colors.green
+                                                            : Colors.orange)),
+                                          ],
+                                        ),
+                                        int.parse(lastStock) == 0
+                                            ? RaisedButton(
+                                                color: Colors.blue,
+                                                padding: EdgeInsets.all(0),
+                                                onPressed: () {
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (context) =>
+                                                          AlertDialog(
+                                                            title:
+                                                                Text("Notify"),
+                                                            content:
+                                                                SingleChildScrollView(
+                                                              child: Column(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                children: <
+                                                                    Widget>[
+                                                                  Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            4.0),
+                                                                    child:
+                                                                        TextField(
+                                                                      autofocus:
+                                                                          true,
+                                                                      controller:
+                                                                          mobile,
+                                                                      maxLength:
+                                                                          11,
+                                                                      keyboardType:
+                                                                          TextInputType
+                                                                              .number,
+                                                                      decoration: InputDecoration(
+                                                                          counterStyle: TextStyle(
+                                                                            height:
+                                                                                double.minPositive,
+                                                                          ),
+                                                                          counterText: "",
+                                                                          labelText: "Enter mobile number",
+                                                                          contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                                                                          border: OutlineInputBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(5.0),
+                                                                            borderSide:
+                                                                                BorderSide(),
+                                                                          )),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            actions: <Widget>[
+                                                              FlatButton(
+                                                                child: Text(
+                                                                    "Notify"),
+                                                                onPressed: () {
+                                                                  if (mobile
+                                                                          .text
+                                                                          .length <
+                                                                      10) {
+                                                                    presentToast(
+                                                                        "Enter valid mobile number",
+                                                                        context,
+                                                                        2);
+                                                                  } else {
+                                                                    Navigator.pop(
+                                                                        context,
+                                                                        false);
+                                                                    presentToast(
+                                                                        "You will be notified",
+                                                                        context,
+                                                                        0);
+                                                                  }
+                                                                },
+                                                              ),
+                                                            ],
+                                                          ));
+                                                },
+                                                highlightElevation: 1.0,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25)),
+                                                child: Text(
+                                                  "NOTIFY ME",
+                                                  style: TextStyle(
+                                                      color: Colors.white70),
+                                                ),
+                                              )
+                                            : SizedBox()
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Wrap(
+                                        crossAxisAlignment:
+                                            WrapCrossAlignment.start,
+                                        children: <Widget>[
+                                          Icon(
+                                            Icons.directions_car,
+                                            color: Colors.blue,
+                                            size: 20,
+                                          ),
+                                          Wrap(
+                                            direction: Axis.vertical,
+                                            children: <Widget>[
+                                              RichText(
+                                                  text: TextSpan(
+                                                      text: "Free ",
+                                                      style: TextStyle(
+                                                        fontSize: 10,
+                                                        color: Colors.green,
+                                                      ),
+                                                      children: [
+                                                    TextSpan(
+                                                        text: "\u20b9 49",
+                                                        style: TextStyle(
+                                                            fontSize: 10,
+                                                            color: Colors.grey,
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .lineThrough)),
+                                                  ])),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 2),
+                                                child: Text(
+                                                    "If ordered before 9:20 PM",
+                                                    style: TextStyle(
+                                                      fontSize: 10,
+                                                      color: Colors.grey,
+                                                    )),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 8.0),
+                                        child: Wrap(
+                                            crossAxisAlignment:
+                                                WrapCrossAlignment.center,
+                                            children: <Widget>[
+                                              Icon(
+                                                Icons.cancel,
+                                                color: Colors.red,
+                                                size: 20,
+                                              ),
+                                              Text("5 Day's return policy",
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: Colors.grey,
+                                                  ))
+                                            ])),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                          "Discounts on prepaid\n\nGet additional 2% discount on every prepaid order",
+                                          maxLines: descTextShowFlag ? 3 : 1,
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.grey,
+                                          )),
+                                    ),
+                                    !descTextShowFlag
+                                        ? InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                descTextShowFlag =
+                                                    !descTextShowFlag;
+                                              });
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 8.0, bottom: 8),
+                                              child: Text("View Offers",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontSize: 10,
+                                                    color: Colors.green,
+                                                  )),
+                                            ),
+                                          )
+                                        : SizedBox(),
+                                    _buildDescription(context),
+                                    _buildComments(context),
+                                    _buildProducts(context),
+                                  ],
+                                ),
+                              )),
+                        )
+                      ])))),
+        ));
   }
 
   void addToCart(String method, String from) {
@@ -1137,7 +1147,7 @@ class _ProductPageState extends State<ProductPage> {
     return Container(
         child: Image.network(
       imageUrl,
-      fit: BoxFit.cover,
+      fit: BoxFit.contain,
       errorBuilder: (context, _, __) {
         return Image.asset("assets/littardo_logo.png");
       },
