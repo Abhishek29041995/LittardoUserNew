@@ -132,9 +132,7 @@ class _MyOrders extends State<MyOrders> {
                                                                           10,
                                                                       right: 3),
                                                               child: Text(
-                                                                item['order_details']
-                                                                            [0][
-                                                                        'product']
+                                                                item['product']
                                                                     ['name'],
                                                                 style:
                                                                     TextStyle(
@@ -152,16 +150,15 @@ class _MyOrders extends State<MyOrders> {
                                                           ],
                                                         ),
                                                       ),
-                                                      SizedBox(height: 5),
                                                       Padding(
                                                         padding:
                                                             EdgeInsets.only(
                                                                 left: 3,
                                                                 bottom: 10),
                                                         child: Text(
-                                                          item['order_details']
-                                                                  [0]['product']
-                                                              ['description'],
+                                                          "Ordered on - " +
+                                                              item['order'][
+                                                                  'created_at'],
                                                           style: TextStyle(
                                                             fontFamily:
                                                                 'Montserrat',
@@ -172,15 +169,28 @@ class _MyOrders extends State<MyOrders> {
                                                           ),
                                                         ),
                                                       ),
+                                                      SizedBox(height: 5),
                                                       Padding(
                                                         padding:
                                                             EdgeInsets.only(
                                                                 left: 3,
                                                                 bottom: 10),
                                                         child: Text(
-                                                          "Ordered on - " +
-                                                              item[
-                                                                  'created_at'],
+                                                          item['delivery_status'] ==
+                                                                  "0"
+                                                              ? "Expected\nDelivery Date - " +
+                                                                  item['order']
+                                                                      ['d_date']
+                                                              : item['delivery_status'] !=
+                                                                          "0" &&
+                                                                      item['cancel_reason'] ==
+                                                                          null
+                                                                  ? "Delivered on - " +
+                                                                      item[
+                                                                          'u_date']
+                                                                  : "Cancelled on - " +
+                                                                      item[
+                                                                          'u_date'],
                                                           style: TextStyle(
                                                             fontFamily:
                                                                 'Montserrat',
@@ -212,8 +222,7 @@ class _MyOrders extends State<MyOrders> {
                                                   child: ClipRRect(
                                                       child: CachedNetworkImage(
                                                           imageUrl: item[
-                                                                      'order_details']
-                                                                  [0]['product']
+                                                                  'product']
                                                               ['thumbnail_img'],
                                                           height: 120,
                                                           width: 100,
@@ -221,37 +230,27 @@ class _MyOrders extends State<MyOrders> {
                                         ],
                                       ),
                                     ),
-                                    item['order_details'][0]
-                                                ['delivery_status'] ==
-                                            "delivered"
+                                    item['delivery_status'] == "delivered"
                                         ? Divider()
                                         : SizedBox(),
-                                    item['order_details'][0]
-                                                ['delivery_status'] ==
-                                            "delivered"
+                                    item['delivery_status'] == "delivered"
                                         ? Padding(
                                             padding: EdgeInsets.only(
                                                 left: 10, right: 10),
                                             child: Row(
                                               children: <Widget>[
-                                                item['order_details'][0]
-                                                                    ['product'][
-                                                                'user_review'] !=
+                                                item['product']['user_review'] !=
                                                             null &&
-                                                        item['order_details'][0]
-                                                                        [
-                                                                        'product']
-                                                                    [
+                                                        item['product'][
                                                                     'user_review']
                                                                 .length >
                                                             0
                                                     ? RatingBar(
-                                                        initialRating: double.parse(
-                                                            item['order_details']
-                                                                            [0][
-                                                                        'product']
-                                                                    [
-                                                                    'user_review']['rating']
+                                                        initialRating: double
+                                                            .parse(item['product']
+                                                                        [
+                                                                        'user_review']
+                                                                    ['rating']
                                                                 .toString()),
                                                         minRating: 0.5,
                                                         itemSize: 20,
@@ -314,9 +313,7 @@ class _MyOrders extends State<MyOrders> {
                                               ],
                                             ))
                                         : SizedBox(),
-                                    item['order_details'][0]
-                                                ['delivery_status'] ==
-                                            "delivered"
+                                    item['delivery_status'] == "delivered"
                                         ? SizedBox(
                                             height: 10,
                                           )

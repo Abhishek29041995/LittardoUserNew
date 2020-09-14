@@ -468,15 +468,10 @@ class _AddNewAddress extends State<AddNewAddress> {
         Map data = json.decode(value);
         print(data.toString() + "===");
         if (data['code'] == 200) {
-//        if (isCash == "COD") {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.setString("cartCount", null);
+          Provider.of<UserData>(context, listen: false).saveCartCount(0);
           Navigator.of(context).popUntil((route) => route.isFirst);
           Navigator.push(
               context, MaterialPageRoute(builder: (_) => MyOrders()));
-//        } else {
-//          proceedToPayment(data['order_id']);
-//        }
         } else {
           presentToast(data['message'], context, 0);
           getProgressDialog(context, "Placing Order...").hide(context);

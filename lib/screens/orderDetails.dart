@@ -31,6 +31,7 @@ class _OrderDetais extends State<OrderDetais> {
       },
       child: SafeArea(
           child: Scaffold(
+        backgroundColor: Colors.grey[300],
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.white,
@@ -43,211 +44,201 @@ class _OrderDetais extends State<OrderDetais> {
           ),
         ),
         body: SingleChildScrollView(
-            child: Stack(children: <Widget>[
-          Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            color: Colors.grey[300],
             child: Column(
-              children: <Widget>[
-                Container(
-                    color: Colors.white,
-                    child: Column(
+          children: <Widget>[
+            Container(
+                color: Colors.white,
+                child: Column(
+                  children: <Widget>[
+                    Row(
                       children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            new Flexible(
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                    left: 10, top: 10, right: 10),
-                                child: new RichText(
-                                    text: TextSpan(
-                                        text: "Order ID - ",
-                                        style: TextStyle(
-                                            color: Colors.grey.withOpacity(0.9),
-                                            fontSize: 12),
-                                        children: [
-                                      TextSpan(
-                                          text: product['code'],
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            decoration: TextDecoration.none,
-                                          ))
-                                    ])),
-                              ),
-                            ),
-                          ],
+                        new Flexible(
+                          child: Padding(
+                            padding:
+                                EdgeInsets.only(left: 10, top: 10, right: 10),
+                            child: new RichText(
+                                text: TextSpan(
+                                    text: "Order ID - ",
+                                    style: TextStyle(
+                                        color: Colors.grey.withOpacity(0.9),
+                                        fontSize: 12),
+                                    children: [
+                                  TextSpan(
+                                      text: product['order']['code'],
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        decoration: TextDecoration.none,
+                                      ))
+                                ])),
+                          ),
                         ),
-                        Padding(
-                            padding: EdgeInsets.only(left: 10, right: 10),
-                            child: Divider()),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Flexible(
-                              flex: 8,
-                              child: Padding(
-                                padding: EdgeInsets.all(10.0),
-                                child: InkWell(
-                                  onTap: () {
+                      ],
+                    ),
+                    Padding(
+                        padding: EdgeInsets.only(left: 10, right: 10),
+                        child: Divider()),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Flexible(
+                          flex: 8,
+                          child: Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: InkWell(
+                              onTap: () {
 //                                            Navigator.of(context).push(
 //                                                new MaterialPageRoute(
 //                                                    builder: (context) =>
 //                                                    new ProductDetails(
 //                                                        product['order_details'][0]
 //                                                        ['product'])));
-                                  },
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: EdgeInsets.all(3.0),
-                                        child: Text(
-                                          product['order_details'][0]['product']
-                                              ['name'],
-                                          style: TextStyle(fontSize: 12),
-                                        ),
-                                      ),
-                                      SizedBox(height: 5),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 3),
-                                        child: Text(
-                                          "Ordered On - " +
-                                              product['created_at'],
-                                          style: TextStyle(
-                                              fontSize: 10, color: Colors.grey),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 3),
-                                        child: Text(
-                                          "Description -  " +
-                                              product['order_details'][0]
-                                                  ['product']['description'],
-                                          style: TextStyle(
-                                              fontSize: 10, color: Colors.grey),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 3),
-                                        child: Text(
-                                          "Seller: Littardo Emporium",
-                                          style: TextStyle(
-                                              fontSize: 10, color: Colors.grey),
-                                        ),
-                                      ),
-                                    ],
+                              },
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: EdgeInsets.all(3.0),
+                                    child: Text(
+                                      product['product']['name'],
+                                      style: TextStyle(fontSize: 12),
+                                    ),
                                   ),
-                                ),
+                                  SizedBox(height: 5),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 3),
+                                    child: Text(
+                                      "Ordered On - " + product['created_at'],
+                                      style: TextStyle(
+                                          fontSize: 10, color: Colors.grey),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 3),
+                                    child: Text(
+                                      "Description -  " +
+                                          product['product']['description'],
+                                      style: TextStyle(
+                                          fontSize: 10, color: Colors.grey),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 3),
+                                    child: Text(
+                                      "Seller: Littardo Emporium",
+                                      style: TextStyle(
+                                          fontSize: 10, color: Colors.grey),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            Flexible(
-                              flex: 4,
-                              child: InkWell(
-                                onTap: () {
+                          ),
+                        ),
+                        Flexible(
+                          flex: 4,
+                          child: InkWell(
+                            onTap: () {
 //                                          Navigator.of(context).push(
 //                                              new MaterialPageRoute(
 //                                                  builder: (context) =>
 //                                                  new ProductDetails(
 //                                                      product['order_details'][0]
 //                                                      ['product'])));
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ClipRRect(
-                                      child: CachedNetworkImage(
-                                          imageUrl: product['order_details'][0]
-                                              ['product']['thumbnail_img'],
-                                          height: 120,
-                                          width: 100,
-                                          fit: BoxFit.fill)),
-                                ),
-                              ),
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ClipRRect(
+                                  child: CachedNetworkImage(
+                                      imageUrl: product['product']
+                                          ['thumbnail_img'],
+                                      height: 120,
+                                      width: 100,
+                                      fit: BoxFit.fill)),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                        padding: EdgeInsets.only(left: 10, right: 10),
+                        child: IntrinsicHeight(
+                            child: Row(
+                          children: <Widget>[
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: tracking.map((item) {
+                                return Column(
+                                  children: <Widget>[
+                                    Row(
+                                      children: <Widget>[
+                                        new Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width /
+                                                28,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                20,
+                                            decoration: new BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Colors.blue,
+                                            )),
+                                        Wrap(
+                                          direction: Axis.vertical,
+                                          children: <Widget>[
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 10, top: 10, right: 10),
+                                              child: new Text(
+                                                item['comment'],
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 12,
+                                                  decoration:
+                                                      TextDecoration.none,
+                                                ),
+                                                textAlign: TextAlign
+                                                    .start, // has impact
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 10, right: 10),
+                                              child: new Text(
+                                                item['created_at'],
+                                                style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 8,
+                                                  decoration:
+                                                      TextDecoration.none,
+                                                ),
+                                                textAlign: TextAlign
+                                                    .start, // has impact
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                    VerticalDivider(
+                                      thickness: 1,
+                                      color: Colors.blue,
+                                      endIndent: 10,
+                                    ),
+                                  ],
+                                );
+                              }).toList(),
                             ),
                           ],
-                        ),
-                        Padding(
-                            padding: EdgeInsets.only(left: 10, right: 10),
-                            child: IntrinsicHeight(
-                                child: Row(
-                              children: <Widget>[
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: tracking.map((item) {
-                                    return Column(
-                                      children: <Widget>[
-                                        Row(
-                                          children: <Widget>[
-                                            new Container(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width /
-                                                    28,
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height /
-                                                    20,
-                                                decoration: new BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: Colors.blue,
-                                                )),
-                                            Wrap(
-                                              direction: Axis.vertical,
-                                              children: <Widget>[
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 10,
-                                                      top: 10,
-                                                      right: 10),
-                                                  child: new Text(
-                                                    item['comment'],
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 12,
-                                                      decoration:
-                                                          TextDecoration.none,
-                                                    ),
-                                                    textAlign: TextAlign
-                                                        .start, // has impact
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 10, right: 10),
-                                                  child: new Text(
-                                                    item['created_at'],
-                                                    style: TextStyle(
-                                                      color: Colors.grey,
-                                                      fontSize: 8,
-                                                      decoration:
-                                                          TextDecoration.none,
-                                                    ),
-                                                    textAlign: TextAlign
-                                                        .start, // has impact
-                                                  ),
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                        VerticalDivider(
-                                          thickness: 1,
-                                          color: Colors.blue,
-                                          endIndent: 10,
-                                        ),
-                                      ],
-                                    );
-                                  }).toList(),
-                                ),
-                              ],
-                            ))),
-                        Padding(
-                            padding: EdgeInsets.only(left: 10, right: 10),
-                            child: Divider()),
+                        ))),
+                    Padding(
+                        padding: EdgeInsets.only(left: 10, right: 10),
+                        child: Divider()),
 //                                Padding(
 //                                    padding: EdgeInsets.only(
 //                                        left: 10, right: 10),
@@ -302,14 +293,14 @@ class _OrderDetais extends State<OrderDetais> {
 //                                            : SizedBox(),
 //                                      ],
 //                                    )),
-                        SizedBox(
-                          height: 10,
-                        )
-                      ],
-                    )),
-                SizedBox(
-                  height: 8,
-                ),
+                    SizedBox(
+                      height: 10,
+                    )
+                  ],
+                )),
+            SizedBox(
+              height: 8,
+            ),
 //                        Container(
 //                          color: Colors.white,
 //                          child: Padding(
@@ -335,90 +326,89 @@ class _OrderDetais extends State<OrderDetais> {
 //                        SizedBox(
 //                          height: 8,
 //                        ),
-                Container(
-                    color: Colors.white,
-                    child: Column(
+            Container(
+                color: Colors.white,
+                child: Column(
+                  children: <Widget>[
+                    Row(
                       children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            new Flexible(
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                    left: 10, top: 10, right: 10),
-                                child: new Text(
-                                  "Shipping Address",
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 12,
-                                    decoration: TextDecoration.none,
-                                  ),
-                                  textAlign: TextAlign.center, // has impact
-                                ),
+                        new Flexible(
+                          child: Padding(
+                            padding:
+                                EdgeInsets.only(left: 10, top: 10, right: 10),
+                            child: new Text(
+                              "Shipping Address",
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12,
+                                decoration: TextDecoration.none,
                               ),
+                              textAlign: TextAlign.center, // has impact
                             ),
-                          ],
-                        ),
-                        Padding(
-                            padding: EdgeInsets.only(left: 10, right: 10),
-                            child: Divider(
-                              thickness: 1,
-                            )),
-                        Row(
-                          children: <Widget>[
-                            new Flexible(
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                    left: 10, top: 10, right: 10),
-                                child: new Text(
-                                  product['shipping_address']['name'],
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.none,
-                                  ),
-                                  textAlign: TextAlign.center, // has impact
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: <Widget>[
-                            new Flexible(
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                    left: 10, top: 10, bottom: 10, right: 10),
-                                child: new Text(
-                                  product['shipping_address']['address'] +
-                                      ", " +
-                                      product['shipping_address']['city'] +
-                                      ", " +
-                                      product['shipping_address']['country'] +
-                                      ", PIN - " +
-                                      product['shipping_address']
-                                          ['postal_code'],
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 12,
-                                    decoration: TextDecoration.none,
-                                  ),
-                                  textAlign: TextAlign.center, // has impact
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ],
-                    )),
-                SizedBox(
-                  height: 8,
-                ),
-                priceSection()
-              ],
+                    ),
+                    Padding(
+                        padding: EdgeInsets.only(left: 10, right: 10),
+                        child: Divider(
+                          thickness: 1,
+                        )),
+                    Row(
+                      children: <Widget>[
+                        new Flexible(
+                          child: Padding(
+                            padding:
+                                EdgeInsets.only(left: 10, top: 10, right: 10),
+                            child: new Text(
+                              product['order']['shipping_address']['name'],
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.none,
+                              ),
+                              textAlign: TextAlign.center, // has impact
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        new Flexible(
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                left: 10, top: 10, bottom: 10, right: 10),
+                            child: new Text(
+                              product['order']['shipping_address']['address'] +
+                                  ", " +
+                                  product['order']['shipping_address']['city'] +
+                                  ", " +
+                                  product['order']['shipping_address']
+                                      ['country'] +
+                                  ", PIN - " +
+                                  product['order']['shipping_address']
+                                      ['postal_code'],
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12,
+                                decoration: TextDecoration.none,
+                              ),
+                              textAlign: TextAlign.center, // has impact
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                )),
+            SizedBox(
+              height: 8,
             ),
-          ),
-        ])),
+            priceSection()
+          ],
+        )),
       )),
     );
   }
@@ -468,15 +458,15 @@ class _OrderDetais extends State<OrderDetais> {
               ),
               createPriceItem(
                   "List Price",
-                  "\u20b9 ${double.parse(product['grand_total'])}",
+                  "\u20b9 ${double.parse(product['order']['grand_total'])}",
                   Colors.grey.shade700),
               createPriceItem(
                   "Extra Discount",
-                  "\u20b9 ${double.parse(product['coupon_discount'])}",
+                  "\u20b9 ${double.parse(product['order']['coupon_discount'])}",
                   Colors.red.shade300),
               createPriceItem(
                   "Shipping Fee",
-                  "\u20b9 ${double.parse(product['order_details'][0]['shipping_cost'])}",
+                  "\u20b9 ${double.parse(product['shipping_cost'])}",
                   Colors.grey.shade700),
               SizedBox(
                 height: 8,
@@ -499,7 +489,7 @@ class _OrderDetais extends State<OrderDetais> {
                     style: TextStyle(color: Colors.black, fontSize: 12),
                   ),
                   Text(
-                    "\u20b9 ${double.parse(product['grand_total'])}",
+                    "\u20b9 ${double.parse(product['order']['grand_total'])}",
                     style: TextStyle(color: Colors.black, fontSize: 12),
                   )
                 ],

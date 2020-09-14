@@ -131,7 +131,17 @@ class _ProductPageState extends State<ProductPage> {
                       ],
                     ),
                     Text(
-                      "12 % off",
+                      (double.parse(originallastPrice) -
+                                  double.parse(
+                                      lastPrice.replaceAll("\u20b9 ", ""))) >
+                              0
+                          ? ((double.parse(originallastPrice) -
+                                          double.parse(lastPrice.replaceAll(
+                                              "\u20b9 ", ""))) /
+                                      100)
+                                  .toStringAsFixed(2) +
+                              "% off"
+                          : "",
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
